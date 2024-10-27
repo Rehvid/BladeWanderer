@@ -13,7 +13,8 @@
         public static readonly int DrawWeapon = Animator.StringToHash("DrawWeapon");
         public static readonly int PickUp = Animator.StringToHash("PickUp");
         public static readonly int HasEquippedWeapon = Animator.StringToHash("HasEquippedWeapon");
-        
+        public static readonly int Dodge = Animator.StringToHash("Dodge");
+        public static readonly int Death = Animator.StringToHash("Death");
         
         public static string GetParameterName(int hash)
         {
@@ -28,6 +29,8 @@
                 _ when hash == DrawWeapon => "DrawWeapon",
                 _ when hash == HasEquippedWeapon => "HasEquippedWeapon",
                 _ when hash == PickUp => "PickUp",
+                _ when hash == Dodge => "Dodge",
+                _ when hash == Death => "Death",
                 _ => null
             };
         }
