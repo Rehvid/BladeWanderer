@@ -10,7 +10,7 @@
     {
         public FightState(AIController aiController) : base(aiController) { }
         
-        public override IAIState GetNextState()
+        public override IState GetNextState()
         {
             if (controller.IsPlayerDead())
             {

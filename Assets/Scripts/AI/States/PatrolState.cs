@@ -8,7 +8,7 @@
     {
         public PatrolState(AIController aiController) : base(aiController) { }
         
-        public override IAIState GetNextState()
+        public override IState GetNextState()
         {
             return ShouldTransitionToChaseState() ? AIStateFactory.GetState(AIStateType.Chase, controller) : this;
         }

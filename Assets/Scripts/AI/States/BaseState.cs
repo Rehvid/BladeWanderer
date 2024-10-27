@@ -4,14 +4,14 @@
     using Factories;
     using Interfaces;
     
-    public abstract class BaseState: IAIState
+    public abstract class BaseState: IState
     {
         protected AIController controller;
         private bool _active;
 
         public abstract void Execute();
         
-        public abstract IAIState GetNextState();
+        public abstract IState GetNextState();
         
         public virtual void Enter() => EnableState();
         
@@ -26,7 +26,7 @@
         
         protected bool ShouldTransitionToChaseState() => controller.IsPlayerDetected();
         
-        protected IAIState GetStateBasedOnLastKnownPlayerLocation()
+        protected IState GetStateBasedOnLastKnownPlayerLocation()
         {
             return AIStateFactory.GetState(
                 controller.HasLastKnownLocationPlayer() ? AIStateType.Search : AIStateType.Patrol,

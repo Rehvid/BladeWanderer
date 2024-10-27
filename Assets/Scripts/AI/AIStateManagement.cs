@@ -7,7 +7,7 @@
 
     public class AIStateManagement : MonoBehaviour
     {
-        private IAIState _currentState;
+        private IState _currentState;
 
         public void InitState(AIController aiController)
         {
@@ -27,7 +27,7 @@
             }
         }
         
-        private void TransitionToState(IAIState state)
+        private void TransitionToState(IState state)
         {
             _currentState?.Exit();
             _currentState = state;

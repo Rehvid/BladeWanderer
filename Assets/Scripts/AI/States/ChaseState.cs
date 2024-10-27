@@ -7,7 +7,7 @@
     {
         public ChaseState(AIController aiController) : base(aiController) { }
         
-        public override IAIState GetNextState()
+        public override IState GetNextState()
         {
             if (ShouldTransitionToChaseState())
             {

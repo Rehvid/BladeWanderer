@@ -9,14 +9,14 @@
 
     public static class AIStateFactory
     {
-        private static Dictionary<AIStateType, IAIState> _states = new();
+        private static Dictionary<AIStateType, IState> _states = new();
 
-        public static IAIState GetState(AIStateType stateType, AIController aiController)
+        public static IState GetState(AIStateType stateType, AIController aiController)
         {
             return !_states.TryGetValue(stateType, out var state) ? Create(stateType, aiController) : state;
         }
 
-        private static IAIState Create(AIStateType stateType, AIController aiController)
+        private static IState Create(AIStateType stateType, AIController aiController)
         {
             return stateType switch
             {

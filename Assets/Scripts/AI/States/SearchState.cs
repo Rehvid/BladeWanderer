@@ -8,7 +8,7 @@
     { 
         public SearchState(AIController aiController) : base(aiController) { }
         
-        public override IAIState GetNextState()
+        public override IState GetNextState()
         {
            return ShouldSearchForPlayer() ? this : AIStateFactory.GetState(AIStateType.Patrol, controller);
         }
