@@ -3,24 +3,27 @@
     using Interfaces;
     using UnityEngine;
     using Enums;
-    
+    using Weapons;
+
     public class Player: MonoBehaviour, IDamageable
     {
         [SerializeField] private PlayerAttributes _attributes;
         [SerializeField] private Transform _primaryWeaponSocket;
         [SerializeField] private Transform _storageWeaponSocket;
         [SerializeField] private PlayerActionManager _actionManager;
+        
         public PlayerActionManager ActionManager => _actionManager;
         
         public PlayerAttributes Attributes => _attributes;
-        public IWeapon Weapon { get; private set; }
+        
+        public BaseWeapon Weapon { get; private set; }
         
         public bool HasEquippedWeapon()
         {
             return Weapon != null && Weapon.IsCurrentlyEquipped;
         }
         
-        public void AttachWeaponToPrimarySocket(IWeapon weapon)
+        public void AttachWeaponToPrimarySocket(BaseWeapon weapon)
         {
             Weapon = weapon;
             Weapon.Equip(_primaryWeaponSocket);

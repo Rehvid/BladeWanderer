@@ -1,6 +1,5 @@
 ﻿namespace RehvidGames.Weapons
 {
-    using System;
     using Animator;
     using Behaviors;
     using Data.Serializable;
@@ -8,11 +7,15 @@
     using Player;
     using UnityEngine;
     using UnityEngine.Events;
+    using UnityEngine.VFX;
 
     public class Sword: BaseWeapon
     {
         [SerializeField] private WaveMotionController _waveMotionController;
-        [SerializeField] private UnityEvent<AnimationData[]> _interactionAnimations;
+        [SerializeField] private AnimatorController _animator;
+        [SerializeField] private VisualEffect _slashVfx;
+        
+        public VisualEffect SlashVfx => _slashVfx;
         
         private void Update()
         {
@@ -29,8 +32,8 @@
             }
             else
             {
-                _waveMotionController.active = false;
                 Destroy(_waveMotionController);
+                
             }
         }
         
@@ -38,15 +41,14 @@
         {
             if (player.Weapon != null) {return;}
             
-            if (_interactionAnimations != null)
-            { 
-                player.SetAction(PlayerActionType.Interacting);
-                RaiseInteractMultiAnimationsEvent();
-            }
+            player.SetAction(PlayerActionType.Interacting);
+            _animator.SetTrigger(AnimatorParameter.Interaction);
+            _animator.SetTrigger(AnimatorParameter.PickUp);
+            _animator.SetBool(AnimatorParameter.HasEquippedWeapon, true);
             
             if (TryGetComponent(out SphereCollider sphereCollider))
             {
-              Destroy(sphereCollider);   
+               Destroy(sphereCollider);   
             }
         }
 
@@ -61,29 +63,6 @@
             damageCollider.enabled = false;
             damageCollider.isTrigger = false;
         }
-
-        private void RaiseInteractMultiAnimationsEvent()
-        {
-            const AnimatorParameterType type = AnimatorParameterType.Trigger;
-            AnimationData[] animations = {
-                new()
-                {
-                    AnimationName = AnimatorParameter.GetParameterName(AnimatorParameter.Interaction), 
-                    ParameterType = type
-                },
-                new()
-                {
-                    AnimationName = AnimatorParameter.GetParameterName(AnimatorParameter.PickUp), 
-                    ParameterType = type
-                },
-                new()
-                {
-                    AnimationName = AnimatorParameter.GetParameterName(AnimatorParameter.HasEquippedWeapon),
-                    ParameterType = AnimatorParameterType.Bool,
-                    Value = true
-                }
-            };
-            _interactionAnimations?.Invoke(animations); 
-        }
+        
     }
 }

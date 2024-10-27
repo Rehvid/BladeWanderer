@@ -85,7 +85,7 @@ namespace RehvidGames.AI
         
         public void PlayAnimation(string animationName, AnimatorParameterType animatorParameterType, object value = null)
         {
-            animatorController.PlayAnimation(animationName, animatorParameterType, value);
+            // animatorController.PlayAnimation(animationName, animatorParameterType, value);
         }
     }
 }

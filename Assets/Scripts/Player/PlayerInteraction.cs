@@ -1,11 +1,9 @@
 ﻿namespace RehvidGames.Player
 {
     using Animator;
-    using Data.Serializable;
     using Enums;
     using Interfaces;
     using UnityEngine;
-    using UnityEngine.Events;
     using UnityEngine.InputSystem;
     using Weapons;
 
@@ -13,7 +11,7 @@
     {
         private IInteractable _interactableObject;
         [SerializeField] private Player _player;
-        [SerializeField] private UnityEvent<AnimationData[]> _interactionTriggered;
+        [SerializeField] private AnimatorController _animator;
         
         
         public void OnInteraction(InputAction.CallbackContext context)
@@ -59,8 +57,14 @@
 
         public void OnPickUpWeapon()
         {
-            if (_interactableObject is not IWeapon weapon) return;
+            if (_interactableObject is not BaseWeapon weapon) return;
+            
+            GameObject parentWeapon = weapon.transform.parent.gameObject;
             _player.AttachWeaponToPrimarySocket(weapon);
+            if (parentWeapon != null && parentWeapon.CompareTag("Temporary"))
+            {
+                Destroy(parentWeapon);
+            }
             _player.SetAction(PlayerActionType.Unoccupied);
         }
         
@@ -94,28 +98,9 @@
         
         private void RaiseInteractMultiAnimationsForToggleWeapon(bool isDrawingWeapon)
         {
-            const AnimatorParameterType trigger = AnimatorParameterType.Trigger;
-            AnimationData[] animations = {
-                new()
-                {
-                    AnimationName = AnimatorParameter.GetParameterName(AnimatorParameter.Interaction), 
-                    ParameterType = trigger
-                },
-                new()
-                {
-                    AnimationName = AnimatorParameter.GetParameterName(
-                        isDrawingWeapon ? AnimatorParameter.DrawWeapon : AnimatorParameter.HideWeapon
-                    ), 
-                    ParameterType = trigger
-                },
-                new()
-                {
-                    AnimationName = AnimatorParameter.GetParameterName(AnimatorParameter.HasEquippedWeapon),
-                    ParameterType = AnimatorParameterType.Bool,
-                    Value = isDrawingWeapon
-                }
-            };
-            _interactionTriggered?.Invoke(animations); 
+            _animator.SetTrigger(AnimatorParameter.Interaction);
+            _animator.SetTrigger( isDrawingWeapon ? AnimatorParameter.DrawWeapon : AnimatorParameter.HideWeapon);
+            _animator.SetBool(AnimatorParameter.HasEquippedWeapon, isDrawingWeapon);
         }
     }
 }

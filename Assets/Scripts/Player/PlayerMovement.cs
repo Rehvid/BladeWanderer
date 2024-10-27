@@ -5,17 +5,14 @@ namespace RehvidGames.Player
     using Enums;
     using UnityEngine;
     using UnityEngine.InputSystem;
-
+    
     public class PlayerMovement : MonoBehaviour
     {
-      
         [Header("Configuration")] 
-        [SerializeField] private AnimatorController animatorController;
+        [SerializeField] private AnimatorController _animator;
         [SerializeField] private Player _player;
         [SerializeField] private CharacterController _characterController;
         [SerializeField] private ParticleSystem _dust;
-        
-        private bool _isJumpTriggered;
         
         [Header("Movement Parameters")] 
         [SerializeField] private float _speed = 5.0f;
@@ -28,6 +25,8 @@ namespace RehvidGames.Player
         [SerializeField] private float _jumpPower = 3.0f;
         [SerializeField] private bool _isLockingCamera;
         [SerializeField] private int _staminaCost = 20;
+        
+        private bool _isJumpTriggered;
         private float _currentVerticalSpeed;
         
         private void Start()
@@ -41,6 +40,8 @@ namespace RehvidGames.Player
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
+
+            TryGetComponent(out _animator);
         }
         
     
@@ -68,10 +69,8 @@ namespace RehvidGames.Player
             _player.UseStamina(_staminaCost);
             _player.SetAction(PlayerActionType.Jumping);
             _currentVerticalSpeed = _jumpPower;
-            animatorController.PlayAnimation(
-                AnimatorParameter.GetParameterName(AnimatorParameter.Jump), 
-                AnimatorParameterType.Trigger
-            );
+            
+            _animator.SetTrigger(AnimatorParameter.Jump);
         }
     
         private bool CanJump()
@@ -137,8 +136,6 @@ namespace RehvidGames.Player
         {
             var normalizedMoveDirection = NormalizeMoveDirection(CalculateMoveDirection());
             _characterController.Move(normalizedMoveDirection);
-            _dust.Play();
-            
         }
         
         private Vector3 CalculateMoveDirection()
@@ -167,16 +164,9 @@ namespace RehvidGames.Player
         {
             var velocity = _characterController.velocity;
             var currentHorizontalSpeed = new Vector3(velocity.x, 0, velocity.z);
-            animatorController.PlayAnimation(
-                AnimatorParameter.GetParameterName(AnimatorParameter.XSpeed), 
-                AnimatorParameterType.Float, 
-                currentHorizontalSpeed.magnitude
-            );
-            animatorController.PlayAnimation(
-                AnimatorParameter.GetParameterName(AnimatorParameter.YSpeed), 
-                AnimatorParameterType.Float, 
-                _currentVerticalSpeed
-            );
+            
+            _animator.SetFloat(AnimatorParameter.XSpeed, currentHorizontalSpeed.magnitude);
+            _animator.SetFloat(AnimatorParameter.YSpeed, _currentVerticalSpeed);
         }
         
         private bool IsGrounded()

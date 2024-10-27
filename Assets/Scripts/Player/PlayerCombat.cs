@@ -1,19 +1,16 @@
 ﻿namespace RehvidGames.Player
 {
     using Animator;
-    using Data.Serializable;
     using Enums;
     using UnityEngine;
-    using UnityEngine.Events;
     using UnityEngine.InputSystem;
+    using Weapons;
 
     public class PlayerCombat : MonoBehaviour
     {
-        [Header("Events")]
-        [SerializeField] private UnityEvent<AnimationData> attackTriggered;
-        
         [Header("Configuration")]
         [SerializeField] private Player _player;
+        [SerializeField] private AnimatorController _animator;
         
         public void OnAttack(InputAction.CallbackContext context)
         {
@@ -22,22 +19,23 @@
                 Attack();
             }
         }
+
+        public void OnDodge(InputAction.CallbackContext context)
+        {
+            if (context.performed && _player.ActionManager.IsUnoccupied())
+            {
+                _animator.SetTrigger(AnimatorParameter.Dodge);
+                _animator.ApplyRootMotion();
+            }
+        }
         
         private void Attack()
         {
             if (!CanAttack()) return; 
             _player.UseStamina(_player.Weapon.Stats.StaminaCost);
             _player.SetAction(PlayerActionType.Attacking);
-            attackTriggered.Invoke(PrepareAnimationDataForAttack());
-        }
-
-        private AnimationData PrepareAnimationDataForAttack()
-        {
-            return new AnimationData
-            {
-                AnimationName = AnimatorParameter.GetParameterName(AnimatorParameter.Attack),
-                ParameterType = AnimatorParameterType.Trigger
-            };
+            
+            _animator.SetTrigger(AnimatorParameter.Attack);
         }
         
         private bool CanAttack()
@@ -46,6 +44,16 @@
                    && _player.ActionManager.IsUnoccupied()
                    && _player.HasEnoughStamina(_player.Weapon.Stats.StaminaCost);
             ;
+        }
+
+        private void OnPlayVFX()
+        {
+            var weapon = _player.Weapon;
+            if (weapon is Sword sword)
+            {
+                sword.SlashVfx.enabled = true;
+                sword.SlashVfx.Play();
+            }
         }
         
         private void OnAttackEnd()
