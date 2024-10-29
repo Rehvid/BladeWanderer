@@ -3,6 +3,7 @@
     using System;
     using UnityEngine;
 
+    [RequireComponent(typeof(Animator))]
     public class AnimatorController: MonoBehaviour
     {
         private Animator _animator;
