@@ -1,5 +1,6 @@
 ﻿namespace RehvidGames.Enemy
 {
+    using Managers;
     using UnityEngine;
 
     public class Skeleton: BaseEnemy
@@ -21,12 +22,17 @@
 
         private void OnEnableCollision()
         {
-            weapon.EnableDamageCollider();
+            Weapon.EnableDamageCollider();
         }
 
         private void OnDisableCollision()
         {
-            weapon.DisableDamageCollider();
+            Weapon.DisableDamageCollider();
+        }
+
+        public override void ReceiveDamage(float damage, Vector3 hitPosition)
+        {
+            VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
         }
     }
 }

@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b062817dfdf24a8386d64c51f56870a9, type: 3}
+  m_Name: CharacterEffects
+  m_EditorClassIdentifier: 
+  HitVfx: {fileID: 11400000, guid: d05aca9ab7fecca4cb55e99682f862d5, type: 2}
+  SlashSwordVfx: {fileID: 11400000, guid: 43992703682fc104e8cd3c01aa8df125, type: 2}
+  DustVFX: {fileID: 11400000, guid: 63287ad42b8edf94db549c1875b2d959, type: 2}

@@ -1,8 +1,9 @@
 namespace RehvidGames.Player
 {
+    using System.Collections;
     using Animator;
-    using Data.Serializable;
     using Enums;
+    using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
     
@@ -12,10 +13,10 @@ namespace RehvidGames.Player
         [SerializeField] private AnimatorController _animator;
         [SerializeField] private Player _player;
         [SerializeField] private CharacterController _characterController;
-        [SerializeField] private ParticleSystem _dust;
         
         [Header("Movement Parameters")] 
-        [SerializeField] private float _speed = 5.0f;
+        [SerializeField] private float _walkSpeed = 5.0f;
+        [SerializeField] private float _runSpeed = 10.0f;
         [SerializeField] private Transform _cameraTransform;
         [SerializeField] private float _turnSmoothTime = 0.1f;
         private float _currentSmoothVelocity;
@@ -28,9 +29,14 @@ namespace RehvidGames.Player
         
         private bool _isJumpTriggered;
         private float _currentVerticalSpeed;
+        private float _speed;
+        private Coroutine _speedCoroutine;
+
+        private bool IsParticleDustPlayedForMovement = false;
         
         private void Start()
         {
+            _speed = _walkSpeed;
             Init();
         }
 
@@ -164,6 +170,17 @@ namespace RehvidGames.Player
         {
             var velocity = _characterController.velocity;
             var currentHorizontalSpeed = new Vector3(velocity.x, 0, velocity.z);
+
+            if (!IsMoving() && IsParticleDustPlayedForMovement == false)
+            {
+                PlayDustParticleEffect();
+                IsParticleDustPlayedForMovement = true;
+            }
+
+            if (IsMoving())
+            {
+                IsParticleDustPlayedForMovement = false;
+            }
             
             _animator.SetFloat(AnimatorParameter.XSpeed, currentHorizontalSpeed.magnitude);
             _animator.SetFloat(AnimatorParameter.YSpeed, _currentVerticalSpeed);
@@ -179,7 +196,40 @@ namespace RehvidGames.Player
             var inputMovement = context.ReadValue<Vector2>();
             _movementDirection = new Vector3(inputMovement.x, 0f, inputMovement.y).normalized;
         }
-   
+
+        public void OnRun(InputAction.CallbackContext context)
+        {
+            float targetSpeed = _walkSpeed;
+            if (!context.canceled)
+            {
+                targetSpeed = _runSpeed;
+            }
+
+            if (_speedCoroutine != null)
+            {
+                StopCoroutine(_speedCoroutine);
+            }
+            
+            _speedCoroutine = StartCoroutine(SmoothSpeedTransition(targetSpeed, InputSystem.settings.defaultHoldTime));
+        }
+
+        private IEnumerator SmoothSpeedTransition(float targetSpeed, float speedTransitionTime)
+        {
+            float initialSpeed = _speed;
+            float elapsedTime = 0f;
+
+            while (elapsedTime < speedTransitionTime)
+            {
+                elapsedTime += Time.deltaTime;
+                float time = elapsedTime / speedTransitionTime;
+                _speed = Mathf.Lerp(initialSpeed, targetSpeed, time);
+                yield return null;
+            }
+
+            _speed = targetSpeed;
+        }
+        
+        
         public void OnJump(InputAction.CallbackContext context)
         {
             _isJumpTriggered = context.performed;
@@ -188,11 +238,17 @@ namespace RehvidGames.Player
         public void OnFallingLand()
         {
             _player.SetAction(PlayerActionType.Unoccupied);
+            PlayDustParticleEffect();
         }
 
         public void OnFallingIdleEnd()
         {
             _player.SetAction(PlayerActionType.IdleFalling);
+        }
+
+        private void PlayDustParticleEffect()
+        {
+            VFXManager.Instance.PlayParticleEffect(_player.CharacterEffects.DustVFX, _player.transform.position);
         }
     }
 }

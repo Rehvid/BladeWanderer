@@ -2,20 +2,15 @@
 {
     using Animator;
     using Behaviors;
-    using Data.Serializable;
     using Enums;
     using Player;
     using UnityEngine;
-    using UnityEngine.Events;
-    using UnityEngine.VFX;
+   
 
     public class Sword: BaseWeapon
     {
         [SerializeField] private WaveMotionController _waveMotionController;
         [SerializeField] private AnimatorController _animator;
-        [SerializeField] private VisualEffect _slashVfx;
-        
-        public VisualEffect SlashVfx => _slashVfx;
         
         private void Update()
         {
