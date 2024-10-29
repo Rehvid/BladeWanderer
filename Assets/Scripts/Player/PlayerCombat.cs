@@ -2,6 +2,7 @@
 {
     using Animator;
     using Enums;
+    using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
     using Weapons;
@@ -51,8 +52,7 @@
             var weapon = _player.Weapon;
             if (weapon is Sword sword)
             {
-                sword.SlashVfx.enabled = true;
-                sword.SlashVfx.Play();
+                VFXManager.Instance.PlayVisualEffect(_player.CharacterEffects.SlashSwordVfx, sword.transform.position);
             }
         }
         
