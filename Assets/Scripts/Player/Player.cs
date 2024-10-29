@@ -1,11 +1,12 @@
 ﻿namespace RehvidGames.Player
 {
-    using Interfaces;
+    using Animator;
+    using Character;
     using UnityEngine;
     using Enums;
     using Weapons;
 
-    public class Player: MonoBehaviour, IDamageable
+    public class Player: BaseCharacter
     {
         [SerializeField] private PlayerAttributes _attributes;
         [SerializeField] private Transform _primaryWeaponSocket;
@@ -15,8 +16,17 @@
         public PlayerActionManager ActionManager => _actionManager;
         
         public PlayerAttributes Attributes => _attributes;
+
+        public Transform PrimaryWeaponSocket => _primaryWeaponSocket;
         
-        public BaseWeapon Weapon { get; private set; }
+        public override void ReceiveDamage(float damage, Vector3 hitPosition)
+        {
+            healthAttribute.ReceiveDamage(damage, hitPosition);
+            HitDirectionType directionType = hitDirectionAnalyzer.GetDirectionType(hitPosition, transform);
+            // VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
+            _animatorController.SetTrigger(AnimatorParameter.HitDirection);
+            _animatorController.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
+        }
         
         public bool HasEquippedWeapon()
         {
@@ -34,16 +44,6 @@
             Weapon.UnEquip(_storageWeaponSocket);
         }
         
-        public void ReceiveDamage(float damage, Vector3 hitPosition)
-        {
-            _attributes.HealthAttribute.ReceiveDamage(damage);
-        }
-
-        public bool IsDead()
-        {
-            return _attributes.HealthAttribute.IsDead();
-        }
-
         public void SetAction(PlayerActionType actionType)
         {
             _actionManager.ChangeCurrentAction(actionType);

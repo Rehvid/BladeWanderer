@@ -13,7 +13,7 @@
             InitUI();
         }
         
-        public void ReceiveDamage(float damage)
+        public void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             CurrentValue -= damage;
             StartCoroutine(InterpolateAttributeValue());
