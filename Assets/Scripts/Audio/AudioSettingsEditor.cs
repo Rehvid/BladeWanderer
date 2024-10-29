@@ -6,6 +6,7 @@
         using Enums;
         using UnityEditor;
         using UnityEngine;
+        using AudioSettings = ScriptableObjects.AudioSettings;
 
         [CustomEditor(typeof(AudioSettings))]
         public class AudioSettingsEditor : Editor

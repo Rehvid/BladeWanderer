@@ -1,9 +1,9 @@
 ﻿namespace RehvidGames.Attributes
 {
-    using Data.Events.Events;
     using UnityEngine;
     using Interfaces;
-    
+    using ScriptableObjects;
+
     public class HealthAttribute: BaseAttribute, IHealth
     {
         [SerializeField] private GameEvent deathTriggered; 

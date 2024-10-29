@@ -1,11 +1,11 @@
 ﻿namespace RehvidGames.AI.States
 {
     using Animator;
-    using Data.Serializable;
     using Factories;
     using Enums;
     using Interfaces;
-    
+    using Serializable;
+
     public class FightState: BaseState
     {
         public FightState(AIController aiController) : base(aiController) { }

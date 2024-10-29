@@ -1,5 +1,6 @@
-﻿namespace RehvidGames.Audio
+﻿namespace RehvidGames.ScriptableObjects
 {
+    using Audio;
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "AudioSettings", menuName = "Audio/Settings")]

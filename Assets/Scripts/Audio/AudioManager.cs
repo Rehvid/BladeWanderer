@@ -4,6 +4,7 @@
     using System.Linq;
     using Enums;
     using UnityEngine;
+    using AudioSettings = ScriptableObjects.AudioSettings;
     using Random = UnityEngine.Random;
 
     public class AudioManager: MonoBehaviour

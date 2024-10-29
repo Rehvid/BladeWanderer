@@ -1,6 +1,6 @@
-﻿namespace RehvidGames.Data.Serializable
+﻿namespace RehvidGames.Serializable
 {
-    using RehvidGames.Data.Events.Events;
+    using ScriptableObjects;
     using UnityEngine;
     using UnityEngine.Events;
 

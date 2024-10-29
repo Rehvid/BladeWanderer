@@ -1,8 +1,8 @@
 namespace RehvidGames.AI
 {
     using Animator;
-    using Data.Serializable;
     using Player;
+    using Serializable;
     using UnityEngine;
     using Vector3 = UnityEngine.Vector3;
 

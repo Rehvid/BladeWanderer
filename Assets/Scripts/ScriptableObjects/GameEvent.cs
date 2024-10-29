@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.Data.Events.Events
+﻿namespace RehvidGames.ScriptableObjects
 {
     using System.Collections.Generic;
     using Serializable;

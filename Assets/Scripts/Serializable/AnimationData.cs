@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.Data.Serializable
+﻿namespace RehvidGames.Serializable
 {
     public enum AnimatorParameterType
     {
