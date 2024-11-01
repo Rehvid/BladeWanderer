@@ -20,5 +20,7 @@
             _currentSouls += souls;
             _soulCounterChanged?.Invoke(_currentSouls);
         }
+
+        public bool HasEnoughStaminaToMakeAction(float stamina) => _staminaAttribute.HasEnoughStamina(stamina);
     }
 }

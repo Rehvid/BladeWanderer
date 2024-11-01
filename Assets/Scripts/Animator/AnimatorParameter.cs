@@ -8,6 +8,7 @@
             public static readonly int XSpeed = Animator.StringToHash("XSpeed");
             public static readonly int YSpeed = Animator.StringToHash("YSpeed");
             public static readonly int Jump = Animator.StringToHash("Jump");
+            public static readonly int JumpRun = Animator.StringToHash("JumpRun");
         #endregion
 
         #region Combat
@@ -40,6 +41,7 @@
                 _ when hash == Interaction => "Interaction",
                 _ when hash == HideWeapon => "HideWeapon",
                 _ when hash == Jump => "Jump",
+                _ when hash == JumpRun => "JumpRun",
                 _ when hash == DrawWeapon => "DrawWeapon",
                 _ when hash == HasEquippedWeapon => "HasEquippedWeapon",
                 _ when hash == PickUp => "PickUp",
