@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 5fa27f43e7a1adb4e9ba3749a32d5927
+guid: 861eb705c189a28469963b163672046c
 ModelImporter:
   serializedVersion: 22200
   internalIDToNameTable: []
@@ -31,37 +31,30 @@ ModelImporter:
     extraUserProperties: []
     clipAnimations:
     - serializedVersion: 16
-      name: A_PlayerJump_Landing
+      name: A_PlayerJump
       takeName: mixamo.com
       internalID: -203655887218126122
-      firstFrame: 8
-      lastFrame: 32
+      firstFrame: 0
+      lastFrame: 7
       wrapMode: 0
       orientationOffsetY: 0
       level: 0
       cycleOffset: 0
       loop: 0
       hasAdditiveReferencePose: 0
-      loopTime: 1
+      loopTime: 0
       loopBlend: 0
       loopBlendOrientation: 1
       loopBlendPositionY: 1
       loopBlendPositionXZ: 1
-      keepOriginalOrientation: 0
+      keepOriginalOrientation: 1
       keepOriginalPositionY: 1
       keepOriginalPositionXZ: 1
       heightFromFeet: 0
       mirror: 0
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
-      events:
-      - time: 0.36400875
-        functionName: OnFallingLand
-        data: 
-        objectReferenceParameter: {instanceID: 0}
-        floatParameter: 0
-        intParameter: 0
-        messageOptions: 0
+      events: []
       transformMask: []
       maskType: 3
       maskSource: {instanceID: 0}

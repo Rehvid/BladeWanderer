@@ -640,7 +640,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weapon: {fileID: 0}
   healthAttribute: {fileID: 103988198}
-  _animatorController: {fileID: 0}
+  animatorController: {fileID: 0}
   characterEffects: {fileID: 11400000, guid: 4d67e7edae7a07649ae4e17f8589d0ec, type: 2}
   _weapon: {fileID: 0}
   _treasure: {fileID: 0}
@@ -2249,6 +2249,8 @@ GameObject:
   - component: {fileID: 1150700265}
   - component: {fileID: 1150700272}
   - component: {fileID: 1150700271}
+  - component: {fileID: 1150700275}
+  - component: {fileID: 1150700274}
   - component: {fileID: 1150700270}
   - component: {fileID: 1150700269}
   - component: {fileID: 1150700268}
@@ -2279,6 +2281,7 @@ Transform:
   - {fileID: 7183225679866979022}
   - {fileID: 1967758739}
   - {fileID: 549555868}
+  - {fileID: 1349289108}
   m_Father: {fileID: 247121141}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &1150700266
@@ -2294,7 +2297,7 @@ Animator:
   m_Controller: {fileID: 9100000, guid: f402be46aca7eae40a587f78c5b3b4a0, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
-  m_ApplyRootMotion: 0
+  m_ApplyRootMotion: 1
   m_LinearVelocityBlending: 0
   m_StabilizeFeet: 0
   m_AnimatePhysics: 0
@@ -2325,8 +2328,8 @@ CharacterController:
   m_Radius: 0.3
   m_SlopeLimit: 45
   m_StepOffset: 0.3
-  m_SkinWidth: 0.08
-  m_MinMoveDistance: 0.001
+  m_SkinWidth: 0.03
+  m_MinMoveDistance: 0
   m_Center: {x: 0, y: 0.85, z: 0}
 --- !u!114 &1150700268
 MonoBehaviour:
@@ -2355,8 +2358,8 @@ MonoBehaviour:
   m_ActionEvents:
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1150700271}
-        m_TargetAssemblyTypeName: RehvidGames.Player.PlayerMovement, Assembly-CSharp
+      - m_Target: {fileID: 1150700274}
+        m_TargetAssemblyTypeName: RehvidGames.Player.PlayerMovementHandler, Assembly-CSharp
         m_MethodName: OnMove
         m_Mode: 0
         m_Arguments:
@@ -2491,8 +2494,8 @@ MonoBehaviour:
     m_ActionName: 'Player/Dodge[/Mouse/rightButton]'
   - m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1150700271}
-        m_TargetAssemblyTypeName: RehvidGames.Player.PlayerMovement, Assembly-CSharp
+      - m_Target: {fileID: 1150700274}
+        m_TargetAssemblyTypeName: RehvidGames.Player.PlayerMovementHandler, Assembly-CSharp
         m_MethodName: OnRun
         m_Mode: 0
         m_Arguments:
@@ -2545,21 +2548,13 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1150700264}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e9e19a6f83fdc46498e0d31a68bba1b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _animator: {fileID: 1150700273}
   _player: {fileID: 1150700272}
   _characterController: {fileID: 1150700267}
-  _walkSpeed: 5
-  _runSpeed: 10
-  _cameraTransform: {fileID: 1823688467}
-  _turnSmoothTime: 0.1
-  _jumpPower: 6
-  _isLockingCamera: 0
-  _staminaCost: 20
 --- !u!114 &1150700272
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2574,7 +2569,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Weapon: {fileID: 0}
   healthAttribute: {fileID: 549555871}
-  _animatorController: {fileID: 1150700273}
+  animatorController: {fileID: 1150700273}
   characterEffects: {fileID: 11400000, guid: 4d67e7edae7a07649ae4e17f8589d0ec, type: 2}
   _attributes: {fileID: 549555872}
   _primaryWeaponSocket: {fileID: 1453299763}
@@ -2592,6 +2587,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa94207e947f4c81bf60715b725bb20f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &1150700274
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150700264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: abf63b85e4c84dc3b6f606723f5eb3ef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _player: {fileID: 1150700272}
+  _characterController: {fileID: 1150700267}
+  _walkSpeed: 5
+  _runSpeed: 10
+  _decelerationRate: 5
+  _cameraTransform: {fileID: 1823688467}
+  _rotationSmoothingTime: 0.1
+  _isLockingCamera: 0
+  _animatorVerticalOffset: -0.5
+  _animatorSpeedSmoothingFactor: 0.1
+--- !u!114 &1150700275
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150700264}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 28293bce4cff44b99e4c134b467000d3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _staminaCost: 20
+  _jumpPower: 3
+  _characterController: {fileID: 1150700267}
+  _player: {fileID: 1150700272}
+  _forwardJumpDistance: 2
 --- !u!1 &1263862402
 GameObject:
   m_ObjectHideFlags: 0
@@ -2897,6 +2931,148 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!1 &1349289107
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1349289108}
+  - component: {fileID: 1349289109}
+  m_Layer: 3
+  m_Name: PlayerInputReader
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1349289108
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349289107}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1150700265}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1349289109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1349289107}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62899f850307741f2a39c98a8b639597, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Actions: {fileID: -944628639613478452, guid: 6f6a530b7446a534bbdbc3ba91469977, type: 3}
+  m_NotificationBehavior: 2
+  m_UIInputModule: {fileID: 0}
+  m_DeviceLostEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_DeviceRegainedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ControlsChangedEvent:
+    m_PersistentCalls:
+      m_Calls: []
+  m_ActionEvents:
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: da816ff6-6b96-4cad-9aed-d4bf5b7cc2ec
+    m_ActionName: 'Player/Move[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls:
+      - m_Target: {fileID: 1150700275}
+        m_TargetAssemblyTypeName: RehvidGames.Player.PlayerJumpHandler, Assembly-CSharp
+        m_MethodName: OnJump
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+    m_ActionId: e6792519-fdd4-49a3-a13a-b2b074a71042
+    m_ActionName: 'Player/Jump[/Keyboard/space]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c1b0d8bf-5658-4a61-b7c0-064e53fae4c8
+    m_ActionName: 'Player/Interaction[/Keyboard/e]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 1b4d7437-d522-44d1-aceb-196b80394792
+    m_ActionName: 'Player/Attack[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 80bcb4bf-1208-4150-a5e8-577cdfa6711c
+    m_ActionName: 'Player/WeaponToggle[/Keyboard/r]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a5b05c8b-e1da-4e35-b89e-17d2d1a60f97
+    m_ActionName: 'Player/Dodge[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 319df862-dcb9-4f53-a744-a955c539dd5c
+    m_ActionName: 'Player/Run[/Keyboard/leftShift]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 55a6db69-fc80-4a9d-b06d-50e1bc99c98b
+    m_ActionName: 'UI/Navigate[/Keyboard/w,/Keyboard/upArrow,/Keyboard/s,/Keyboard/downArrow,/Keyboard/a,/Keyboard/leftArrow,/Keyboard/d,/Keyboard/rightArrow]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 0e172cd7-7fb4-49e1-803d-b4e57c68cc1e
+    m_ActionName: 'UI/Submit[/Keyboard/enter]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 87fb079b-f919-4c98-b928-ff87afef01d6
+    m_ActionName: 'UI/Cancel[/Keyboard/escape]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: d5608681-4258-4cd3-aa9c-dc971b5f6979
+    m_ActionName: 'UI/Point[/Mouse/position]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 3b5aea15-cc95-4be6-873e-030f919327af
+    m_ActionName: 'UI/Click[/Mouse/leftButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c6fcbcfa-fa4d-4387-9a2f-416b99915ed9
+    m_ActionName: 'UI/ScrollWheel[/Mouse/scroll]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: c5f272b3-9d06-4476-845e-b836d25599ec
+    m_ActionName: 'UI/MiddleClick[/Mouse/middleButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 7190ff8b-3f6b-4287-a1d9-a8cbfcc98c51
+    m_ActionName: 'UI/RightClick[/Mouse/rightButton]'
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: a8e0b0f9-efe1-4225-bf9b-ec392735f9d4
+    m_ActionName: UI/TrackedDevicePosition
+  - m_PersistentCalls:
+      m_Calls: []
+    m_ActionId: 54dd3507-783d-4f2b-a436-58d0d521c173
+    m_ActionName: UI/TrackedDeviceOrientation
+  m_NeverAutoSwitchControlSchemes: 0
+  m_DefaultControlScheme: 
+  m_DefaultActionMap: Player
+  m_SplitScreenIndex: -1
+  m_Camera: {fileID: 0}
 --- !u!1 &1453299762
 GameObject:
   m_ObjectHideFlags: 0
