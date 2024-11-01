@@ -8,6 +8,7 @@
 
     public class Player: BaseCharacter
     {
+        [Header("Player configuration")]
         [SerializeField] private PlayerAttributes _attributes;
         [SerializeField] private Transform _primaryWeaponSocket;
         [SerializeField] private Transform _storageWeaponSocket;
@@ -24,8 +25,8 @@
             healthAttribute.ReceiveDamage(damage, hitPosition);
             HitDirectionType directionType = hitDirectionAnalyzer.GetDirectionType(hitPosition, transform);
             // VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
-            _animatorController.SetTrigger(AnimatorParameter.HitDirection);
-            _animatorController.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
+            animatorController.SetTrigger(AnimatorParameter.HitDirection);
+            animatorController.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
         }
         
         public bool HasEquippedWeapon()

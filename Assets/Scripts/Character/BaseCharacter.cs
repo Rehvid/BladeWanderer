@@ -11,12 +11,15 @@
 
     public abstract class BaseCharacter: MonoBehaviour, ICharacter
     {
-        public BaseWeapon Weapon;
         public CharacterEffects CharacterEffects => characterEffects;
+
+        public AnimatorController AnimatorController => animatorController;
         
+        [Header("Base configuration")]
         [SerializeField] protected HealthAttribute healthAttribute;
-        [SerializeField] protected AnimatorController _animatorController;
+        [SerializeField] protected AnimatorController animatorController;
         [SerializeField] protected CharacterEffects characterEffects;
+        public BaseWeapon Weapon;
         
         protected HitDirectionAnalyzer hitDirectionAnalyzer;
         
