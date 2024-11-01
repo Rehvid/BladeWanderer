@@ -7,17 +7,16 @@
 
     public class PlayerMovementHandler: MonoBehaviour
     {
-        //TODO: Refactor (znaleźć inną animacje Idle)
-    
         [Header("Configuration")]
         [SerializeField] private Player _player;
         [SerializeField] private CharacterController _characterController;
-        
-        [Header("Speed parameters")]
-        [Tooltip("Walking speed of the character.")]
-        [SerializeField] private float _walkSpeed;
-        [Tooltip("Running speed of the character.")]
-        [SerializeField] private float _runSpeed;
+
+        [Header("Speed parameters")] 
+        [Tooltip("Walking speed of the character.")] 
+        [SerializeField] private float _walkSpeed = 5f;
+
+        [Tooltip("Running speed of the character.")] 
+        [SerializeField] private float _runSpeed = 10f;
         [Tooltip("Rate at which the character decelerates to a full stop when movement input is released. Higher values cause quicker stops, while lower values result in a slower, more gradual deceleration.")]
         [SerializeField] private float _decelerationRate = 5f;
         

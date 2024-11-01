@@ -11,7 +11,7 @@
     {
         [Header("Configuration")]
         [SerializeField] private Player _player;
-        [SerializeField] private AnimatorController _animator;
+   
         
         public void OnAttack(InputAction.CallbackContext context)
         {
@@ -25,8 +25,7 @@
         {
             if (context.performed && _player.ActionManager.IsUnoccupied())
             {
-                _animator.SetTrigger(AnimatorParameter.Dodge);
-                _animator.ApplyRootMotion();
+                _player.AnimatorController.SetTrigger(AnimatorParameter.Dodge);
             }
         }
         
@@ -36,7 +35,7 @@
             _player.UseStamina(_player.Weapon.Stats.StaminaCost);
             _player.SetAction(PlayerActionType.Attacking);
             
-            _animator.SetTrigger(AnimatorParameter.Attack);
+            _player.AnimatorController.SetTrigger(AnimatorParameter.Attack);
         }
         
         private bool CanAttack()

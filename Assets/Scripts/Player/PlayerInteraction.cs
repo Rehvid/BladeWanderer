@@ -11,7 +11,6 @@
     {
         private IInteractable _interactableObject;
         [SerializeField] private Player _player;
-        [SerializeField] private AnimatorController _animator;
         
         
         public void OnInteraction(InputAction.CallbackContext context)
@@ -58,7 +57,7 @@
         public void OnPickUpWeapon()
         {
             if (_interactableObject is not BaseWeapon weapon) return;
-            
+            _player.SetAction(PlayerActionType.Interacting);
             GameObject parentWeapon = weapon.transform.parent.gameObject;
             _player.AttachWeaponToPrimarySocket(weapon);
             if (parentWeapon != null && parentWeapon.CompareTag("Temporary"))
@@ -93,14 +92,14 @@
         
         private void OnDrawingWeaponEnd()
         {
-            _player.SetAction(PlayerActionType.Unoccupied);
+            _player.SetAction(PlayerActionType.Unoccupied); 
         }
         
         private void RaiseInteractMultiAnimationsForToggleWeapon(bool isDrawingWeapon)
         {
-            _animator.SetTrigger(AnimatorParameter.Interaction);
-            _animator.SetTrigger( isDrawingWeapon ? AnimatorParameter.DrawWeapon : AnimatorParameter.HideWeapon);
-            _animator.SetBool(AnimatorParameter.HasEquippedWeapon, isDrawingWeapon);
+            _player.AnimatorController.SetTrigger(AnimatorParameter.Interaction);
+            _player.AnimatorController.SetTrigger( isDrawingWeapon ? AnimatorParameter.DrawWeapon : AnimatorParameter.HideWeapon);
+            _player.AnimatorController.SetBool(AnimatorParameter.HasEquippedWeapon, isDrawingWeapon);
         }
     }
 }

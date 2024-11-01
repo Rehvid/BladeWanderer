@@ -7,11 +7,15 @@
 
     public class PlayerJumpHandler : MonoBehaviour
     {
-        [SerializeField] private int _staminaCost = 20;
-        [SerializeField] private float _jumpPower = 3.0f;
-        [SerializeField] private CharacterController _characterController;
+        [Header("Configuration")]
         [SerializeField] private Player _player;
-        [SerializeField] private float _forwardJumpDistance = 5.0f;    
+        [SerializeField] private CharacterController _characterController;
+      
+        
+        [Header("Jump parameters")]
+        [SerializeField] private float _jumpPower = 3.0f;
+        [SerializeField] private float _forwardJumpDistance = 5.0f;  
+        [SerializeField] private int _staminaCost = 20;
         
         private AnimatorController _animatorController;
         private bool _isJumpTriggered;
@@ -64,6 +68,7 @@
         
         private Vector3 DetermineJumpDirection()
         {
+            Debug.Log(_characterController.velocity.magnitude);
             if (_characterController.velocity.magnitude > 0.1f)
             {
                 _animatorController.SetBool(AnimatorParameter.JumpRun, true);
