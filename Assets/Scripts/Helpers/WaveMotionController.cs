@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.Behaviors
+﻿namespace RehvidGames.Helpers
 {
     using UnityEngine;
 
@@ -23,8 +23,8 @@
         private Vector3 GetWavePosition()
         {
             var waveOffset = Mathf.Sin(Time.time * _frequency);
-            var amplitude  = (_maxUpwardDisplacement - _maxDownwardDisplacement) / 2f; // 0.5f;
-            var midPoint = (_maxUpwardDisplacement + _maxDownwardDisplacement) / 2f; // 1f;
+            var amplitude  = (_maxUpwardDisplacement - _maxDownwardDisplacement) / 2f;
+            var midPoint = (_maxUpwardDisplacement + _maxDownwardDisplacement) / 2f;
             
             return _startPosition.position + _direction * (midPoint + waveOffset * amplitude);
         }
