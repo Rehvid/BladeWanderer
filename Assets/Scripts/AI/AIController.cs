@@ -15,7 +15,7 @@ namespace RehvidGames.AI
         [SerializeField] private AIDetecting _aiDetecting;
         
         [Header("Settings")]
-        [SerializeField] private AnimatorController animatorController;
+        [SerializeField] private AnimatorHandler animatorHandler;
         
         private void Start()
         {
@@ -85,7 +85,7 @@ namespace RehvidGames.AI
         
         public void PlayAnimation(string animationName, AnimatorParameterType animatorParameterType, object value = null)
         {
-            // animatorController.PlayAnimation(animationName, animatorParameterType, value);
+            // animatorHandler.PlayAnimation(animationName, animatorParameterType, value);
         }
     }
 }

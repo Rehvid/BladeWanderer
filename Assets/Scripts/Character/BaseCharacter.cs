@@ -2,7 +2,6 @@
 {
     using Animator;
     using Attributes;
-    using Enums;
     using Helpers;
     using Interfaces;
     using ScriptableObjects;
@@ -12,12 +11,11 @@
     public abstract class BaseCharacter: MonoBehaviour, ICharacter
     {
         public CharacterEffects CharacterEffects => characterEffects;
-
-        public AnimatorController AnimatorController => animatorController;
+        public AnimatorHandler AnimatorHandler => animatorHandler;
         
         [Header("Base configuration")]
         [SerializeField] protected HealthAttribute healthAttribute;
-        [SerializeField] protected AnimatorController animatorController;
+        [SerializeField] protected AnimatorHandler animatorHandler;
         [SerializeField] protected CharacterEffects characterEffects;
         public BaseWeapon Weapon;
         

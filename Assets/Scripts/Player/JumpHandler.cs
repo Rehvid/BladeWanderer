@@ -1,39 +1,34 @@
 ﻿namespace RehvidGames.Player
 {
     using Animator;
+    using Audio;
     using Enums;
+    using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
 
-    public class PlayerJumpHandler : MonoBehaviour
+    public class JumpHandler : MonoBehaviour
     {
         [Header("Configuration")]
         [SerializeField] private Player _player;
         [SerializeField] private CharacterController _characterController;
-      
         
         [Header("Jump parameters")]
         [SerializeField] private float _jumpPower = 3.0f;
         [SerializeField] private float _forwardJumpDistance = 5.0f;  
-        [SerializeField] private int _staminaCost = 20;
         
-        private AnimatorController _animatorController;
+        private AnimatorHandler _animatorHandler;
         private bool _isJumpTriggered;
         private float _currentVerticalSpeed;
         private Vector3 _jumpDirection;
         
         private const float GravityScale = -2f;
 
-        public void OnJump(InputAction.CallbackContext context)
-        {
-            _isJumpTriggered = context.performed;
-        }
-
         private void Start()
         {
             if (_player)
             {
-                _animatorController = _player.AnimatorController;
+                _animatorHandler = _player.AnimatorHandler;
             }
         }
 
@@ -43,7 +38,7 @@
             ApplyJumpMovement();
             UpdateAnimatorParameters();
         }
-
+        
         private void HandleJumpInput()
         {
             if (_isJumpTriggered && CanJump())
@@ -54,24 +49,24 @@
         
         private void StartJump()
         {
-            _animatorController.SetTrigger(AnimatorParameter.Jump);
-            _player.UseStamina(_staminaCost);
+            _animatorHandler.SetTrigger(AnimatorParameter.Jump);
+            AudioManager.PlayRandomAudioOneShot(SoundType.Jump);
+            _player.UseStamina(_player.StaminaCosts.Jump);
+            _player.RegenerationStamina();
             _player.SetAction(PlayerActionType.Jumping);
+            
             _currentVerticalSpeed = CalculateJumpSpeed(); 
             _jumpDirection = DetermineJumpDirection();
         }
 
-        private float CalculateJumpSpeed()
-        {
-            return Mathf.Sqrt(_jumpPower * GravityScale * Physics.gravity.y);
-        }
+        private float CalculateJumpSpeed() => Mathf.Sqrt(_jumpPower * GravityScale * Physics.gravity.y);
+        
         
         private Vector3 DetermineJumpDirection()
         {
-            Debug.Log(_characterController.velocity.magnitude);
             if (_characterController.velocity.magnitude > 0.1f)
             {
-                _animatorController.SetBool(AnimatorParameter.JumpRun, true);
+                _animatorHandler.SetBool(AnimatorParameter.JumpRun, true);
                 return new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).normalized * _forwardJumpDistance;
             }
             return Vector3.zero; 
@@ -85,28 +80,37 @@
             Vector3 movement = _jumpDirection + Vector3.up * _currentVerticalSpeed;
             _characterController.Move(movement * Time.deltaTime);
             
-            if (_characterController.isGrounded)
-            {
-                EndJump();
-            }
         }
-
-        private void EndJump()
-        {
-            _player.SetAction(PlayerActionType.Unoccupied);
-            _currentVerticalSpeed = 0;
-            _animatorController.SetBool(AnimatorParameter.JumpRun, false);
-        }
-
+        
         private void UpdateAnimatorParameters()
         {
-            _animatorController.SetFloat(AnimatorParameter.YSpeed, _currentVerticalSpeed);
+            _animatorHandler.SetFloat(AnimatorParameter.YSpeed, _currentVerticalSpeed);
         }
 
         private bool CanJump()
         {
             return _characterController.isGrounded && _player.ActionManager.IsUnoccupied() &&
-                   _player.Attributes.HasEnoughStaminaToMakeAction(_staminaCost);
+                   _player.HasEnoughStamina(_player.StaminaCosts.Jump);
         }
+        
+        #region Events
+        public void OnJump(InputAction.CallbackContext context)
+        {
+            _isJumpTriggered = context.performed;
+        }
+        
+        private void OnVFXPlay()
+        {
+            AudioManager.PlayRandomAudioOneShot(SoundType.Land);
+            VFXManager.Instance.PlayParticleEffect(_player.CharacterEffects.DustVFX, transform.position);
+        }
+        
+        private void OnJumpEnd()
+        {
+            _player.SetAction(PlayerActionType.Unoccupied);
+            _currentVerticalSpeed = 0;
+            _animatorHandler.SetBool(AnimatorParameter.JumpRun, false);
+        }
+        #endregion
     }
 }

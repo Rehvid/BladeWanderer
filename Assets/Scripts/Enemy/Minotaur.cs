@@ -3,7 +3,7 @@
     using Managers;
     using UnityEngine;
 
-    public class Skeleton: BaseEnemy
+    public class Minotaur: BaseEnemy
     {
         protected override void HandleDeath()
         {
@@ -17,7 +17,7 @@
 
         public override void OnDeath(Component sender, object value = null)
         {
-            Debug.Log("Skeleton Death");
+            Debug.Log("Minotaur Death");
         }
 
         private void OnEnableCollision()

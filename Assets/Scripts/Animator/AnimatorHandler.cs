@@ -4,7 +4,7 @@
     using UnityEngine;
 
     [RequireComponent(typeof(Animator))]
-    public class AnimatorController: MonoBehaviour
+    public class AnimatorHandler: MonoBehaviour
     {
         private Animator _animator;
 
@@ -26,10 +26,6 @@
         public void SetFloat(int hash, float value) => _animator.SetFloat(GetAnimationNameByHash(hash), value);
 
         public void SetBool(int hash, bool value) => _animator.SetBool(GetAnimationNameByHash(hash), value);
-
-        public void ApplyRootMotion() => _animator.applyRootMotion = true;
-
-        public void DisableRootMotion() => _animator.applyRootMotion = false;
         
         private string GetAnimationNameByHash(int hash) => AnimatorParameter.GetParameterName(hash);
     }

@@ -1,12 +1,13 @@
-namespace RehvidGames
+namespace RehvidGames.Animator
 {
     using UnityEngine;
-    public class Selection : StateMachineBehaviour
+
+    public class RandomAnimationSelector : StateMachineBehaviour
     {
         [SerializeField] private int _count;
         [SerializeField] private string parameterName;
         
-        public override void OnStateEnter(UnityEngine.Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
+        public override void OnStateEnter(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
             int selection = Random.Range(0, _count);
             int currentSelection = animator.GetInteger(parameterName);

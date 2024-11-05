@@ -4,8 +4,9 @@
     using Animator;
     using UnityEngine;
     using UnityEngine.InputSystem;
+    using VFXManager = Managers.VFXManager;
 
-    public class PlayerMovementHandler: MonoBehaviour
+    public class MovementHandler: MonoBehaviour
     {
         [Header("Configuration")]
         [SerializeField] private Player _player;
@@ -33,43 +34,85 @@
         [Tooltip("Smoothing factor for speed transitions in the animator. Lower values make animations more responsive to speed changes, while higher values create smoother, slower adjustments.")]
         [SerializeField] private float _animatorSpeedSmoothingFactor = 0.1f;
 
+        private bool _stopRunning;
         private bool _isRunHolding;
         private bool _isStopped;
+        private bool _canInvokeVfxEffects;
+        
+        private float _fullRunStaminaCost => _player.StaminaCosts.Run * Time.deltaTime;
         private float _rotationVelocity;
         private float _currentSpeed;
         private float _previousSpeed;
+        
         private Vector3 _movementInput;
         private Coroutine _speedCoroutine;
-        private AnimatorController _animatorController;
-
-
-        #region Input events
-        public void OnMove(InputAction.CallbackContext context)
+        private AnimatorHandler _animatorHandler;
+        
+        private void Start()
         {
-            _isStopped = false;
-            var inputMovement = context.ReadValue<Vector2>();
-            _movementInput = new Vector3(inputMovement.x, 0f, inputMovement.y).normalized;
-            if (!_isRunHolding || _currentSpeed < 1f)
+            _animatorHandler = _player.AnimatorHandler;
+            if (_isLockingCamera)
             {
-               _currentSpeed = _walkSpeed; 
+                Cursor.lockState = CursorLockMode.Locked;
+            }
+        }
+
+        private void Update()
+        {
+            HandlePlayerRunning();
+            if (!_player.ActionManager.IsUnoccupied())
+            {
+                _animatorHandler.SetFloat(AnimatorParameter.XSpeed, 0);
+                return; 
+            }
+            HandleMovement();
+
+            if (!_isStopped)
+            {
+                UpdateAnimatorParameters();
             }
             
+            PlayMovementStopEffects();
         }
         
-        public void OnRun(InputAction.CallbackContext context)
+        private void HandlePlayerRunning()
+        {
+            if (!HasEnoughStaminaToRun())
+            {
+                StopRunning();
+                return;
+            }
+
+            ContinueRunning();
+        }
+        
+        private bool HasEnoughStaminaToRun() => _player.HasEnoughStamina(_fullRunStaminaCost);
+
+        private void StopRunning()
+        {
+            if (_currentSpeed > _walkSpeed)
+            { 
+                StartSpeedCoroutine(_walkSpeed);
+            }
+            _stopRunning = true;
+                
+            if (_player.IsRegenerationStarted())
+            {
+                _player.StopRegenerationStamina();
+                return;
+            }
+            
+            _player.RegenerationStamina();  
+        }
+        
+        private void StartSpeedCoroutine(float targetSpeed)
         {
             if (_speedCoroutine != null)
             {
                 StopCoroutine(_speedCoroutine);
             }
-            float targetSpeed = context.canceled ? _walkSpeed : _runSpeed;
-            _isRunHolding = !context.canceled;
             _speedCoroutine = StartCoroutine(SmoothSpeedTransition(targetSpeed, InputSystem.settings.defaultHoldTime));
         }
-
-        #endregion
-       
-        
         private IEnumerator SmoothSpeedTransition(float targetSpeed, float transitionTime)
         {
             float initialSpeed = _currentSpeed;
@@ -86,42 +129,36 @@
             _currentSpeed = targetSpeed;
         }
         
-        private void Start()
+        private void ContinueRunning()
         {
-            _animatorController = _player.AnimatorController;
-            if (_isLockingCamera)
+            _stopRunning = false;
+            if (_isRunHolding)
             {
-                Cursor.lockState = CursorLockMode.Locked;
-            }
-        }
-
-        private void Update()
-        {
-            if (!_player.ActionManager.IsUnoccupied())
-            {
-               _animatorController.SetFloat(AnimatorParameter.XSpeed, 0);
+                _player.UseStamina(_fullRunStaminaCost);
                 return;
             }
-            
-            if (CanMove())
-            {
-                ApplyRotation();
-                MoveCharacter();
-            }
-            else
-            {
-                DecelerateToStop();
-            }
-
-            if (!_isStopped)
-            {
-                UpdateAnimatorParameters();
-            }
+          
+            _player.RegenerationStamina();
         }
 
-        private bool CanMove()
+        private void HandleMovement()
         {
-            return _movementInput.magnitude >= 0.1f;
+            if (!CanMove())
+            {
+                DecelerateToStop();
+                return;
+            }
+            _canInvokeVfxEffects = true;
+            ApplyRotation();
+            MoveCharacter();
+        }
+        
+        private bool CanMove() => _movementInput.magnitude >= 0.1f;
+        
+        private void DecelerateToStop()
+        {
+            _characterController.Move(new Vector3(0, _animatorVerticalOffset, 0));
+            _currentSpeed = Mathf.Lerp(_currentSpeed, 0f, Time.deltaTime * _decelerationRate);
         }
         
         private void ApplyRotation()
@@ -167,25 +204,52 @@
         {
             return moveDirection.normalized * (_currentSpeed * Time.deltaTime);
         }
-
-        private void DecelerateToStop()
-        {
-            _characterController.Move(new Vector3(0, _animatorVerticalOffset, 0));
-            _currentSpeed = Mathf.Lerp(_currentSpeed, 0f, Time.deltaTime * _decelerationRate);
-        }
         
         private void UpdateAnimatorParameters()
         {
             float currentSpeed = new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).magnitude;
             float interpolatedSpeed = Mathf.Lerp(_previousSpeed, currentSpeed,  _animatorSpeedSmoothingFactor);
             
-            _animatorController.SetFloat(AnimatorParameter.XSpeed, interpolatedSpeed);
-            _animatorController.SetFloat(AnimatorParameter.YSpeed, _animatorVerticalOffset);
+            _animatorHandler.SetFloat(AnimatorParameter.XSpeed, interpolatedSpeed);
+            _animatorHandler.SetFloat(AnimatorParameter.YSpeed, _animatorVerticalOffset);
             _previousSpeed = interpolatedSpeed;
-
+            
             if (!(interpolatedSpeed <= 0.01)) return;
             _isStopped = true;
             _currentSpeed = 0;
         }
+
+        private void PlayMovementStopEffects()
+        {
+            if (CanMove() || !_canInvokeVfxEffects) return;
+            
+            VFXManager.Instance.PlayParticleEffect(_player.CharacterEffects.DustVFX, transform.position);
+            _canInvokeVfxEffects = false;
+        }
+        
+        #region Input events
+        public void OnMove(InputAction.CallbackContext context)
+        {
+            _isStopped = false;
+            var inputMovement = context.ReadValue<Vector2>();
+            _movementInput = new Vector3(inputMovement.x, 0f, inputMovement.y).normalized;
+            if (!_isRunHolding || _currentSpeed < 1f)
+            {
+                _currentSpeed = _walkSpeed; 
+            }
+            
+        }
+        
+        public void OnRun(InputAction.CallbackContext context)
+        {
+            if (_stopRunning) return;
+            if (_player.IsRegenerationStarted())
+            {
+                _player.StopRegenerationStamina();
+            }
+            _isRunHolding = !context.canceled;
+            StartSpeedCoroutine(context.canceled ? _walkSpeed : _runSpeed);
+        }
+        #endregion
     }
 }
