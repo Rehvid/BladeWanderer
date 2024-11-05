@@ -55,15 +55,15 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.89337176
-        functionName: OnDrawingWeaponEnd
+      - time: 0.4092219
+        functionName: OnDrawingWeaponStart
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.4092219
-        functionName: OnDrawingWeaponStart
+      - time: 1
+        functionName: OnDrawingWeaponEnd
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
