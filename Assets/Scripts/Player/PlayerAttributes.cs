@@ -13,14 +13,12 @@
         [Header("Events")] 
         [SerializeField] private UnityEvent<int> _soulCounterChanged;
         
-        public StaminaAttribute StaminaAttribute => _staminaAttribute;
+        public StaminaAttribute Stamina => _staminaAttribute;
         
         public void AddSouls(int souls)
         {
             _currentSouls += souls;
             _soulCounterChanged?.Invoke(_currentSouls);
         }
-
-        public bool HasEnoughStaminaToMakeAction(float stamina) => _staminaAttribute.HasEnoughStamina(stamina);
     }
 }

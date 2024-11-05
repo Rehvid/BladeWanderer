@@ -3,20 +3,22 @@
     using UnityEngine;
     using Interfaces;
     using ScriptableObjects;
+    using UI;
 
     public class HealthAttribute: BaseAttribute, IHealth
     {
-        [SerializeField] private GameEvent deathTriggered; 
+        [SerializeField] private GameEvent deathTriggered;
+        [SerializeField] private HealthBar _healthBar;
         
         private void Start()
         {
-            InitUI();
+            _healthBar.Init(this);
         }
         
         public void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             CurrentValue -= damage;
-            StartCoroutine(InterpolateAttributeValue());
+            _healthBar.UpdateHealth(this);
             if (IsDead())
             {
                 deathTriggered.Raise(this);
