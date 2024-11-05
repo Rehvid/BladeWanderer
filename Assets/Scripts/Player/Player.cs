@@ -4,6 +4,7 @@
     using Character;
     using UnityEngine;
     using Enums;
+    using ScriptableObjects;
     using Weapons;
 
     public class Player: BaseCharacter
@@ -13,20 +14,21 @@
         [SerializeField] private Transform _primaryWeaponSocket;
         [SerializeField] private Transform _storageWeaponSocket;
         [SerializeField] private PlayerActionManager _actionManager;
+        [SerializeField] private StaminaCosts _staminaCosts;
         
         public PlayerActionManager ActionManager => _actionManager;
         
         public PlayerAttributes Attributes => _attributes;
-
-        public Transform PrimaryWeaponSocket => _primaryWeaponSocket;
+        
+        public StaminaCosts StaminaCosts => _staminaCosts;
         
         public override void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             healthAttribute.ReceiveDamage(damage, hitPosition);
             HitDirectionType directionType = hitDirectionAnalyzer.GetDirectionType(hitPosition, transform);
             // VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
-            animatorController.SetTrigger(AnimatorParameter.HitDirection);
-            animatorController.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
+            animatorHandler.SetTrigger(AnimatorParameter.HitDirection);
+            animatorHandler.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
         }
         
         public bool HasEquippedWeapon()
@@ -45,20 +47,20 @@
             Weapon.UnEquip(_storageWeaponSocket);
         }
         
-        public void SetAction(PlayerActionType actionType)
-        {
-            _actionManager.ChangeCurrentAction(actionType);
-        }
-        
-        public bool HasEnoughStamina(float staminaCost)
-        {
-            return _attributes.StaminaAttribute.HasEnoughStamina(staminaCost);
-        }
+        public void SetAction(PlayerActionType actionType) => _actionManager.ChangeCurrentAction(actionType);
 
-        public void UseStamina(float staminaCost)
-        {
-            _attributes.StaminaAttribute.UseStamina(staminaCost);
-        }
+        #region StaminaAttribute shortcut functions
+        public bool HasEnoughStamina(float staminaCost) => _attributes.Stamina.HasEnoughStamina(staminaCost);
+        
+        public void UseStamina(float staminaCost) => _attributes.Stamina.UseStamina(staminaCost);
+
+        public void RegenerationStamina() => _attributes.Stamina.Regeneration();
+
+        public bool IsRegenerationStarted() => _attributes.Stamina.isRegenerationStarted();
+        
+        public void StopRegenerationStamina() => _attributes.Stamina.StopRegeneration();
+        #endregion
+     
         
         public void OnDeath(Component sender, object value = null)
         {
