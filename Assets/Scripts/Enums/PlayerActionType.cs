@@ -4,8 +4,8 @@
     {
         Unoccupied,
         Jumping,
-        IdleFalling,
         Interacting,
         Attacking,
+        Dodge
     }
 }

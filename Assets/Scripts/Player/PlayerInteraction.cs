@@ -36,7 +36,7 @@
 
         private bool CanInteract()
         {
-            return _interactableObject != null && _player != null;
+            return _interactableObject != null && _interactableObject.CanInteract(_player);
         }
         
         public void OnWeaponToggle(InputAction.CallbackContext context) 
@@ -53,17 +53,19 @@
                 DrawWeapon();
             }
         }
-
+        
         public void OnPickUpWeapon()
         {
             if (_interactableObject is not BaseWeapon weapon) return;
             _player.SetAction(PlayerActionType.Interacting);
-            GameObject parentWeapon = weapon.transform.parent.gameObject;
             _player.AttachWeaponToPrimarySocket(weapon);
+            
+            GameObject parentWeapon = weapon.transform.parent.gameObject;
             if (parentWeapon != null && parentWeapon.CompareTag("Temporary"))
             {
                 Destroy(parentWeapon);
             }
+            
             _player.SetAction(PlayerActionType.Unoccupied);
         }
         
@@ -97,9 +99,9 @@
         
         private void RaiseInteractMultiAnimationsForToggleWeapon(bool isDrawingWeapon)
         {
-            _player.AnimatorController.SetTrigger(AnimatorParameter.Interaction);
-            _player.AnimatorController.SetTrigger( isDrawingWeapon ? AnimatorParameter.DrawWeapon : AnimatorParameter.HideWeapon);
-            _player.AnimatorController.SetBool(AnimatorParameter.HasEquippedWeapon, isDrawingWeapon);
+            _player.AnimatorHandler.SetTrigger(AnimatorParameter.Interaction);
+            _player.AnimatorHandler.SetTrigger( isDrawingWeapon ? AnimatorParameter.DrawWeapon : AnimatorParameter.HideWeapon);
+            _player.AnimatorHandler.SetBool(AnimatorParameter.HasEquippedWeapon, isDrawingWeapon);
         }
     }
 }

@@ -1,8 +1,8 @@
 ﻿namespace RehvidGames.Weapons
 {
     using Animator;
-    using Behaviors;
     using Enums;
+    using Helpers;
     using Player;
     using UnityEngine;
    
@@ -10,7 +10,7 @@
     public class Sword: BaseWeapon
     {
         [SerializeField] private WaveMotionController _waveMotionController;
-        [SerializeField] private AnimatorController _animator;
+        [SerializeField] private AnimatorHandler _animator;
         
         private void Update()
         {
@@ -46,6 +46,8 @@
                Destroy(sphereCollider);   
             }
         }
+
+        public override bool CanInteract(Player player) => player != null && player.Weapon == null;
 
         public override void EnableDamageCollider()
         {

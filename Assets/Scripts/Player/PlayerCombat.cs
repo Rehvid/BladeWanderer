@@ -11,7 +11,6 @@
     {
         [Header("Configuration")]
         [SerializeField] private Player _player;
-   
         
         public void OnAttack(InputAction.CallbackContext context)
         {
@@ -23,19 +22,24 @@
 
         public void OnDodge(InputAction.CallbackContext context)
         {
-            if (context.performed && _player.ActionManager.IsUnoccupied())
-            {
-                _player.AnimatorController.SetTrigger(AnimatorParameter.Dodge);
-            }
+            if (!context.performed || !CanDodge()) return;
+            _player.AnimatorHandler.SetTrigger(AnimatorParameter.Dodge);
+            _player.SetAction(PlayerActionType.Dodge);
+            _player.UseStamina(_player.StaminaCosts.Dodge);
+            _player.RegenerationStamina();
         }
+
+        public void OnDodgeEnd() => _player.SetAction(PlayerActionType.Unoccupied);
+
+        private bool CanDodge() => _player.ActionManager.IsUnoccupied() && _player.HasEnoughStamina(_player.StaminaCosts.Dodge);
         
         private void Attack()
         {
             if (!CanAttack()) return; 
-            _player.UseStamina(_player.Weapon.Stats.StaminaCost);
             _player.SetAction(PlayerActionType.Attacking);
-            
-            _player.AnimatorController.SetTrigger(AnimatorParameter.Attack);
+            _player.UseStamina(_player.Weapon.Stats.StaminaCost);
+            _player.RegenerationStamina();
+            _player.AnimatorHandler.SetTrigger(AnimatorParameter.Attack);
         }
         
         private bool CanAttack()

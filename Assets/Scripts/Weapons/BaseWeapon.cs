@@ -18,6 +18,7 @@ namespace RehvidGames.Weapons
         public abstract void DisableDamageCollider();
         
         public abstract void Interact(Player player);
+        public abstract bool CanInteract(Player player);
         
         public void Equip(Transform socket)
         {
