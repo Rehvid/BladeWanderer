@@ -13,18 +13,24 @@ MonoBehaviour:
   m_Name: AudioSettings
   m_EditorClassIdentifier: 
   AudioCollections:
-  - Name: Sword
+  - Name: Background
     AudioSourceType: 0
     Clips: []
-  - Name: Background
+  - Name: Sword
     AudioSourceType: 0
     Clips: []
   - Name: Jump
     AudioSourceType: 0
-    Clips: []
-  - Name: Hurt
+    Clips:
+    - ClipName: 
+      Clip: {fileID: 8300000, guid: 4330765ebe5ad594bad02f2288159761, type: 3}
+  - Name: Land
     AudioSourceType: 0
-    Clips: []
-  - Name: Footstep
+    Clips:
+    - ClipName: 
+      Clip: {fileID: 8300000, guid: 544c21e9d03489040bd97034cb926a93, type: 3}
+  - Name: Footsteps
     AudioSourceType: 0
-    Clips: []
+    Clips:
+    - ClipName: 
+      Clip: {fileID: 8300000, guid: 85806be157ee89441bc86265eb61fbab, type: 3}
