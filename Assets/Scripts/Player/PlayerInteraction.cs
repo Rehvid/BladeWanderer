@@ -57,10 +57,11 @@
         public void OnPickUpWeapon()
         {
             if (_interactableObject is not BaseWeapon weapon) return;
+            GameObject parentWeapon = weapon.transform.parent.gameObject;
+            
             _player.SetAction(PlayerActionType.Interacting);
             _player.AttachWeaponToPrimarySocket(weapon);
             
-            GameObject parentWeapon = weapon.transform.parent.gameObject;
             if (parentWeapon != null && parentWeapon.CompareTag("Temporary"))
             {
                 Destroy(parentWeapon);
