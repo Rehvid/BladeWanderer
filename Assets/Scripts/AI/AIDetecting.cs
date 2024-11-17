@@ -16,6 +16,9 @@
             IsPlayerDetected = true;
         }
 
+        public void SetIsPlayerDetected(bool isPlayerDetected) => IsPlayerDetected = isPlayerDetected; 
+        
+        
         public void OnPlayerSightLost(Vector3 lastKnownLocationPlayer)
         {
             IsPlayerDetected = false;

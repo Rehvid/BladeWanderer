@@ -1,47 +1,53 @@
 ﻿namespace RehvidGames.AI
 {
+    using Animator;
     using Enemy;
     using Player;
     using UnityEngine;
+    using Weapons;
 
     public class AIFight : MonoBehaviour
     {
+        public bool IsAttacking { get; private set; }
+
         [SerializeField] private BaseEnemy _enemy;
         [SerializeField] private Player _player;
         
         [Tooltip("Fight radius in meters")]
         [SerializeField] private float _fightRadius = 2f;
 
-        private bool _isInCombat;
+        private BaseWeapon _weapon;
         
-        public void OnHitDirectionTaken(Vector3 hitPosition)
+        private void Start()
         {
-            if (!_isInCombat)
-            {
-                RotateTowardsHit(hitPosition);
-            }
-        }
-        
-        private void RotateTowardsHit(Vector3 hitPosition)
-        {
-            Vector3 directionToHit = (hitPosition - transform.position).normalized;
-            directionToHit.y = 0;
-            _enemy.transform.rotation = Quaternion.LookRotation(directionToHit);
-        }
-        
-        public void StartAttack()
-        {
-            _isInCombat = true;
-            _enemy.Weapon.SetCurrentlyEquipped(true);
+            if (!_enemy) return;
+            _weapon = _enemy.Weapon;
+            _weapon.SetCurrentlyEquipped(true);
         }
 
-        public void StopAttack()
+        public void OnStartAttack()
         {
-            _isInCombat = false;
-            _enemy?.Weapon.DisableDamageCollider();
-        } 
+            _weapon?.EnableDamageCollider();
+        }
 
-        public bool CanAttack() => Vector3.Distance(transform.position, _player.transform.position) <= _fightRadius;
+        public void OnStopAttack()
+        {
+            _weapon?.DisableDamageCollider();
+        }
+
+        public void OnEndAttack()
+        {
+            IsAttacking = false;
+        }
+        
+        public void Attack()
+        {
+            if (!CanAttack() || IsAttacking) return;
+            _enemy.AnimatorHandler.SetTrigger(AnimatorParameter.Attack);
+            IsAttacking = true;
+        }
+        
+        public bool CanAttack() => Vector3.Distance(transform.position, _player.transform.position) <= _fightRadius && !IsPlayerDead();
         
         public bool IsPlayerDead() => _player.IsDead();
     }

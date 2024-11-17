@@ -1,10 +1,8 @@
 ﻿namespace RehvidGames.AI.States
 {
-    using Animator;
     using Factories;
     using Enums;
     using Interfaces;
-    using Serializable;
 
     public class FightState: BaseState
     {
@@ -12,10 +10,9 @@
         
         public override IState GetNextState()
         {
-            if (controller.IsPlayerDead())
-            {
-                return AIStateFactory.GetState(AIStateType.Patrol, controller);
-            }
+            if (controller.IsAttacking()) return this;
+            
+            if (controller.IsPlayerDead()) return AIStateFactory.GetState(AIStateType.Patrol, controller);
             
             if (!ShouldTransitionToChaseState())
             {
@@ -24,30 +21,17 @@
 
             return controller.CanAttack() ? this : AIStateFactory.GetState(AIStateType.Chase, controller);
         }
-
+        
         public override void Execute()
         {
             controller.StopMovement();
-            PlayAttackAnimation(true);
-            controller.StartAttack();
+            controller.Attack();
         }
 
         public override void Exit()
         {
-            base.Exit();
-            
-            PlayAttackAnimation(false);
             controller.ResumeMovement();
-            controller.StopAttack();
         }
         
-        private void PlayAttackAnimation(bool value)
-        {
-            controller.PlayAnimation(
-                AnimatorParameter.GetParameterName(AnimatorParameter.Attack),
-                AnimatorParameterType.Bool, 
-                value
-            );
-        }
     }
 }

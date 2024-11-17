@@ -7,17 +7,14 @@
     public abstract class BaseState: IState
     {
         protected AIController controller;
-        private bool _active;
-
+        
         public abstract void Execute();
         
         public abstract IState GetNextState();
         
-        public virtual void Enter() => EnableState();
+        public virtual void Enter(){}
         
-        public virtual void Exit() => DisableState();
-        
-        public bool IsActive() => _active;
+        public virtual void Exit(){}
         
         protected BaseState(AIController aiController)
         {
@@ -33,9 +30,5 @@
                 controller
             );
         }
-        
-        private void EnableState() => _active = true;
-        
-        private void DisableState() => _active = false;
     }
 }

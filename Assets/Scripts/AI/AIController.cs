@@ -2,7 +2,6 @@ namespace RehvidGames.AI
 {
     using Animator;
     using Player;
-    using Serializable;
     using UnityEngine;
     using Vector3 = UnityEngine.Vector3;
 
@@ -15,7 +14,8 @@ namespace RehvidGames.AI
         [SerializeField] private AIDetecting _aiDetecting;
         
         [Header("Settings")]
-        [SerializeField] private AnimatorHandler animatorHandler;
+        [SerializeField] private AnimatorHandler _animatorHandler;
+        public AnimatorHandler Animator => _animatorHandler;
         
         private void Start()
         {
@@ -31,11 +31,13 @@ namespace RehvidGames.AI
         
         private void UpdateAnimatorAgentSpeed()
         {
-            PlayAnimation(
-                AnimatorParameter.GetParameterName(AnimatorParameter.XSpeed), 
-                AnimatorParameterType.Float, 
-                _aiMovement.GetVelocityMagnitudeAgent()
-            );
+            Animator.SetFloat(AnimatorParameter.XSpeed,_aiMovement.GetVelocityMagnitudeAgent());
+        }
+
+        public void OnDeathPlayer()
+        {
+            _aiDetecting.SetIsPlayerDetected(false);
+            _aiMovement.SetImmediatePatrol(true);
         }
         
         #region AI Movement
@@ -60,13 +62,14 @@ namespace RehvidGames.AI
         #endregion AI Movement
         
         #region AI Fight
-        public void StartAttack() => _aiFight?.StartAttack();
-        
-        public void StopAttack() => _aiFight?.StopAttack();
         
         public bool CanAttack() => _aiFight && _aiFight.CanAttack();
         
         public bool IsPlayerDead() => _aiFight && _aiFight.IsPlayerDead();
+
+        public bool IsAttacking() => _aiFight && _aiFight.IsAttacking;
+
+        public void Attack() => _aiFight?.Attack();
         
         #endregion
         
@@ -82,10 +85,5 @@ namespace RehvidGames.AI
         public bool IsPlayerDetected() => _aiDetecting && _aiDetecting.IsPlayerDetected;
         
         #endregion AI Detecting
-        
-        public void PlayAnimation(string animationName, AnimatorParameterType animatorParameterType, object value = null)
-        {
-            // animatorHandler.PlayAnimation(animationName, animatorParameterType, value);
-        }
     }
 }

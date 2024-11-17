@@ -9,6 +9,8 @@
         
         public override IState GetNextState()
         {
+            if (controller.IsPlayerDead()) return AIStateFactory.GetState(AIStateType.Patrol, controller);
+            
             if (ShouldTransitionToChaseState())
             {
                 return controller.CanAttack() ? AIStateFactory.GetState(AIStateType.Fight, controller) : this; 

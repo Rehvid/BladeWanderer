@@ -19,7 +19,6 @@
         
         public void TransitionToNextState()
         {
-            Debug.Log(_currentState);
             var nextState = _currentState.GetNextState();
             if (nextState != _currentState)
             {
