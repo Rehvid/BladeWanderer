@@ -10,6 +10,8 @@
         
         public override IState GetNextState()
         {
+            
+            
             return ShouldTransitionToChaseState() ? AIStateFactory.GetState(AIStateType.Chase, controller) : this;
         }
 

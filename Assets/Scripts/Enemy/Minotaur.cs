@@ -1,23 +1,15 @@
 ﻿namespace RehvidGames.Enemy
 {
+    using Animator;
+    using Enums;
     using Managers;
     using UnityEngine;
 
     public class Minotaur: BaseEnemy
     {
-        protected override void HandleDeath()
-        {
-            if (_treasure != null)
-            {
-                Instantiate(_treasure, transform.position, transform.rotation);
-            }
-            
-            Destroy(gameObject);
-        }
-
         public override void OnDeath(Component sender, object value = null)
         {
-            Debug.Log("Minotaur Death");
+            HandleDeath();
         }
 
         private void OnEnableCollision()
@@ -33,6 +25,15 @@
         public override void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
+            healthAttribute.ReceiveDamage(damage, hitPosition);
+            HitDirectionType directionType = hitDirectionAnalyzer.GetFrontBackDirection(hitPosition, transform);
+            animatorHandler.SetTrigger(AnimatorParameter.HitDirection);
+            animatorHandler.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
+
+            if (hitDirectionAnalyzer.GetDirectionType(hitPosition, transform) != HitDirectionType.Front)
+            {
+                RotateTowardsToHit(hitPosition);
+            }
         }
     }
 }

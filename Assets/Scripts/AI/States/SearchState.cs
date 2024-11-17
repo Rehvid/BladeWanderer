@@ -10,6 +10,8 @@
         
         public override IState GetNextState()
         {
+            if (controller.IsPlayerDead()) return AIStateFactory.GetState(AIStateType.Patrol, controller);
+            
            return ShouldSearchForPlayer() ? this : AIStateFactory.GetState(AIStateType.Patrol, controller);
         }
 
