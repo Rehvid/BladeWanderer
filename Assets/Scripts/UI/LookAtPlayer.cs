@@ -2,7 +2,7 @@
 
 namespace RehvidGames.UI
 {
-    public class Billboard: MonoBehaviour
+    public class LookAtPlayer: MonoBehaviour
     {
         [SerializeField] private Transform _mainCamera;
 
