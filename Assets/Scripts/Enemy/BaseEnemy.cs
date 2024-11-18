@@ -23,7 +23,9 @@
         
         protected virtual void HandleDeath()
         {
-            animatorHandler.SetTrigger(AnimatorParameter.Death);
+            StartCoroutine(animatorHandler.WaitForCurrentAnimationEndAndInvokeNew(
+                () => animatorHandler.SetTrigger(AnimatorParameter.Death)
+            ));
             DisableBaseCollider();
             CreateTreasureInstance();
             Destroy(gameObject, _deathTime);

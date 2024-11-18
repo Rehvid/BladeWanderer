@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.Animator
 {
     using System;
+    using System.Collections;
     using UnityEngine;
 
     [RequireComponent(typeof(Animator))]
@@ -27,6 +28,22 @@
 
         public void SetBool(int hash, bool value) => _animator.SetBool(GetAnimationNameByHash(hash), value);
         
+        public IEnumerator WaitForCurrentAnimationEndAndInvokeNew(Action callback)
+        {
+            while (!IsCurrentAnimationComplete())
+            {
+                yield return null;
+            }
+
+            callback?.Invoke();
+        }
+        
         private string GetAnimationNameByHash(int hash) => AnimatorParameter.GetParameterName(hash);
+        
+        private bool IsCurrentAnimationComplete()
+        {
+            var currentState = _animator.GetCurrentAnimatorStateInfo(0);
+            return currentState.normalizedTime >= 1 && !currentState.loop;
+        }
     }
 }
