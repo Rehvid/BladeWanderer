@@ -1,10 +1,9 @@
 namespace RehvidGames.Weapons
 {
     using Interfaces;
-    using Player;
     using UnityEngine;
 
-    public abstract class BaseWeapon : MonoBehaviour, IInteractable, IWeapon
+    public abstract class BaseWeapon : MonoBehaviour, IWeapon
     {
         [SerializeField] protected Collider damageCollider;
         [SerializeField] protected WeaponStats weaponStats;
@@ -12,13 +11,25 @@ namespace RehvidGames.Weapons
         public WeaponStats Stats => weaponStats;
         
         public bool IsCurrentlyEquipped { get; private set; }
+        
+        public virtual void EnableDamageCollider()
+        {
+            damageCollider.enabled = true;
+            damageCollider.isTrigger = true;
+        }
 
-        public abstract void EnableDamageCollider();
+        public virtual void DisableDamageCollider()
+        {
+            damageCollider.enabled = false;
+            damageCollider.isTrigger = false;
+        }
         
-        public abstract void DisableDamageCollider();
         
-        public abstract void Interact(Player player);
-        public abstract bool CanInteract(Player player);
+        #region Events
+        public void OnEnableDamageCollider() => EnableDamageCollider();
+
+        public void OnDisableDamageCollider() => DisableDamageCollider();
+        #endregion
         
         public void Equip(Transform socket)
         {
@@ -65,6 +76,5 @@ namespace RehvidGames.Weapons
         {
             return target != null && !target.IsDead();
         }
-        
     }
 }

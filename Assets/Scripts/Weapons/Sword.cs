@@ -3,63 +3,36 @@
     using Animator;
     using Enums;
     using Helpers;
+    using Interfaces;
     using Player;
     using UnityEngine;
    
 
-    public class Sword: BaseWeapon
+    public class Sword: BaseWeapon, IInteractable
     {
         [SerializeField] private WaveMotionController _waveMotionController;
-        [SerializeField] private AnimatorHandler _animator;
         
-        private void Update()
+        public void Interact(Player player)
         {
-            Wave();
-        }
-
-        private void Wave()
-        {
-            if (!_waveMotionController) return;
+            if (player.Weapon != null) return;
+            AnimatorHandler animator = player.AnimatorHandler;
             
-            if (IsCurrentlyEquipped == false)
-            {
-                _waveMotionController.active = true;
-            }
-            else
-            {
-                Destroy(_waveMotionController);
-                
-            }
-        }
-        
-        public override void Interact(Player player)
-        {
-            if (player.Weapon != null) {return;}
             
             player.SetAction(PlayerActionType.Interacting);
-            _animator.SetTrigger(AnimatorParameter.Interaction);
-            _animator.SetTrigger(AnimatorParameter.PickUp);
-            _animator.SetBool(AnimatorParameter.HasEquippedWeapon, true);
+            animator.SetTrigger(AnimatorParameter.Interaction);
+            animator.SetTrigger(AnimatorParameter.PickUp);
+            animator.SetBool(AnimatorParameter.HasEquippedWeapon, true);
             
             if (TryGetComponent(out SphereCollider sphereCollider))
             {
                Destroy(sphereCollider);   
             }
+
+            if (!TryGetComponent(out WaveMotionController waveMotionController)) return;
+            waveMotionController.enabled = false;
+            Destroy(waveMotionController);
         }
 
-        public override bool CanInteract(Player player) => player != null && player.Weapon == null;
-
-        public override void EnableDamageCollider()
-        {
-            damageCollider.enabled = true;
-            damageCollider.isTrigger = true;
-        }
-
-        public override void DisableDamageCollider()
-        {
-            damageCollider.enabled = false;
-            damageCollider.isTrigger = false;
-        }
-        
+        public bool CanInteract(Player player) => player != null && player.Weapon == null;
     }
 }
