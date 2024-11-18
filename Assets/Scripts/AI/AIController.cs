@@ -16,6 +16,8 @@ namespace RehvidGames.AI
         [Header("Settings")]
         [SerializeField] private AnimatorHandler _animatorHandler;
         public AnimatorHandler Animator => _animatorHandler;
+
+        private bool _isDead;
         
         private void Start()
         {
@@ -24,6 +26,8 @@ namespace RehvidGames.AI
         
         private void Update()
         {
+            if (_isDead) return;
+            
             _aiStateManagement.ExecuteCurrentState();
             _aiStateManagement.TransitionToNextState();
             UpdateAnimatorAgentSpeed();
@@ -34,6 +38,11 @@ namespace RehvidGames.AI
             Animator.SetFloat(AnimatorParameter.XSpeed,_aiMovement.GetVelocityMagnitudeAgent());
         }
 
+        public void OnDeathEnemy()
+        {
+            _isDead = true;
+        }
+        
         public void OnDeathPlayer()
         {
             _aiDetecting.SetIsPlayerDetected(false);
