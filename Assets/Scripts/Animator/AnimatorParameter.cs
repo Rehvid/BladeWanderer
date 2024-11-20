@@ -15,6 +15,7 @@
             public static readonly int Attack = Animator.StringToHash("Attack");
             public static readonly int Dodge = Animator.StringToHash("Dodge");
             public static readonly int HitDirection = Animator.StringToHash("HitDirection");
+            public static readonly int HitDirectionType = Animator.StringToHash("HitDirectionType");
             public static readonly int HitDirectionLeft = Animator.StringToHash("HitDirectionLeft");
             public static readonly int HitDirectionRight = Animator.StringToHash("HitDirectionRight");
             public static readonly int HitDirectionFront = Animator.StringToHash("HitDirectionFront");
@@ -52,6 +53,7 @@
                 _ when hash == HitDirectionRight => "HitDirectionRight",
                 _ when hash == HitDirectionFront => "HitDirectionFront",
                 _ when hash == HitDirectionBack => "HitDirectionBack",
+                _ when hash == HitDirectionType => "HitDirectionType",
                 _ => null
             };
         }

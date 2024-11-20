@@ -1,6 +1,7 @@
 namespace RehvidGames.AI
 {
     using Animator;
+    using Enums;
     using Player;
     using UnityEngine;
     using Vector3 = UnityEngine.Vector3;
@@ -38,6 +39,8 @@ namespace RehvidGames.AI
             Animator.SetFloat(AnimatorParameter.XSpeed,_aiMovement.GetVelocityMagnitudeAgent());
         }
 
+        #region Events
+
         public void OnDeathEnemy()
         {
             _isDead = true;
@@ -48,6 +51,9 @@ namespace RehvidGames.AI
             _aiDetecting.SetIsPlayerDetected(false);
             _aiMovement.SetImmediatePatrol(true);
         }
+
+        #endregion
+      
         
         #region AI Movement
         public void StartPatrolling() => _aiMovement.Patrol();
@@ -75,10 +81,16 @@ namespace RehvidGames.AI
         public bool CanAttack() => _aiFight && _aiFight.CanAttack();
         
         public bool IsPlayerDead() => _aiFight && _aiFight.IsPlayerDead();
-
-        public bool IsAttacking() => _aiFight && _aiFight.IsAttacking;
-
+        
         public void Attack() => _aiFight?.Attack();
+
+        public void ResetAttack() => _aiFight.ResetAttack();
+
+        public AttackStateType CurrentAttackState => _aiFight.CurrentAttackState;
+
+        public void SetReadyAttackState() => _aiFight?.SetReadyAttackState();
+
+        public bool CanResetAttack() => _aiFight && _aiFight.CanResetAttack();
         
         #endregion
         

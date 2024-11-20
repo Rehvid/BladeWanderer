@@ -32,6 +32,6 @@
             controller.SetDefaultSpeed();
         }
 
-        private bool CanContinueChase() => ShouldTransitionToChaseState() && !controller.HasLastKnownLocationPlayer();
+        private bool CanContinueChase() => ShouldTransitionToChaseState(); 
     }
 }

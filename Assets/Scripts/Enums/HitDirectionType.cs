@@ -2,7 +2,7 @@
 {
     public enum HitDirectionType
     {
-        Left,
+        Left = 1,
         Right,
         Front,
         Back,

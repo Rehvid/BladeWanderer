@@ -28,8 +28,8 @@
             healthAttribute.ReceiveDamage(damage, hitPosition);
             HitDirectionType directionType = hitDirectionAnalyzer.GetFrontBackDirection(hitPosition, transform);
             animatorHandler.SetTrigger(AnimatorParameter.HitDirection);
-            animatorHandler.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
-
+            animatorHandler.SetInt(AnimatorParameter.HitDirectionType, (int) directionType); 
+            
             if (hitDirectionAnalyzer.GetDirectionType(hitPosition, transform) != HitDirectionType.Front)
             {
                 RotateTowardsToHit(hitPosition);

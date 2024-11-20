@@ -2,14 +2,15 @@
 {
     using Animator;
     using Enemy;
+    using Enums;
     using Player;
     using UnityEngine;
     using Weapons;
 
     public class AIFight : MonoBehaviour
     {
-        public bool IsAttacking { get; private set; }
-
+        public AttackStateType CurrentAttackState { get; private set; } = AttackStateType.Ready;
+        
         [SerializeField] private BaseEnemy _enemy;
         [SerializeField] private Player _player;
         
@@ -17,12 +18,15 @@
         [SerializeField] private float _fightRadius = 2f;
 
         private BaseWeapon _weapon;
+        private AnimatorHandler _animatorHandler;
+        
         
         private void Start()
         {
             if (!_enemy) return;
             _weapon = _enemy.Weapon;
             _weapon.SetCurrentlyEquipped(true);
+            _animatorHandler = _enemy.AnimatorHandler;
         }
 
         public void OnStartAttack()
@@ -37,18 +41,43 @@
 
         public void OnEndAttack()
         {
-            IsAttacking = false;
+            CurrentAttackState = AttackStateType.Ready;
         }
+
+        public void SetReadyAttackState() => CurrentAttackState = AttackStateType.Ready;
         
         public void Attack()
         {
-            if (!CanAttack() || IsAttacking) return;
-            _enemy.AnimatorHandler.SetTrigger(AnimatorParameter.Attack);
-            IsAttacking = true;
+            _animatorHandler.SetTrigger(AnimatorParameter.Attack);
+            CurrentAttackState = AttackStateType.Attack;
+        }
+
+        public void ResetAttack()
+        {
+            CurrentAttackState = AttackStateType.WaitingForAnimation;
+            Debug.Log($"Transitioning to: {CurrentAttackState}");
+            StartCoroutine(
+                _animatorHandler.WaitForCurrentAnimationEndAndInvokeNew(() =>
+                {
+                    _animatorHandler.SetTrigger(AnimatorParameter.Attack);
+                    _animatorHandler.SetInt(AnimatorParameter.HitDirectionType, 0);
+                    CurrentAttackState = AttackStateType.Attack;
+                    Debug.Log($"Animation finished. State: {CurrentAttackState}");
+                })
+            );
         }
         
-        public bool CanAttack() => Vector3.Distance(transform.position, _player.transform.position) <= _fightRadius && !IsPlayerDead();
+        public bool CanAttack() => 
+            Vector3.Distance(transform.position, _player.transform.position) <= _fightRadius 
+            && !IsPlayerDead() 
+            && CurrentAttackState == AttackStateType.Ready;
+
+        public bool CanResetAttack() =>
+            CurrentAttackState == AttackStateType.Attack && !IsDirectionTypeAnimationCurrentlyNotPlay();
         
         public bool IsPlayerDead() => _player.IsDead();
+
+        private bool IsDirectionTypeAnimationCurrentlyNotPlay() =>
+            _animatorHandler.GetInt(AnimatorParameter.HitDirectionType) == 0;
     }
 }

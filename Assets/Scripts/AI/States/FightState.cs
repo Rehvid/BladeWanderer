@@ -3,6 +3,7 @@
     using Factories;
     using Enums;
     using Interfaces;
+    using UnityEngine;
 
     public class FightState: BaseState
     {
@@ -10,7 +11,7 @@
         
         public override IState GetNextState()
         {
-            if (controller.IsAttacking()) return this;
+            if (controller.CurrentAttackState != AttackStateType.Ready) return this; 
             
             if (controller.IsPlayerDead()) return AIStateFactory.GetState(AIStateType.Patrol, controller);
             
@@ -25,13 +26,19 @@
         public override void Execute()
         {
             controller.StopMovement();
-            controller.Attack();
+            if (controller.CanAttack())
+            {
+                controller.Attack();
+            } else if (controller.CanResetAttack())
+            {
+                controller.ResetAttack(); 
+            }
         }
 
         public override void Exit()
         {
             controller.ResumeMovement();
+            controller.SetReadyAttackState();
         }
-        
     }
 }

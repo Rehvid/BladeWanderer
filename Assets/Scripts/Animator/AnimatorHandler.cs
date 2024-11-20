@@ -7,8 +7,9 @@
     [RequireComponent(typeof(Animator))]
     public class AnimatorHandler: MonoBehaviour
     {
+        
         private Animator _animator;
-
+        
         private void Awake()
         {
             TryGetComponent(out _animator);
@@ -22,10 +23,14 @@
             }
         }
 
+        public int GetInt(int hash) => _animator.GetInteger(GetAnimationNameByHash(hash));
+        
         public void SetTrigger(int hash) => _animator.SetTrigger(GetAnimationNameByHash(hash));
-
+        
+        public void SetInt(int hash, int value) => _animator.SetInteger(GetAnimationNameByHash(hash), value); 
+        
         public void SetFloat(int hash, float value) => _animator.SetFloat(GetAnimationNameByHash(hash), value);
-
+        
         public void SetBool(int hash, bool value) => _animator.SetBool(GetAnimationNameByHash(hash), value);
         
         public IEnumerator WaitForCurrentAnimationEndAndInvokeNew(Action callback)
