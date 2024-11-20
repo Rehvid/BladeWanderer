@@ -8,7 +8,10 @@
     {
         public void OnTriggerEnter(Collider otherCollider)
         {
-            Collect(otherCollider.GetComponent<Player>());
+            if (otherCollider.TryGetComponent(out Player player))
+            {
+                Collect(player);
+            }
         }
         
         public abstract void Collect(Player player);
