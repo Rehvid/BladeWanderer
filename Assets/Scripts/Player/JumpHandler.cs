@@ -15,7 +15,6 @@
         
         [Header("Jump parameters")]
         [SerializeField] private float _jumpPower = 3.0f;
-        [SerializeField] private float _forwardJumpDistance = 5.0f;  
         
         private AnimatorHandler _animatorHandler;
         private bool _isJumpTriggered;
@@ -66,8 +65,9 @@
         {
             if (_characterController.velocity.magnitude > 0.1f)
             {
+                var forwardJumpDistance = new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).magnitude;
                 _animatorHandler.SetBool(AnimatorParameter.JumpRun, true);
-                return new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).normalized * _forwardJumpDistance;
+                return new Vector3(_characterController.velocity.x, 0, _characterController.velocity.z).normalized * forwardJumpDistance;
             }
             return Vector3.zero; 
         }
