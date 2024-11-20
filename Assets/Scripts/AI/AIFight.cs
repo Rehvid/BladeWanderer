@@ -57,7 +57,7 @@
             CurrentAttackState = AttackStateType.WaitingForAnimation;
             Debug.Log($"Transitioning to: {CurrentAttackState}");
             StartCoroutine(
-                _animatorHandler.WaitForCurrentAnimationEndAndInvokeNew(() =>
+                _animatorHandler.WaitForCurrentAnimationThenInvoke(() =>
                 {
                     _animatorHandler.SetTrigger(AnimatorParameter.Attack);
                     _animatorHandler.SetInt(AnimatorParameter.HitDirectionType, 0);

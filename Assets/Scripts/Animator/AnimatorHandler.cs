@@ -33,7 +33,7 @@
         
         public void SetBool(int hash, bool value) => _animator.SetBool(GetAnimationNameByHash(hash), value);
         
-        public IEnumerator WaitForCurrentAnimationEndAndInvokeNew(Action callback)
+        public IEnumerator WaitForCurrentAnimationThenInvoke(Action callback)
         {
             while (!IsCurrentAnimationComplete())
             {

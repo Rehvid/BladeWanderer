@@ -23,7 +23,7 @@
         
         protected virtual void HandleDeath()
         {
-            StartCoroutine(animatorHandler.WaitForCurrentAnimationEndAndInvokeNew(
+            StartCoroutine(animatorHandler.WaitForCurrentAnimationThenInvoke(
                 () => animatorHandler.SetTrigger(AnimatorParameter.Death)
             ));
             DisableBaseCollider();
