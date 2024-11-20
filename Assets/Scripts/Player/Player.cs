@@ -4,6 +4,7 @@
     using Character;
     using UnityEngine;
     using Enums;
+    using Managers;
     using ScriptableObjects;
     using Weapons;
 
@@ -25,8 +26,8 @@
         public override void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             healthAttribute.ReceiveDamage(damage, hitPosition);
-            HitDirectionType directionType = hitDirectionAnalyzer.GetDirectionType(hitPosition, transform);
-            // VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
+            HitDirectionType directionType = hitDirectionAnalyzer.GetDirectionType(hitPosition, transform); 
+            VFXManager.Instance.PlayParticleEffect(CharacterEffects.HitVfx, hitPosition);
             animatorHandler.SetTrigger(AnimatorParameter.HitDirection);
             animatorHandler.SetTrigger(hitDirectionAnalyzer.GetAnimatorParameterTypeByHitDirectionType(directionType));
         }
