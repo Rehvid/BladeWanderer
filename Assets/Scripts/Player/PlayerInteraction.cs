@@ -66,8 +66,10 @@
             {
                 Destroy(parentWeapon);
             }
-            
-            _player.SetAction(PlayerActionType.Unoccupied);
+
+            StartCoroutine(_player.AnimatorHandler.WaitForCurrentAnimationThenInvoke(() =>
+                _player.SetAction(PlayerActionType.Unoccupied))
+            );
         }
         
         private void SheatheWeapon()
