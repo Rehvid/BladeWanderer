@@ -133,7 +133,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5590806057610563420}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72f3c134f44144e899db5a78a7a4e0d9, type: 3}
   m_Name: 
@@ -143,7 +143,6 @@ MonoBehaviour:
   _startPosition: {fileID: 3493110668167270342}
   _maxUpwardDisplacement: 1.5
   _maxDownwardDisplacement: 0.5
-  active: 0
 --- !u!135 &2296800266376870711
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -181,5 +180,4 @@ MonoBehaviour:
   maxAmount: 25
   useRandomAmount: 1
   notRandomizingAmount: 10
-  prefabEffects: {fileID: 0}
   collectSound: {fileID: 0}
