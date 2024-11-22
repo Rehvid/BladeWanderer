@@ -49,7 +49,7 @@
         private void StartJump()
         {
             _animatorHandler.SetTrigger(AnimatorParameter.Jump);
-            AudioManager.PlayRandomAudioOneShot(SoundType.Jump);
+            AudioManager.Instance.PlayRandomClip(SoundType.PlayerJump);
             _player.UseStamina(_player.StaminaCosts.Jump);
             _player.RegenerationStamina();
             _player.SetAction(PlayerActionType.Jumping);
@@ -101,7 +101,7 @@
         
         private void OnVFXPlay()
         {
-            AudioManager.PlayRandomAudioOneShot(SoundType.Land);
+            AudioManager.Instance.PlayRandomClip(SoundType.PlayerLand);
             VFXManager.Instance.PlayParticleEffect(_player.CharacterEffects.DustVFX, transform.position);
         }
         

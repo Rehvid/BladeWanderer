@@ -7,9 +7,18 @@
     {
         [SerializeField] private SoundType _soundType;
         [SerializeField] private AudioSource _audioSource;
+        [SerializeField] private string _clipName;
+        
         public override void OnStateExit(Animator animator, AnimatorStateInfo stateInfo, int layerIndex)
         {
-            AudioManager.PlayRandomAudioOneShot(_soundType, _audioSource);
+            var instance = AudioManager.Instance;
+            if (string.IsNullOrEmpty(_clipName))
+            {
+                instance.PlayRandomClip(_soundType, _audioSource);    
+                return;
+            }
+            
+            instance.PlayClip(_soundType, _clipName, _audioSource);
         }
     }
 }

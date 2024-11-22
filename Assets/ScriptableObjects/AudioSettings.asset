@@ -15,7 +15,10 @@ MonoBehaviour:
   AudioCollections:
   - Name: Background
     AudioSourceType: 0
-    Clips: []
+    Clips:
+    - ClipName: 
+      Clip: {fileID: 0}
+      Volume: 0
   - Name: Sword
     AudioSourceType: 0
     Clips: []
@@ -24,13 +27,16 @@ MonoBehaviour:
     Clips:
     - ClipName: 
       Clip: {fileID: 8300000, guid: 4330765ebe5ad594bad02f2288159761, type: 3}
+      Volume: 0
   - Name: Land
     AudioSourceType: 0
     Clips:
     - ClipName: 
       Clip: {fileID: 8300000, guid: 544c21e9d03489040bd97034cb926a93, type: 3}
+      Volume: 0
   - Name: Footsteps
     AudioSourceType: 0
     Clips:
     - ClipName: 
       Clip: {fileID: 8300000, guid: 85806be157ee89441bc86265eb61fbab, type: 3}
+      Volume: 0

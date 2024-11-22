@@ -1,83 +1,81 @@
 ﻿namespace RehvidGames.Audio
 {
-    using System;
+    using System.Collections.Generic;
     using System.Linq;
     using Enums;
+    using ScriptableObjects;
+    using Serializable;
     using UnityEngine;
-    using AudioSettings = ScriptableObjects.AudioSettings;
-    using Random = UnityEngine.Random;
 
-    public class AudioManager: MonoBehaviour
+    public class AudioManager : MonoBehaviour
     {
         public static AudioManager Instance { get; private set; }
 
-        [SerializeField] private AudioSettings _audioSettings;
-        [SerializeField] private AudioSource _sfxSource;
-        [SerializeField] private AudioSource _musicSource;
+        [Header("Audio components")]
+        [SerializeField] private AudioSourceManager _audioSourceManager;
+        [SerializeField] private AudioMixerManager _audioMixerManager;
+        [SerializeField] private AudioCollection _audioCollection;
+        
+        private Dictionary<SoundType, SoundCategory> _soundCategories;
+        
         
         private void Awake()
         {
             if (Instance == null)
             {
                 Instance = this;
-            }
-        }
-        
-        public static void PlayRandomAudioOneShot(SoundType audioType, AudioSource source = null)
-        {
-            if (!Instance._audioSettings) return;
-            AudioCollection audioCollection = GetAudioCollectionByType(audioType);
-            AudioClipEntry[] clips = GetAudioClipsEntryFromAudioCollection(audioCollection);
-            if (clips == null) return;
-            
-            AudioClipEntry randomClipEntry = clips[Random.Range(0, clips.Length)];
-            AudioSource currentAudioSource = GetAudioSourceFromAudioCollection(audioCollection);
-            
-            if (source != null)
-            {
-                source.PlayOneShot(randomClipEntry.Clip);
+                InitializeSoundCategories();
             }
             else
             {
-                currentAudioSource.PlayOneShot(randomClipEntry.Clip);
+                Destroy(gameObject);
             }
         }
 
-        public static void PlayAudioOneShot(SoundType soundType, string clipName, AudioSource source = null)
+        private void InitializeSoundCategories()
         {
-            if (!Instance._audioSettings) return;
-            AudioCollection audioCollection = GetAudioCollectionByType(soundType);
-            AudioClipEntry[] clips = GetAudioClipsEntryFromAudioCollection(audioCollection);
-            if (clips == null) return;
+            if (_audioCollection == null)
+            {
+                Debug.LogError("AudioCollection is not assigned in the AudioManager!");
+                return;
+            }
             
-            AudioSource currentAudioSource = GetAudioSourceFromAudioCollection(audioCollection);
-
-            var audioClipEntry = clips.FirstOrDefault(audioClipEntry => audioClipEntry.ClipName == clipName);
-            if (audioClipEntry != null)
-            {
-                currentAudioSource.PlayOneShot(audioClipEntry.Clip);
-            }
-        }
-        
-        private static AudioCollection GetAudioCollectionByType(SoundType type)
-        {
-            return Instance._audioSettings.AudioCollections[(int)type];
+            _soundCategories = _audioCollection?.SoundCategories.ToDictionary(
+                category => category.SoundType,
+                category => category
+            );
         }
 
-        private static AudioClipEntry[] GetAudioClipsEntryFromAudioCollection(AudioCollection audioCollection)
+        public void PlayClip(SoundType soundType, string clipName, AudioSource customAudioSource = null)
         {
-            AudioClipEntry[] clips = audioCollection.Clips;
-            return clips.Length <= 0 ? null : clips;
+            PlayClipInternal(soundType, isRandom: false, clipName, customAudioSource);
         }
 
-        private static AudioSource GetAudioSourceFromAudioCollection(AudioCollection audioCollection)
+        public void PlayRandomClip(SoundType soundType, AudioSource customAudioSource = null)
         {
-            return audioCollection.AudioSourceType switch
-            {
-                AudioSourceType.Music => Instance._musicSource,
-                AudioSourceType.SFX => Instance._sfxSource,
-                _ => throw new ArgumentOutOfRangeException()
-            };
+            PlayClipInternal(soundType, isRandom: true, clipName: null, customAudioSource);
+        }
+
+        private void PlayClipInternal(SoundType soundType, bool isRandom, string clipName, AudioSource customAudioSource = null)
+        {
+            if (!_soundCategories.TryGetValue(soundType, out var soundCategory)) return;
+            
+            if (isRandom && !soundCategory.AllowRandomizeClips) return;
+
+            AudioClipSettings clipSettings = isRandom
+                ? soundCategory.GetRandomClipSettings()
+                : soundCategory.GetAudioClipSettings(clipName);
+
+            if (clipSettings == null) return;
+            
+            float volumeMultiplier = _audioMixerManager.GetMixerVolume(soundCategory.AudioSourceType);
+
+            _audioSourceManager.PlayClip(
+                soundCategory.AudioSourceType,
+                clipSettings,
+                volumeMultiplier,
+                customAudioSource
+            );
         }
     }
 }

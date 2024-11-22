@@ -2,10 +2,7 @@
 {
     public enum SoundType
     {
-        Background,
-        Sword,
-        Jump,
-        Land,
-        Footsteps
+        PlayerLand,
+        PlayerJump
     }
 }
