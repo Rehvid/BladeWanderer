@@ -60,7 +60,6 @@
                 Cursor.lockState = CursorLockMode.Locked;
             }
             _audioManager = AudioManager.Instance;
-            _audioManager.PlayRandomClip(SoundType.PlayerJump);
         }
 
         private void Update()
@@ -248,13 +247,13 @@
             }
             
             if (_isPlayerFootstepsSoundPlaying) return;
-            AudioManager.Instance.PlayRandomClip(SoundType.PlayerFootsteps);
+            _audioManager.PlayRandomClip(SoundType.PlayerFootsteps);
             _isPlayerFootstepsSoundPlaying = true;
         }
 
         private void StopMovementSound()
         {
-            AudioManager.Instance.StopCurrentSoundType(SoundType.PlayerFootsteps);
+            _audioManager.StopCurrentSoundType(SoundType.PlayerFootsteps);
             _isPlayerFootstepsSoundPlaying = false;
         }
         
