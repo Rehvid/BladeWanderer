@@ -18,7 +18,7 @@ MonoBehaviour:
     AllowRandomizeClips: 1
     Clips:
     - Volume: 1
-      Pitch: 1
+      Pitch: 3
       Loop: 0
       Name: 
       Clip: {fileID: 8300000, guid: 544c21e9d03489040bd97034cb926a93, type: 3}
@@ -36,7 +36,7 @@ MonoBehaviour:
     AllowRandomizeClips: 1
     Clips:
     - Volume: 1
-      Pitch: 1
+      Pitch: 2.25
       Loop: 1
       Name: 
       Clip: {fileID: 8300000, guid: 85806be157ee89441bc86265eb61fbab, type: 3}
@@ -45,7 +45,16 @@ MonoBehaviour:
     AllowRandomizeClips: 0
     Clips:
     - Volume: 1
+      Pitch: 1.25
+      Loop: 0
+      Name: PlayerDrawWeaponSword
+      Clip: {fileID: 8300000, guid: 0861b9a606a85c44182823667e4c3209, type: 3}
+  - SoundType: 4
+    AudioSourceType: 0
+    AllowRandomizeClips: 1
+    Clips:
+    - Volume: 1
       Pitch: 1
-      Loop: 1
-      Name: 
-      Clip: {fileID: 8300000, guid: 836a16e34a038df4190d1be2d558bdb2, type: 3}
+      Loop: 0
+      Name: PlayerHideWeaponSword
+      Clip: {fileID: 8300000, guid: 0e68ab5de50db634a89c941b54f04d0c, type: 3}

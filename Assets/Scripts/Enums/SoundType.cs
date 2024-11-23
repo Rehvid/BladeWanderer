@@ -5,6 +5,8 @@
         PlayerLand,
         PlayerJump,
         PlayerFootsteps,
+        PlayerDrawWeapon,
+        PlayerHideWeapon,
         
         ItemPickUpSoul
     }

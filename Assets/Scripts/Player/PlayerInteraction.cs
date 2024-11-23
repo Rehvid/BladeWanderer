@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.Player
 {
     using Animator;
+    using Audio;
     using Enums;
     using Interfaces;
     using UnityEngine;
@@ -77,11 +78,20 @@
             _player.SetAction(PlayerActionType.Interacting);
             RaiseInteractMultiAnimationsForToggleWeapon(false);
         }
+
+        private void OnSoundPlay()
+        {
+            AudioManager.Instance.PlayClip(SoundType.PlayerHideWeapon, "PlayerHideWeaponSword"); 
+        }
+
+        private void OnUnoccupied()
+        {
+            _player.SetAction(PlayerActionType.Unoccupied);
+        }
         
         private void OnSheathingWeaponEnd()
         {
             _player.AttachWeaponToStorageSocket();
-            _player.SetAction(PlayerActionType.Unoccupied);
         }
         
         private void DrawWeapon()
@@ -93,6 +103,7 @@
         private void OnDrawingWeaponStart()
         {
             _player.AttachWeaponToPrimarySocket(_player.Weapon);
+            AudioManager.Instance.PlayClip(SoundType.PlayerDrawWeapon, "PlayerDrawWeaponSword");
         }
         
         private void OnDrawingWeaponEnd()
