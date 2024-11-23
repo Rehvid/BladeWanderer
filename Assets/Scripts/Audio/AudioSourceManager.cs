@@ -1,5 +1,6 @@
 ﻿namespace RehvidGames.Audio
 {
+    using System.Collections.Generic;
     using Enums;
     using Serializable;
     using UnityEngine;
@@ -9,34 +10,32 @@
         [Header("Audio sources")]
         [SerializeField] private AudioSource _sfxSource;
         [SerializeField] private AudioSource _musicSource;
-
-        private AudioSource _currentSource;
-
-        public void StopCurrentClip() => _currentSource?.Stop();
         
-        public void PlayClip(
-            AudioSourceType sourceType, 
-            AudioClipSettings clipSettings, 
-            float volumeMultiplier,
-            AudioSource customAudioSource = null
-        )
+        private Dictionary<AudioSource, AudioPlayContext> _activeAudioSources = new();
+
+        public void StopActiveAudioSource(AudioSourceType sourceType)
         {
-            var source = GetAudioSourceForClip(sourceType, customAudioSource);
-            if (source == null) return;
+            if (!_activeAudioSources.TryGetValue(GetAudioSource(sourceType), out AudioPlayContext audioPlayContext)) return;
             
-            StopCurrentClip();
-            ConfigureAudioSource(source, clipSettings, volumeMultiplier);
-            if (clipSettings.Loop)
+            audioPlayContext.AudioSource.Stop();
+            _activeAudioSources.Remove(audioPlayContext.AudioSource);
+        }
+        
+        public void PlayClip(AudioPlayContext audioPlayContext)
+        {
+            var source = audioPlayContext.AudioSource;
+            ConfigureAudioSource(audioPlayContext);
+            if (audioPlayContext.ClipSettings?.Clip)
             {
                 source.Play();
             }
             else
             {
-                source.PlayOneShot(clipSettings.Clip);
+                source.PlayOneShot(audioPlayContext.ClipSettings?.Clip);
             }
         }        
         
-        private AudioSource GetAudioSourceForClip(AudioSourceType audioSourceType, AudioSource customAudioSource = null)
+        public AudioSource GetAudioSourceForClip(AudioSourceType audioSourceType, AudioSource customAudioSource = null)
         {
             return customAudioSource ? customAudioSource : GetAudioSource(audioSourceType);
         }
@@ -51,9 +50,12 @@
             };
         }
 
-        private void ConfigureAudioSource(AudioSource source, AudioClipSettings clipSettings, float volumeMultiplier)
+        private void ConfigureAudioSource(AudioPlayContext audioPlayContext)
         {
-            source.volume = clipSettings.Volume * volumeMultiplier;
+            AudioSource source = audioPlayContext.AudioSource;
+            AudioClipSettings clipSettings = audioPlayContext.ClipSettings;
+            
+            source.volume = clipSettings.Volume * audioPlayContext.VolumeMultiplier;
             source.pitch = clipSettings.Pitch;
             source.loop = clipSettings.Loop;
 
@@ -62,7 +64,7 @@
                 source.clip = clipSettings.Clip;
             }
             
-            _currentSource = source;
+            _activeAudioSources[source] = audioPlayContext;
         }
     }
 }

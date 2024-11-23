@@ -46,7 +46,12 @@
             );
         }
 
-        public void StopCurrentClip() =>_audioSourceManager.StopCurrentClip();
+        public void StopCurrentSoundType(SoundType soundType)
+        {
+            if (!_soundCategories.TryGetValue(soundType, out SoundCategory soundCategory)) return;
+            
+            _audioSourceManager.StopActiveAudioSource(soundCategory.AudioSourceType);   
+        }
         
         public void PlayClip(SoundType soundType, string clipName, AudioSource customAudioSource = null)
         {
@@ -60,7 +65,7 @@
 
         private void PlayClipInternal(SoundType soundType, bool isRandom, string clipName, AudioSource customAudioSource = null)
         {
-            if (!_soundCategories.TryGetValue(soundType, out var soundCategory)) return;
+            if (!_soundCategories.TryGetValue(soundType, out SoundCategory soundCategory)) return;
             
             if (isRandom && !soundCategory.AllowRandomizeClips) return;
 
@@ -72,12 +77,14 @@
             
             float volumeMultiplier = _audioMixerManager.GetMixerVolume(soundCategory.AudioSourceType);
 
-            _audioSourceManager.PlayClip(
-                soundCategory.AudioSourceType,
+            var context = AudioPlayContext.Create(
+                soundType,
+                _audioSourceManager.GetAudioSourceForClip(soundCategory.AudioSourceType, customAudioSource),
                 clipSettings,
-                volumeMultiplier,
-                customAudioSource
+                volumeMultiplier
             );
+            
+            _audioSourceManager.PlayClip(context);
         }
     }
 }

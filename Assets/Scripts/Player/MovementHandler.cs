@@ -50,6 +50,7 @@
         private Vector3 _movementInput;
         private Coroutine _speedCoroutine;
         private AnimatorHandler _animatorHandler;
+        private AudioManager _audioManager;
         
         private void Start()
         {
@@ -58,6 +59,8 @@
             {
                 Cursor.lockState = CursorLockMode.Locked;
             }
+            _audioManager = AudioManager.Instance;
+            _audioManager.PlayRandomClip(SoundType.PlayerJump);
         }
 
         private void Update()
@@ -251,7 +254,7 @@
 
         private void StopMovementSound()
         {
-            AudioManager.Instance.StopCurrentClip();
+            AudioManager.Instance.StopCurrentSoundType(SoundType.PlayerFootsteps);
             _isPlayerFootstepsSoundPlaying = false;
         }
         
