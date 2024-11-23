@@ -2,6 +2,8 @@
 {
     using System.Collections;
     using Animator;
+    using Audio;
+    using Enums;
     using UnityEngine;
     using UnityEngine.InputSystem;
     using VFXManager = Managers.VFXManager;
@@ -38,6 +40,7 @@
         private bool _isRunHolding;
         private bool _isStopped;
         private bool _canInvokeVfxEffects;
+        private bool _isPlayerFootstepsSoundPlaying;
         
         private float _fullRunStaminaCost => _player.StaminaCosts.Run * Time.deltaTime;
         private float _rotationVelocity;
@@ -63,6 +66,7 @@
             if (!_player.ActionManager.IsUnoccupied())
             {
                 _animatorHandler.SetFloat(AnimatorParameter.XSpeed, 0);
+                _isPlayerFootstepsSoundPlaying = false;
                 return; 
             }
             HandleMovement();
@@ -73,6 +77,7 @@
             }
             
             PlayMovementStopEffects();
+            PlayMovementSound();
         }
         
         private void HandlePlayerRunning()
@@ -192,8 +197,9 @@
         private void MoveCharacter()
         {
             var normalizedMoveDirection = NormalizeMoveDirection(CalculateMoveDirection());
-            _characterController.Move(normalizedMoveDirection); 
+            _characterController.Move(normalizedMoveDirection);
         }
+        
         
         private Vector3 CalculateMoveDirection()
         {
@@ -226,6 +232,28 @@
             VFXManager.Instance.PlayParticleEffect(_player.CharacterEffects.DustVFX, transform.position);
             _canInvokeVfxEffects = false;
         }
+
+        private void PlayMovementSound()
+        {
+            if (!CanMove())
+            {
+                if (_isPlayerFootstepsSoundPlaying)
+                {
+                    StopMovementSound();
+                }
+                return;
+            }
+            
+            if (_isPlayerFootstepsSoundPlaying) return;
+            AudioManager.Instance.PlayRandomClip(SoundType.PlayerFootsteps);
+            _isPlayerFootstepsSoundPlaying = true;
+        }
+
+        private void StopMovementSound()
+        {
+            AudioManager.Instance.StopCurrentClip();
+            _isPlayerFootstepsSoundPlaying = false;
+        }
         
         #region Input events
         public void OnMove(InputAction.CallbackContext context)
@@ -237,7 +265,6 @@
             {
                 _currentSpeed = _walkSpeed; 
             }
-            
         }
         
         public void OnRun(InputAction.CallbackContext context)

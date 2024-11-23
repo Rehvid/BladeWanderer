@@ -46,6 +46,8 @@
             );
         }
 
+        public void StopCurrentClip() =>_audioSourceManager.StopCurrentClip();
+        
         public void PlayClip(SoundType soundType, string clipName, AudioSource customAudioSource = null)
         {
             PlayClipInternal(soundType, isRandom: false, clipName, customAudioSource);

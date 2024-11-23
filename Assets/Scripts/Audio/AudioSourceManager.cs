@@ -10,6 +10,10 @@
         [SerializeField] private AudioSource _sfxSource;
         [SerializeField] private AudioSource _musicSource;
 
+        private AudioSource _currentSource;
+
+        public void StopCurrentClip() => _currentSource?.Stop();
+        
         public void PlayClip(
             AudioSourceType sourceType, 
             AudioClipSettings clipSettings, 
@@ -20,8 +24,16 @@
             var source = GetAudioSourceForClip(sourceType, customAudioSource);
             if (source == null) return;
             
+            StopCurrentClip();
             ConfigureAudioSource(source, clipSettings, volumeMultiplier);
-            source.PlayOneShot(clipSettings.Clip);
+            if (clipSettings.Loop)
+            {
+                source.Play();
+            }
+            else
+            {
+                source.PlayOneShot(clipSettings.Clip);
+            }
         }        
         
         private AudioSource GetAudioSourceForClip(AudioSourceType audioSourceType, AudioSource customAudioSource = null)
@@ -44,6 +56,13 @@
             source.volume = clipSettings.Volume * volumeMultiplier;
             source.pitch = clipSettings.Pitch;
             source.loop = clipSettings.Loop;
+
+            if (source.loop)
+            {
+                source.clip = clipSettings.Clip;
+            }
+            
+            _currentSource = source;
         }
     }
 }

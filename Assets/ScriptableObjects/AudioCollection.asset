@@ -31,3 +31,12 @@ MonoBehaviour:
       Loop: 0
       Name: 
       Clip: {fileID: 8300000, guid: 4330765ebe5ad594bad02f2288159761, type: 3}
+  - SoundType: 2
+    AudioSourceType: 0
+    AllowRandomizeClips: 1
+    Clips:
+    - Volume: 1
+      Pitch: 1
+      Loop: 1
+      Name: 
+      Clip: {fileID: 8300000, guid: 85806be157ee89441bc86265eb61fbab, type: 3}

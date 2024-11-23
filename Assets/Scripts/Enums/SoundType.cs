@@ -3,6 +3,7 @@
     public enum SoundType
     {
         PlayerLand,
-        PlayerJump
+        PlayerJump,
+        PlayerFootsteps
     }
 }
