@@ -4,6 +4,8 @@
     {
         PlayerLand,
         PlayerJump,
-        PlayerFootsteps
+        PlayerFootsteps,
+        
+        ItemPickUpSoul
     }
 }

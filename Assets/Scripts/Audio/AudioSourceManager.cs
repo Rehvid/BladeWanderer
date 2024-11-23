@@ -25,7 +25,8 @@
         {
             var source = audioPlayContext.AudioSource;
             ConfigureAudioSource(audioPlayContext);
-            if (audioPlayContext.ClipSettings?.Clip)
+            
+            if (audioPlayContext.ClipSettings.Loop)
             {
                 source.Play();
             }
