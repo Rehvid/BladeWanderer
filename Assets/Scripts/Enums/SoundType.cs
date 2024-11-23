@@ -8,6 +8,8 @@
         PlayerDrawWeapon,
         PlayerHideWeapon,
         
-        ItemPickUpSoul
+        ItemPickUpSoul,
+        
+        WeaponSwing
     }
 }

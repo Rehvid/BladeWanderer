@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.Player
 {
     using Animator;
+    using Audio;
     using Enums;
     using Managers;
     using UnityEngine;
@@ -56,6 +57,7 @@
             if (weapon is Sword sword)
             {
                 VFXManager.Instance.PlayVisualEffect(_player.CharacterEffects.SlashSwordVfx, sword.transform.position);
+                AudioManager.Instance.PlayClip(SoundType.WeaponSwing, "WeaponSwingSword");
             }
         }
         

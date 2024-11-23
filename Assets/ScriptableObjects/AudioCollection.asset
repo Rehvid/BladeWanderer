@@ -58,3 +58,12 @@ MonoBehaviour:
       Loop: 0
       Name: PlayerHideWeaponSword
       Clip: {fileID: 8300000, guid: 0e68ab5de50db634a89c941b54f04d0c, type: 3}
+  - SoundType: 6
+    AudioSourceType: 0
+    AllowRandomizeClips: 0
+    Clips:
+    - Volume: 1
+      Pitch: 1
+      Loop: 0
+      Name: WeaponSwingSword
+      Clip: {fileID: 8300000, guid: 8327cd970ac2ffb4290ddcbf49fe9fc0, type: 3}
