@@ -41,6 +41,7 @@
             _player.UseStamina(_player.Weapon.Stats.StaminaCost);
             _player.RegenerationStamina();
             _player.AnimatorHandler.SetTrigger(AnimatorParameter.Attack);
+            AudioManager.Instance.PlayClip(SoundType.PlayerVoice, "PlayerVoiceCombat");
         }
         
         private bool CanAttack()

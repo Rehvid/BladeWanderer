@@ -7,6 +7,7 @@
         PlayerFootsteps,
         PlayerDrawWeapon,
         PlayerHideWeapon,
+        PlayerVoice,
         
         ItemPickUpSoul,
         

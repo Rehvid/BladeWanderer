@@ -67,3 +67,12 @@ MonoBehaviour:
       Loop: 0
       Name: WeaponSwingSword
       Clip: {fileID: 8300000, guid: 8327cd970ac2ffb4290ddcbf49fe9fc0, type: 3}
+  - SoundType: 5
+    AudioSourceType: 0
+    AllowRandomizeClips: 0
+    Clips:
+    - Volume: 1
+      Pitch: 1
+      Loop: 0
+      Name: PlayerVoiceCombat
+      Clip: {fileID: 8300000, guid: bc66708f7529ce94b8b6af1af284f16c, type: 3}
