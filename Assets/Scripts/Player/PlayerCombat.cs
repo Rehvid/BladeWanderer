@@ -24,6 +24,7 @@
         public void OnDodge(InputAction.CallbackContext context)
         {
             if (!context.performed || !CanDodge()) return;
+            AudioManager.Instance.StopCurrentSoundType(SoundType.PlayerFootsteps); //TODO: Refactor later
             _player.AnimatorHandler.SetTrigger(AnimatorParameter.Dodge);
             _player.SetAction(PlayerActionType.Dodge);
             _player.UseStamina(_player.StaminaCosts.Dodge);

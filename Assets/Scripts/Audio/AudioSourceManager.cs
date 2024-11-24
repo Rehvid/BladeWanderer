@@ -13,6 +13,11 @@
         
         private Dictionary<AudioSource, AudioPlayContext> _activeAudioSources = new();
 
+        public AudioPlayContext GetActiveAudioContext(AudioSourceType audioSourceType)
+        {
+            return !_activeAudioSources.TryGetValue(GetAudioSource(audioSourceType), out AudioPlayContext context) ? null : context;
+        }
+        
         public void StopActiveAudioSource(AudioSourceType sourceType)
         {
             if (!_activeAudioSources.TryGetValue(GetAudioSource(sourceType), out AudioPlayContext audioPlayContext)) return;
@@ -24,6 +29,7 @@
         public void PlayClip(AudioPlayContext audioPlayContext)
         {
             var source = audioPlayContext.AudioSource;
+            StopActiveAudioSource(audioPlayContext.SourceType);
             ConfigureAudioSource(audioPlayContext);
             
             if (audioPlayContext.ClipSettings.Loop)

@@ -8,6 +8,7 @@
     using UnityEngine.InputSystem;
     using VFXManager = Managers.VFXManager;
 
+    //TODO: Refactor later
     public class MovementHandler: MonoBehaviour
     {
         [Header("Configuration")]
@@ -65,10 +66,16 @@
         private void Update()
         {
             HandlePlayerRunning();
+            
             if (!_player.ActionManager.IsUnoccupied())
             {
                 _animatorHandler.SetFloat(AnimatorParameter.XSpeed, 0);
+                if (_isPlayerFootstepsSoundPlaying)
+                {
+                      _audioManager.StopCurrentSoundType(SoundType.PlayerFootsteps);
+                }
                 _isPlayerFootstepsSoundPlaying = false;
+              
                 return; 
             }
             HandleMovement();
@@ -244,6 +251,10 @@
                     StopMovementSound();
                 }
                 return;
+            }
+            if (_isPlayerFootstepsSoundPlaying && _audioManager.GetCurrentAudioPlayContext(SoundType.PlayerFootsteps)?.SoundType !=  SoundType.PlayerFootsteps)
+            {
+                _audioManager.PlayRandomClip(SoundType.PlayerFootsteps);
             }
             
             if (_isPlayerFootstepsSoundPlaying) return;

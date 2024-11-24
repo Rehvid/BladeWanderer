@@ -11,13 +11,13 @@
     {
         public static AudioManager Instance { get; private set; }
 
-        [Header("Audio components")]
-        [SerializeField] private AudioSourceManager _audioSourceManager;
+        [Header("Audio components")] [SerializeField]
+        private AudioSourceManager _audioSourceManager;
+
         [SerializeField] private AudioMixerManager _audioMixerManager;
         [SerializeField] private AudioCollection _audioCollection;
-        
+
         private Dictionary<SoundType, SoundCategory> _soundCategories;
-        
         
         private void Awake()
         {
@@ -46,12 +46,19 @@
             );
         }
 
+        public AudioPlayContext GetCurrentAudioPlayContext(SoundType soundType)
+        {
+            _soundCategories.TryGetValue(soundType, out SoundCategory soundCategory);
+            return soundCategory == null ? null : _audioSourceManager.GetActiveAudioContext(soundCategory.AudioSourceType);
+        }
+        
         public void StopCurrentSoundType(SoundType soundType)
         {
             if (!_soundCategories.TryGetValue(soundType, out SoundCategory soundCategory)) return;
-            
+            Debug.Log($"{soundCategory.SoundType} is currently playing!");     
             _audioSourceManager.StopActiveAudioSource(soundCategory.AudioSourceType);   
         }
+
         
         public void PlayClip(SoundType soundType, string clipName, AudioSource customAudioSource = null)
         {
@@ -81,7 +88,8 @@
                 soundType,
                 _audioSourceManager.GetAudioSourceForClip(soundCategory.AudioSourceType, customAudioSource),
                 clipSettings,
-                volumeMultiplier
+                volumeMultiplier,
+                soundCategory.AudioSourceType
             );
             
             _audioSourceManager.PlayClip(context);
