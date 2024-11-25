@@ -58,7 +58,7 @@ MonoBehaviour:
       Loop: 0
       Name: PlayerHideWeaponSword
       Clip: {fileID: 8300000, guid: 0e68ab5de50db634a89c941b54f04d0c, type: 3}
-  - SoundType: 6
+  - SoundType: 7
     AudioSourceType: 0
     AllowRandomizeClips: 0
     Clips:
@@ -76,3 +76,12 @@ MonoBehaviour:
       Loop: 0
       Name: PlayerVoiceCombat
       Clip: {fileID: 8300000, guid: bc66708f7529ce94b8b6af1af284f16c, type: 3}
+  - SoundType: 6
+    AudioSourceType: 0
+    AllowRandomizeClips: 1
+    Clips:
+    - Volume: 1
+      Pitch: 1
+      Loop: 0
+      Name: ItemPickUpSoul
+      Clip: {fileID: 8300000, guid: 836a16e34a038df4190d1be2d558bdb2, type: 3}
