@@ -8,7 +8,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Levels/Scenes/Menu.unity
     guid: 5acff421dc7e3544c9ae282c7ac56780
-  - enabled: 1
+  - enabled: 0
     path: Assets/Levels/Scenes/OutdoorsScene.unity
     guid: 8124e5870f4fd4c779e7a5f994e84ad1
   m_configObjects:
