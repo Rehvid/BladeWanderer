@@ -11,8 +11,8 @@
     {
         public static AudioManager Instance { get; private set; }
 
-        [Header("Audio components")] [SerializeField]
-        private AudioSourceManager _audioSourceManager;
+        [Header("Audio components")] 
+        [SerializeField] private AudioSourceManager _audioSourceManager;
 
         [SerializeField] private AudioMixerManager _audioMixerManager;
         [SerializeField] private AudioCollection _audioCollection;
@@ -45,7 +45,8 @@
                 category => category
             );
         }
-
+        
+        
         public AudioPlayContext GetCurrentAudioPlayContext(SoundType soundType)
         {
             _soundCategories.TryGetValue(soundType, out SoundCategory soundCategory);
@@ -55,10 +56,8 @@
         public void StopCurrentSoundType(SoundType soundType)
         {
             if (!_soundCategories.TryGetValue(soundType, out SoundCategory soundCategory)) return;
-            Debug.Log($"{soundCategory.SoundType} is currently playing!");     
             _audioSourceManager.StopActiveAudioSource(soundCategory.AudioSourceType);   
         }
-
         
         public void PlayClip(SoundType soundType, string clipName, AudioSource customAudioSource = null)
         {
@@ -68,6 +67,11 @@
         public void PlayRandomClip(SoundType soundType, AudioSource customAudioSource = null)
         {
             PlayClipInternal(soundType, isRandom: true, clipName: null, customAudioSource);
+        }
+
+        public void StopAllSounds()
+        {
+            _audioSourceManager.StopAllActiveAudioSources();
         }
 
         private void PlayClipInternal(SoundType soundType, bool isRandom, string clipName, AudioSource customAudioSource = null)

@@ -2,6 +2,7 @@ namespace RehvidGames.AI
 {
     using Animator;
     using Enums;
+    using Managers;
     using Player;
     using UnityEngine;
     using Vector3 = UnityEngine.Vector3;
@@ -27,8 +28,7 @@ namespace RehvidGames.AI
         
         private void Update()
         {
-            if (_isDead) return;
-            
+            if (_isDead || GameManager.Instance.IsPaused) return;
             _aiStateManagement.ExecuteCurrentState();
             _aiStateManagement.TransitionToNextState();
             UpdateAnimatorAgentSpeed();

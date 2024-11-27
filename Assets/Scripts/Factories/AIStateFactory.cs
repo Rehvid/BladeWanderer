@@ -6,10 +6,21 @@
     using AI.States;
     using Interfaces;
     using Enums;
+    using UnityEngine.SceneManagement;
 
     public static class AIStateFactory
     {
         private static Dictionary<AIStateType, IState> _states = new();
+        
+        static AIStateFactory()
+        {
+            SceneManager.sceneLoaded += OnSceneLoaded;
+        }
+
+        private static void OnSceneLoaded(Scene scene, LoadSceneMode mode)
+        {
+            _states.Clear();  
+        }
 
         public static IState GetState(AIStateType stateType, AIController aiController)
         {

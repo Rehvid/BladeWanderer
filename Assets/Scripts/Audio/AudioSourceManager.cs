@@ -17,6 +17,14 @@
         {
             return !_activeAudioSources.TryGetValue(GetAudioSource(audioSourceType), out AudioPlayContext context) ? null : context;
         }
+
+        public void StopAllActiveAudioSources()
+        {
+            foreach (var audioSource in _activeAudioSources.Keys)
+            {
+                audioSource.Stop();
+            }
+        }
         
         public void StopActiveAudioSource(AudioSourceType sourceType)
         {

@@ -4,6 +4,7 @@
     using Animator;
     using Audio;
     using Enums;
+    using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
     using VFXManager = Managers.VFXManager;
@@ -42,6 +43,7 @@
         private bool _isStopped;
         private bool _canInvokeVfxEffects;
         private bool _isPlayerFootstepsSoundPlaying;
+        private bool _isGamePaused;
         
         private float _fullRunStaminaCost => _player.StaminaCosts.Run * Time.deltaTime;
         private float _rotationVelocity;
@@ -65,6 +67,7 @@
 
         private void Update()
         {
+            if (GameManager.Instance.IsPaused) return;
             HandlePlayerRunning();
             
             if (!_player.ActionManager.IsUnoccupied())
