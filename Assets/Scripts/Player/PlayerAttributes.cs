@@ -15,10 +15,13 @@
         
         public StaminaAttribute Stamina => _staminaAttribute;
         
+        public int CurrentSouls => _currentSouls;
+        
         public void AddSouls(int souls)
         {
             _currentSouls += souls;
             _soulCounterChanged?.Invoke(_currentSouls);
         }
+        
     }
 }

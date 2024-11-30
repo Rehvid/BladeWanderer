@@ -4,11 +4,14 @@
     using Character;
     using UnityEngine;
     using Enums;
+    using Interfaces;
     using Managers;
     using ScriptableObjects;
+    using Serializable;
+    using UnityEngine.SceneManagement;
     using Weapons;
 
-    public class Player: BaseCharacter
+    public class Player: BaseCharacter, IDataPersistence
     {
         [Header("Player configuration")]
         [SerializeField] private PlayerAttributes _attributes;
@@ -66,6 +69,19 @@
         public void OnDeath(Component sender, object value = null)
         {
             Debug.Log("OnDeath - Player"); 
+        }
+
+        public void LoadData(GameData data)
+        {
+            transform.position = data.PlayerGameData.Position;
+            _attributes.AddSouls(data.PlayerGameData.CollectedSouls);
+        }
+
+        public void SaveData(GameData data)
+        {
+            data.PlayerGameData.Position = transform.position;
+            data.PlayerGameData.CollectedSouls = _attributes.CurrentSouls;
+            data.CurrentSceneName = SceneManager.GetActiveScene().name;
         }
     }
 }
