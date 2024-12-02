@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.Serializable
+﻿namespace RehvidGames.DataPersistence.Data
 {
     using System;
     using UnityEngine;

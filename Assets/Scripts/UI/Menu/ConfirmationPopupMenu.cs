@@ -11,7 +11,8 @@
         [SerializeField] private TextMeshProUGUI _displayText;
         [SerializeField] private Button _confirmButton;
         [SerializeField] private Button _cancelButton;
-
+        
+        
         public void ActivateMenu(string displayText, UnityAction confirmAction, UnityAction cancelAction)
         {
             gameObject.SetActive(true);
@@ -22,17 +23,17 @@
             
             _confirmButton.onClick.AddListener(() =>
             {
-                DeactiveMenu();
+                DeactivateMenu();
                 confirmAction();
             });
             _cancelButton.onClick.AddListener(() =>
             {
-                DeactiveMenu();
+                DeactivateMenu();
                 cancelAction();
             });
         }
 
-        private void DeactiveMenu()
+        private void DeactivateMenu()
         {
             gameObject.SetActive(false);
         }

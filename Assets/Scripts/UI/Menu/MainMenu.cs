@@ -2,52 +2,59 @@
 {
     using System;
     using DataPersistence;
+    using DataPersistence.Managers;
     using UnityEngine;
     using UnityEngine.SceneManagement;
     using UnityEngine.UI;
 
     public class MainMenu : MonoBehaviour
     {
+        public const string MainMenuSceneName = "Menu";
+        
         [Header("Menu Buttons")]
         [SerializeField] private Button _newGameButton;
         [SerializeField] private Button _continueGameButton;
         [SerializeField] private Button _loadGameButton;
         
         [Header("Menu sections")]
-        [SerializeField] private SaveSlotMenu _saveSlotMenu;
-
+        [SerializeField] private SaveMenu saveMenu;
+        
         private void Start()
         {
             DisableMainMenuButtonsDependingOfData();
         }
 
-        public void DisableMainMenuButtonsDependingOfData()
+        private void DisableMainMenuButtonsDependingOfData()
         {
-            if (DataPersistenceManager.Instance.GetAllProfilesGameData().Count <= 0)
-            {
-                _continueGameButton.interactable = false;
-                _loadGameButton.interactable = false;
-            }
+            if (DataPersistenceManager.Instance.HasAllProfilesGameData()) return;
+            
+            _continueGameButton.interactable = false;
+            _loadGameButton.interactable = false;
         }
 
         #region Events
-        public void OnPlayGame()
+
+        private void OnEnable()
         {
-            _saveSlotMenu.ActivateMenu(false);
+            DisableMainMenuButtonsDependingOfData();
         }
 
-        public void OnLoadGame()
+        public void OnPlayGameClicked()
         {
-            _saveSlotMenu.ActivateMenu(true); 
+            saveMenu.ActivateMenu(false);
         }
 
-        public void OnContinueGame()
+        public void OnLoadGameClicked()
         {
-            DataPersistenceManager.Instance.SaveGame();
+            saveMenu.ActivateMenu(true); 
+        }
+
+        public void OnContinueGameClicked()
+        {
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
         }
 
-        public void OnExitGame()
+        public void OnExitGameClicked()
         {
             Debug.Log("Quit");
             Application.Quit();

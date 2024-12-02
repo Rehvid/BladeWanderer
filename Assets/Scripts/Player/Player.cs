@@ -2,6 +2,7 @@
 {
     using Animator;
     using Character;
+    using DataPersistence.Data;
     using UnityEngine;
     using Enums;
     using Interfaces;
@@ -81,7 +82,7 @@
         {
             data.PlayerGameData.Position = transform.position;
             data.PlayerGameData.CollectedSouls = _attributes.CurrentSouls;
-            data.CurrentSceneName = SceneManager.GetActiveScene().name;
+            // data.CurrentSceneName = SceneManager.GetActiveScene().name;
         }
     }
 }
