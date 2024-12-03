@@ -42,7 +42,7 @@
             while (_isAutoSaveEnabled)
             {
                 yield return new WaitForSeconds(_autoSaveTimeSeconds);
-                _saveLoadManager.SaveGame(PersistenceObjectFinder.FindAll());
+                _saveLoadManager.SaveGame(DataPersistenceRegistryManager.Instance.GetAllRegisteredObjects());
                 Debug.Log("Auto saving...");
             }
         }

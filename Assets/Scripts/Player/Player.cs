@@ -3,6 +3,7 @@
     using Animator;
     using Character;
     using DataPersistence.Data;
+    using DataPersistence.Managers;
     using UnityEngine;
     using Enums;
     using Interfaces;
@@ -26,7 +27,19 @@
         public PlayerAttributes Attributes => _attributes;
         
         public StaminaCosts StaminaCosts => _staminaCosts;
-        
+
+        protected void Awake()
+        {
+            base.Awake();
+            
+            DataPersistenceRegistryManager.Instance.Register(this);
+        }
+
+        private void OnDestroy()
+        {
+            DataPersistenceRegistryManager.Instance.Unregister(this);
+        }
+
         public override void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             healthAttribute.ReceiveDamage(damage, hitPosition);
@@ -82,7 +95,6 @@
         {
             data.PlayerGameData.Position = transform.position;
             data.PlayerGameData.CollectedSouls = _attributes.CurrentSouls;
-            // data.CurrentSceneName = SceneManager.GetActiveScene().name;
         }
     }
 }

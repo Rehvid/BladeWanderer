@@ -23,7 +23,7 @@
         
         public abstract void ReceiveDamage(float damage, Vector3 hitPosition);
         
-        private void Awake()
+        protected void Awake()
         {
             hitDirectionAnalyzer = new HitDirectionAnalyzer();
         }

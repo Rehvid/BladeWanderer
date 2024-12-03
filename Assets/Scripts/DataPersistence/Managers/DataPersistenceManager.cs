@@ -3,7 +3,6 @@
     using System.Collections.Generic;
     using RehvidGames.DataPersistence.Data;
     using RehvidGames.DataPersistence.DataHandlers;
-    using RehvidGames.DataPersistence.Helpers;
     using RehvidGames.Interfaces;
     using RehvidGames.UI.Menu;
     using UnityEngine;
@@ -20,8 +19,7 @@
         [Header("File Storage Config")] 
         [SerializeField] private string _fileName;
         [SerializeField] private bool _useEncryption;
-
-        [FormerlySerializedAs("_autoSaveHandler")]
+        
         [Header("Auto Saving Configuration")] 
         [SerializeField] private AutoSaveManager autoSaveManager;
         
@@ -79,7 +77,7 @@
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         { 
-            _persistenceObjects = PersistenceObjectFinder.FindAll();
+            _persistenceObjects = DataPersistenceRegistryManager.Instance.GetAllRegisteredObjects();
             
             if (scene.name == MainMenu.MainMenuSceneName) return;
             
