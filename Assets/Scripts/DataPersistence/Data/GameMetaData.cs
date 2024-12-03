@@ -19,23 +19,17 @@
 
         public void UpdateCurrentSceneName()
         {
-            string currentSceneName = SceneManager.GetActiveScene().name;
-            int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            string currentActiveSceneName = SceneManager.GetActiveScene().name;
+            if (currentActiveSceneName != MainMenu.MainMenuSceneName)
+            {
+                CurrentSceneName = currentActiveSceneName; 
+                return;
+            }
             
-            if (nextSceneIndex < SceneManager.sceneCountInBuildSettings)
-            {
-                CurrentSceneName = currentSceneName == MainMenu.MainMenuSceneName 
-                    ? SceneManager.GetSceneByBuildIndex(nextSceneIndex).name 
-                    : currentSceneName;
-            }
-            else
-            {
-                //TODO: Tutaj coś nie działa
-                
-                // Obsłuż przypadek, gdy nie ma kolejnej sceny
-                Debug.LogWarning("There is no next scene in Build Settings!");
-                CurrentSceneName = currentSceneName; 
-            }
+            int nextSceneIndex = SceneManager.GetActiveScene().buildIndex + 1;
+            CurrentSceneName = nextSceneIndex < SceneManager.sceneCountInBuildSettings
+                ? SceneManager.GetSceneAt(nextSceneIndex).name
+                : currentActiveSceneName;
         }
         
         public string GetFormattedLastUpdated(string format = "dd.MM.yyyy HH:mm:ss")
