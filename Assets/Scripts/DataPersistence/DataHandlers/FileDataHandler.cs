@@ -21,7 +21,7 @@
             _useEncryption = useEncryption;
         }
 
-        #region Load
+        #region Load game
         public override Dictionary<string, GameData> LoadAllProfiles()
         {
             var profileDirectory = new Dictionary<string, GameData>();
@@ -54,7 +54,19 @@
             }
             catch (Exception e)
             {
-                return isAllowedToRestoreDataFromBackup ? TryToLoadProfileDataFromBackup(fullPath, profileId) : null;
+                Debug.LogError("Error occured when trying to load data from file: " + fullPath + "\n" + e);
+            }
+            
+            if (!isAllowedToRestoreDataFromBackup) return null;
+            
+            try
+            {
+                return TryToLoadProfileDataFromBackup(fullPath, profileId);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error occured when trying to load data from backup file: " + fullPath + "\n" + e);
+                return null;
             }
         }
         
@@ -118,7 +130,7 @@
         
         #endregion
         
-        #region Save
+        #region Save game
         public override void Save(GameData data, string profileId)
         {
             string fullPath = GetFullPath(profileId);
