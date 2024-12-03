@@ -70,8 +70,8 @@
         }
 
         private void SetActiveClearButton(bool active)
-        {
-            _clearDataButton.gameObject.gameObject.SetActive(active);
+        { 
+            _clearDataButton.gameObject.SetActive(active);
         }
     }
 }
