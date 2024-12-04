@@ -21,6 +21,32 @@
             _useEncryption = useEncryption;
         }
 
+        public override GameSettings LoadSettings()
+        {
+            string fullPath = Path.Combine(_dataDirPath, _dataFileName);
+            if (!File.Exists(fullPath)) return null;
+
+            try
+            {
+                string json = File.ReadAllText(fullPath);
+                GameSettings gameSettings = JsonUtility.FromJson<GameSettings>(json);
+                return gameSettings;
+            }
+            catch (Exception e)
+            {
+                Debug.Log(e.Message);
+                return null;
+            }
+        }
+
+        public override void SaveSettings(GameSettings gameSettings)
+        {
+            string fullPath = Path.Combine(_dataDirPath, _dataFileName);
+            // if (!File.Exists(fullPath)) return;
+            
+            File.WriteAllText(fullPath, JsonUtility.ToJson(gameSettings, true));
+        }
+        
         #region Load game
         public override Dictionary<string, GameData> LoadAllProfiles()
         {

@@ -13,7 +13,10 @@
         protected bool isAllowedToRestoreDataFromBackup = true;
 
         #region Interfaces methods
-         public abstract GameData Load(string profileId);
+
+        public abstract void SaveSettings(GameSettings settings);
+        public abstract GameSettings LoadSettings();
+        public abstract GameData Load(string profileId);
         public abstract void Save(GameData data, string profileId);
         public abstract void Delete(string profileId);
         public abstract string GetMostRecentlyUpdatedProfileId();

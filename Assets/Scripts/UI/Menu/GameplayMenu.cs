@@ -2,18 +2,37 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using DataPersistence.Data;
+    using DataPersistence.Managers;
+    using Interfaces;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.UI;
 
-    public class GameplayMenu : MonoBehaviour
+    public class GameplayMenu : MonoBehaviour, IGameSettingsPersistence
     {
-        private Resolution[] _resolutions;
+        [Header("Gameplay interactable options")]
         [SerializeField] private TMP_Dropdown _resolutionDropdown;
+        [SerializeField] private TMP_Dropdown _qualityDropdown;
+        [SerializeField] private Toggle _fullscreenToggle;
+        
+        private Resolution[] _resolutions;
+        
+        private void Awake()
+        {
+            GameSettingsPersistenceRegistryManager.Instance.Register(this);
+        }
+
+        private void OnDestroy()
+        {
+            GameSettingsPersistenceRegistryManager.Instance.Unregister(this);
+        }
 
         private void Start()
         {
             InitializeResolutions();
             SetCurrentResolution();
+            GameSettingsPersistenceManager.Instance.LoadGameSettings();
         }
 
         private void InitializeResolutions()
@@ -54,6 +73,26 @@
         public void OnFullScreenChanged(bool isFullScreen)
         {
             Screen.fullScreen = isFullScreen;
+        }
+
+        public void LoadGameSettings(GameSettings settings)
+        {
+            GameGameplaySettings gameplaySettings = settings.GameplaySettings;
+            
+            _resolutionDropdown.value = gameplaySettings.ResolutionIndex;
+            _qualityDropdown.value = gameplaySettings.QualityIndex;
+            _fullscreenToggle.isOn = gameplaySettings.IsFullScreen;
+        }
+
+        public void SaveGameSettings(GameSettings settings)
+        {
+            GameGameplaySettings gameplaySettings = settings.GameplaySettings;
+            
+            gameplaySettings.IsFullScreen = Screen.fullScreen;
+            gameplaySettings.ResolutionIndex = _resolutionDropdown.value;
+            gameplaySettings.QualityIndex = QualitySettings.GetQualityLevel();
+            
+            settings.GameplaySettings = gameplaySettings;
         }
     }
 }
