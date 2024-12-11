@@ -1,7 +1,9 @@
 ﻿namespace RehvidGames.UI.Menu
 {
     using DataPersistence.Data;
+    using DataPersistence.Data.State;
     using TMPro;
+    using Unity.Collections;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -24,13 +26,18 @@
         [SerializeField] private Button _clearDataButton;
         
         private Button _saveSlotButton;
-
+        
         private void Awake()
         {
             _saveSlotButton = gameObject.GetComponent<Button>();
         }
 
-        public void SetData(GameData data)
+        public void GenerateGuid()
+        {
+            _profileId = System.Guid.NewGuid().ToString();
+        }
+
+        public void SetData(GameState data)
         {
             if (data == null)
             {
@@ -50,17 +57,18 @@
             IsDataAvailable = false;
         }
 
-        private void ShowDataState(GameData data)
+        private void ShowDataState(GameState gameState)
         {
             _noDataPanel.SetActive(false);
             _dataAvailablePanel.SetActive(true);
             SetActiveClearButton(true);
             IsDataAvailable = true;
             
-            GameMetaData metaData = data.GameMetaData;
-            CurrentSceneName = metaData.CurrentSceneName;
-            _sceneNameText.text = metaData.CurrentSceneName;
-            _lastUpdatedText.text = metaData.GetFormattedLastUpdated();
+            GameSessionData sessionData = gameState.SessionData;
+            
+            CurrentSceneName = sessionData.CurrentSceneName;
+            _sceneNameText.text = sessionData.CurrentSceneName;
+            _lastUpdatedText.text = sessionData.GetFormattedLastUpdated();
         }
 
         public void SetInteractable(bool interactable)

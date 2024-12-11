@@ -1,14 +1,14 @@
 ﻿namespace RehvidGames.UI.Menu
 {
-    using System;
-    using DataPersistence.Data;
-    using DataPersistence.Managers;
+    using DataPersistence.Data.Configuration;
     using Interfaces;
+    using Managers;
     using UnityEngine;
     using UnityEngine.Audio;
     using UnityEngine.UI;
+    using AudioSettings = DataPersistence.Data.Configuration.AudioSettings;
 
-    public class AudioMenu : MonoBehaviour, IGameSettingsPersistence
+    public class AudioMenu : MonoBehaviour, IDataPersistence<GameConfiguration>
     {
         [SerializeField] private AudioMixer _audioMixer;
         
@@ -17,22 +17,11 @@
         [SerializeField] private Slider _musicVolumeSlider;
         [SerializeField] private Slider _sfxVolumeSlider;
         
-        private void Awake()
-        {
-            Debug.Log("Audio Menu Awake");
-            GameSettingsPersistenceRegistryManager.Instance.Register(this);
-        }
-
         private void OnDestroy()
         {
-            GameSettingsPersistenceRegistryManager.Instance.Unregister(this);
+            RegistryManager<IDataPersistence<GameConfiguration>>.Instance?.Unregister(this);
         }
-
-        private void Start()
-        {
-            GameSettingsPersistenceManager.Instance.LoadGameSettings();
-        }
-
+        
         public void OnMasterVolume(float value)
         {
             _audioMixer.SetFloat("MasterVolume", value);
@@ -48,22 +37,24 @@
             _audioMixer.SetFloat("SFX", value);
         }
         
-        public void LoadGameSettings(GameSettings settings)
+        public void LoadData(GameConfiguration configuration)
         {
-            _masterVolumeSlider.value = settings.GameAudioSettings.MasterVolume;
-            _musicVolumeSlider.value = settings.GameAudioSettings.MusicVolume;
-            _sfxVolumeSlider.value = settings.GameAudioSettings.SfxVolume;
+            AudioSettings settings = configuration.AudioSettings;
+            
+            _masterVolumeSlider.value = settings.MasterVolume;
+            _musicVolumeSlider.value = settings.MusicVolume;
+            _sfxVolumeSlider.value = settings.SfxVolume;
         }
 
-        public void SaveGameSettings(GameSettings settings)
+        public void SaveData(GameConfiguration configuration)
         {
-            GameAudioSettings audioSettings = settings.GameAudioSettings;
+            AudioSettings settings = configuration.AudioSettings;
             
-            _audioMixer.GetFloat("MasterVolume", out audioSettings.MasterVolume);
-            _audioMixer.GetFloat("Music", out audioSettings.MusicVolume);
-            _audioMixer.GetFloat("SFX", out audioSettings.SfxVolume);
+            _audioMixer.GetFloat("MasterVolume", out settings.MasterVolume);
+            _audioMixer.GetFloat("Music", out settings.MusicVolume);
+            _audioMixer.GetFloat("SFX", out settings.SfxVolume);
             
-            settings.GameAudioSettings = audioSettings;
+            configuration.AudioSettings = settings;
         }
     }
 }

@@ -3,54 +3,41 @@
     using System;
     using System.Collections.Generic;
     using System.IO;
+    using BackupServices;
     using Data;
+    using Data.Configuration;
+    using Data.State;
+    using Interfaces;
+    using Serializers;
     using UnityEngine;
 
-    public class FileDataHandler: BaseDataHandler
+    public class FileDataHandler: IDataHandler
     {
         private readonly string _dataDirPath;
-        
         private readonly string _dataFileName;
+        private readonly ISerializer _serializer;
+        private readonly IBackupService _backupService;
         
-        private readonly bool _useEncryption;
+        private bool _isAllowedToRestoreDataFromBackup = true;
         
-        public FileDataHandler(string dataDirPath, string dataFileName, bool useEncryption) : base(useEncryption)
+        public FileDataHandler(
+            string dataDirPath, 
+            string dataFileName, 
+            ISerializer serializer,
+            IBackupService backupService)
         {
             _dataDirPath = dataDirPath;
             _dataFileName = dataFileName;
-            _useEncryption = useEncryption;
-        }
-
-        public override GameSettings LoadSettings()
-        {
-            string fullPath = Path.Combine(_dataDirPath, _dataFileName);
-            if (!File.Exists(fullPath)) return null;
-
-            try
-            {
-                string json = File.ReadAllText(fullPath);
-                GameSettings gameSettings = JsonUtility.FromJson<GameSettings>(json);
-                return gameSettings;
-            }
-            catch (Exception e)
-            {
-                Debug.Log(e.Message);
-                return null;
-            }
-        }
-
-        public override void SaveSettings(GameSettings gameSettings)
-        {
-            string fullPath = Path.Combine(_dataDirPath, _dataFileName);
-            // if (!File.Exists(fullPath)) return;
-            
-            File.WriteAllText(fullPath, JsonUtility.ToJson(gameSettings, true));
+            _serializer = serializer;
+            _backupService = backupService;
         }
         
-        #region Load game
-        public override Dictionary<string, GameData> LoadAllProfiles()
+        #region Load
+        public GameConfiguration LoadGameConfiguration() => LoadData<GameConfiguration>(GetFullPath());
+        
+        public Dictionary<string, GameState> LoadAllProfiles()
         {
-            var profileDirectory = new Dictionary<string, GameData>();
+            var profileDirectory = new Dictionary<string, GameState>();
             
             IEnumerable<DirectoryInfo> dirInfos = new DirectoryInfo(_dataDirPath).EnumerateDirectories();
             
@@ -59,7 +46,7 @@
                 string profileId = dirInfo.Name;
                 if (!File.Exists(GetFullPath(profileId))) continue;
                 
-                GameData profileData = Load(profileId);
+                GameState profileData = LoadGameState(profileId);
                 
                 if (profileData == null) continue;
                 
@@ -68,171 +55,121 @@
             
             return profileDirectory;
         }
-        
-        public override GameData Load(string profileId)
-        {
-            string fullPath = GetFullPath(profileId);
-            if (!File.Exists(fullPath)) return null;
 
-            try
-            {
-                return TryToLoadProfileDataFromFile(fullPath);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error occured when trying to load data from file: " + fullPath + "\n" + e);
-            }
-            
-            if (!isAllowedToRestoreDataFromBackup) return null;
-            
-            try
-            {
-                return TryToLoadProfileDataFromBackup(fullPath, profileId);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error occured when trying to load data from backup file: " + fullPath + "\n" + e);
-                return null;
-            }
-        }
+        public GameState LoadGameState(string profileId) => LoadData<GameState>(GetFullPath(profileId));
         
-        private GameData TryToLoadProfileDataFromFile(string fullPath)
+        private T LoadData<T>(string path) where T : ISavableData
+        {
+            if (!File.Exists(path)) return default;
+
+            return TryDeserializeData<T>(path) ?? TryRestoreFromBackup<T>(path);
+        }
+
+        private T TryDeserializeData<T>(string path) where T : ISavableData
         {
             try
             {
-                string dataToLoad = File.ReadAllText(fullPath);
-
-                if (_useEncryption)
-                {
-                    dataToLoad = EncryptDecrypt(dataToLoad);
-                }
-
-                return JsonUtility.FromJson<GameData>(dataToLoad);
+                return _serializer.Deserialize<T>(path);
             }
-            catch (Exception ex)
+            catch (Exception e)
             {
-                Debug.LogWarning("Error occured when trying to load data from file: " + fullPath + "\n" + ex);
-                throw;
+                Debug.LogError("Error occured when trying to load data from file: " + path + "\n" + e);
+                return default;
             }
         }
 
-        private GameData TryToLoadProfileDataFromBackup(string fullPath, string profileId)
+        private T TryRestoreFromBackup<T>(string path) where T : ISavableData
+        {
+            if (!_isAllowedToRestoreDataFromBackup) return default;
+            
+            try
+            {
+                return TryToLoadProfileDataFromBackup<T>(path);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Error occured when trying to load data from backup file: " + path + "\n" + e);
+                return default;
+            }
+        }
+        
+        private T TryToLoadProfileDataFromBackup<T>(string fullPath) where T : ISavableData
         {
             Debug.LogWarning("Attempting to load data from backup...");
-            GameData loadedData = null;
+            var loadedData = default(T);
             
-            if (AttemptRollback(fullPath))
+            if (_backupService.RestoreBackup(fullPath))
             {
-                loadedData = Load(profileId);
+                loadedData = LoadData<T>(fullPath);
             }
-            
-            ResetBackupPermission();
+
+            _isAllowedToRestoreDataFromBackup = false;
             return loadedData;
         }
-        
-        private bool AttemptRollback(string fullPath)
-        {
-            string backupFilePath = GetFullPath(fullPath);
-            
-            if (!File.Exists(backupFilePath))
-            {
-                Debug.LogWarning($"Rollback failed: no backup file found at path: {backupFilePath}");
-                return false;
-            }
-            
-            try
-            {
-                File.Copy(backupFilePath, fullPath, true);
-                Debug.LogWarning("Had to roll back to backup file at: " + backupFilePath);
-                return true;
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error occured when trying to roll backup file at :" + backupFilePath + "\n" + e);
-                return false;
-            }
-        }
-        
         
         #endregion
         
         #region Save game
-        public override void Save(GameData data, string profileId)
+        public void SaveGameConfiguration(GameConfiguration configuration) => SaveData(GetFullPath(), configuration);
+
+        public void SaveGameState(GameState state, string profileId)
         {
             string fullPath = GetFullPath(profileId);
-            
-            if (string.IsNullOrEmpty(fullPath)) return;
-            
-            string backupFilePath = GetBackupPath(fullPath);
-            
-            try
-            {
-                TryToSaveProfileData(data, fullPath, profileId);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError("Error occured when trying to save data to file: " + fullPath + "\n" + e);
-            }
-
-            try
-            {
-                TryToCreateBackup(profileId, fullPath, backupFilePath);
-            }
-            catch (Exception e)
-            {
-                Debug.LogError($"Save succeeded, but creating a backup failed: {backupFilePath}\n{e}");
-            }
+            EnsureDirectoryExists(fullPath);
+            SaveData(fullPath, state);
         }
-
-        private void TryToSaveProfileData(GameData data, string fullPath, string profileId)
+        
+        private void EnsureDirectoryExists(string path)
+        {
+            var directoryPath = Path.GetDirectoryName(path) ?? string.Empty;
+            Directory.CreateDirectory(directoryPath);
+        }
+        
+        private void SaveData<T>(string path, T data) where T : ISavableData
         {
             try
             {
-                Directory.CreateDirectory(Path.GetDirectoryName(fullPath) ?? string.Empty);
-                    
-                string dataToStore = JsonUtility.ToJson(data, true);
-
-                if (_useEncryption)
-                {
-                    dataToStore = EncryptDecrypt(dataToStore);
-                }
-                    
-                File.WriteAllText(fullPath, dataToStore);
+                _serializer.Serialize(path, data);
+                TryToCreateBackup<T>(path);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to save data for profile {profileId} at {fullPath}. Exception: {e}");
-                throw;
+                Debug.LogError($"Error occurred during save operation: {path}\n{e}");
             }
         }
         
-        private void TryToCreateBackup(string profileId, string fullPath, string backupFilePath)
+        private void TryToCreateBackup<T>(string fullPath) where T : ISavableData
         {
             try
             {
-                GameData verifiedGameData = Load(profileId);
+                var verifiedGameData = LoadData<T>(fullPath);
                 
                 if (verifiedGameData == null)
                 {
                     throw new Exception("Verification failed: Loaded data is null.");
                 }
                 
-                File.Copy(fullPath, backupFilePath, true);
+                _backupService.CreateBackup(fullPath);
             }
             catch (Exception e)
             {
-                Debug.LogError($"Failed to create backup for profile {profileId}. Exception: {e}");
+                Debug.LogError($"Failed to create backup. Exception: {e}");
                 throw;
             }
         }
 
         #endregion
         
-        public override void Delete(string profileId)
+        public void Delete(string profileId = null)
         {
             string fullPath = GetFullPath(profileId);
             if (!File.Exists(fullPath)) return;
 
+            TryToDelete(fullPath);
+        }
+
+        private void TryToDelete(string fullPath)
+        {
             try
             {
                 Directory.Delete(Path.GetDirectoryName(fullPath) ?? string.Empty, true);
@@ -243,15 +180,15 @@
             }
         }
         
-        public override string GetMostRecentlyUpdatedProfileId()
+        public string GetMostRecentlyUpdatedProfileId()
         {
             string mostRecentProfileId = null;
-            Dictionary<string, GameData> profiles = LoadAllProfiles();
+            Dictionary<string, GameState> profiles = LoadAllProfiles();
             
-            foreach (KeyValuePair<string, GameData> profile in profiles)
+            foreach (KeyValuePair<string, GameState> profile in profiles)
             {
                 string profileId = profile.Key;
-                GameData gameData = profile.Value;
+                GameState gameData = profile.Value;
                 
                 if (gameData == null) continue;
 
@@ -261,8 +198,8 @@
                 }
                 else
                 {
-                    DateTime mostRecentDate = profiles[mostRecentProfileId].GameMetaData.GetDateTimeFromLastUpdated();
-                    DateTime newDateTime = gameData.GameMetaData.GetDateTimeFromLastUpdated();
+                    DateTime mostRecentDate = profiles[mostRecentProfileId].SessionData.GetDateTimeFromLastUpdated();
+                    DateTime newDateTime = gameData.SessionData.GetDateTimeFromLastUpdated();
                     
                     if (newDateTime > mostRecentDate)
                     {
@@ -273,9 +210,14 @@
             return mostRecentProfileId;
         }
         
-        private string GetFullPath(string profileId)
+        private string GetFullPath(string profileId = null)
         {
-            return string.IsNullOrEmpty(profileId) ? null : Path.Combine(_dataDirPath, profileId, _dataFileName);
+            if (string.IsNullOrEmpty(profileId))
+            {
+                return Path.Combine(_dataDirPath, _dataFileName);
+            }
+            
+            return Path.Combine(_dataDirPath, profileId, _dataFileName);
         }
     }
 }

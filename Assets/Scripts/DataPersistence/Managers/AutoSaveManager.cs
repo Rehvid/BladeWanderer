@@ -1,7 +1,12 @@
 ﻿namespace RehvidGames.DataPersistence.Managers
 {
     using System.Collections;
+    using Data;
+    using Data.State;
     using Helpers;
+    using Interfaces;
+    using RehvidGames.Managers;
+    using Service;
     using UnityEngine;
 
     public class AutoSaveManager: MonoBehaviour
@@ -11,12 +16,12 @@
         [Header("Auto Saving Configuration")]  
         [SerializeField] private float _autoSaveTimeSeconds = 360f;
         
-        private SaveLoadManager _saveLoadManager;
+        private PersistenceService<GameState> _gameStatePersistenceService;
         private Coroutine _autoSaveCoroutine;
 
-        public void SetSaveLoadService(SaveLoadManager saveLoadManager)
+        public void SetGameStatePersistenceService(PersistenceService<GameState> service)
         {
-            _saveLoadManager = saveLoadManager;
+            _gameStatePersistenceService = service;
         }
 
         public void HandleAutoSaveCoroutine()
@@ -42,7 +47,7 @@
             while (_isAutoSaveEnabled)
             {
                 yield return new WaitForSeconds(_autoSaveTimeSeconds);
-                _saveLoadManager.SaveGame(DataPersistenceRegistryManager.Instance.GetAllRegisteredObjects());
+                _gameStatePersistenceService.Save(RegistryManager<IDataPersistence<GameState>>.Instance.RegisteredObjects);
                 Debug.Log("Auto saving...");
             }
         }

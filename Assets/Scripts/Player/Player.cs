@@ -3,6 +3,7 @@
     using Animator;
     using Character;
     using DataPersistence.Data;
+    using DataPersistence.Data.State;
     using DataPersistence.Managers;
     using UnityEngine;
     using Enums;
@@ -13,7 +14,7 @@
     using UnityEngine.SceneManagement;
     using Weapons;
 
-    public class Player: BaseCharacter, IDataPersistence
+    public class Player: BaseCharacter, IDataPersistence<GameState>
     {
         [Header("Player configuration")]
         [SerializeField] private PlayerAttributes _attributes;
@@ -27,17 +28,10 @@
         public PlayerAttributes Attributes => _attributes;
         
         public StaminaCosts StaminaCosts => _staminaCosts;
-
-        protected void Awake()
-        {
-            base.Awake();
-            
-            DataPersistenceRegistryManager.Instance.Register(this);
-        }
-
+        
         private void OnDestroy()
         {
-            DataPersistenceRegistryManager.Instance.Unregister(this);
+            RegistryManager<IDataPersistence<GameState>>.Instance?.Unregister(this);
         }
 
         public override void ReceiveDamage(float damage, Vector3 hitPosition)
@@ -84,17 +78,21 @@
         {
             Debug.Log("OnDeath - Player"); 
         }
-
-        public void LoadData(GameData data)
+        
+        public void LoadData(GameState data)
         {
-            transform.position = data.PlayerGameData.Position;
-            _attributes.AddSouls(data.PlayerGameData.CollectedSouls);
+            PlayerProfile playerProfile = data.PlayerProfile;
+            
+            transform.position = playerProfile.Position;
+            _attributes.AddSouls(data.PlayerProfile.CollectedSouls);
         }
 
-        public void SaveData(GameData data)
+        public void SaveData(GameState data)
         {
-            data.PlayerGameData.Position = transform.position;
-            data.PlayerGameData.CollectedSouls = _attributes.CurrentSouls;
+            PlayerProfile playerProfile = data.PlayerProfile;
+            
+            playerProfile.Position = transform.position;
+            playerProfile.CollectedSouls = _attributes.CurrentSouls;
         }
     }
 }

@@ -1,9 +1,9 @@
 ﻿namespace RehvidGames.DataPersistence.Managers
 {
     using System.Collections.Generic;
-    using RehvidGames.DataPersistence.Data;
-    using RehvidGames.Interfaces;
-
+    using Data.State;
+    using DataHandlers;
+    
     public class ProfileManager
     {
         private readonly IDataHandler _dataHandler;
@@ -31,9 +31,11 @@
             SetCurrentProfile(_dataHandler.GetMostRecentlyUpdatedProfileId());
         }
 
-        public Dictionary<string, GameData> GetAllProfiles()
+        public Dictionary<string, GameState> GetAllProfiles()
         {
             return _dataHandler.LoadAllProfiles();
         }
+        
+        
     }
 }

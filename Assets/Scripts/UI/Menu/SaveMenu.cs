@@ -1,14 +1,17 @@
 ﻿namespace RehvidGames.UI.Menu
 {
     using System.Collections.Generic;
-    using DataPersistence;
-    using DataPersistence.Data;
+    using DataPersistence.Data.State;
     using DataPersistence.Managers;
+    using TMPro;
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
     public class SaveMenu : MonoBehaviour
     {
+        [Header("Menu")] 
+        [SerializeField] private TextMeshProUGUI _header;
+        
         [Header("Confirmation popup menu")]
         [SerializeField] private ConfirmationPopupMenu _confirmationPopupMenu;
         [SerializeField] private string _overrideSaveSlotTitle = "Rozpoczęcie nowej gry z tym slotem spowoduje nadpisanie istniejących danych profilu. Czy na pewno chcesz kontynuować?";
@@ -25,20 +28,37 @@
         public void ActivateMenu(bool isLoadingGame)
         {
             _isLoadingGame = isLoadingGame;
+            UpdateHeader();
             
-            Dictionary<string, GameData> profilesGameData = DataPersistenceManager.Instance.GetAllProfilesGameData();
+            Dictionary<string, GameState> profilesGameData = GameStatePersistenceManager.Instance.GetAllProfiles();
             foreach (var saveSlot in _saveSlots)
             {
-                profilesGameData.TryGetValue(saveSlot.ProfileId, out var profileData);
-                saveSlot.SetData(profileData);
-                if (profileData == null && isLoadingGame)
-                {
-                    saveSlot.SetInteractable(false);
-                }
-                else
-                {
-                    saveSlot.SetInteractable(true);
-                }
+                ActiveSlot(profilesGameData, saveSlot);
+            }
+        }
+
+        private void UpdateHeader()
+        {
+            if (_isLoadingGame)
+            {
+                _header.text = "Wczytaj grę";
+                return;
+            }
+
+            _header.text = "Wybierz slot";
+        }
+
+        private void ActiveSlot(Dictionary<string, GameState> profilesGameData, SaveSlot saveSlot)
+        {
+            profilesGameData.TryGetValue(saveSlot.ProfileId, out var gameState);
+            saveSlot.SetData(gameState);
+            if (gameState == null && _isLoadingGame)
+            {
+                saveSlot.SetInteractable(false);
+            }
+            else
+            {
+                saveSlot.SetInteractable(true);
             }
         }
         
@@ -59,8 +79,8 @@
 
         private void LoadSaveSlotClicked(SaveSlot saveSlot)
         {
-            DataPersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
-            DataPersistenceManager.Instance.LoadGame();
+            GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
+            GameStatePersistenceManager.Instance.LoadData();
             SceneManager.LoadScene(saveSlot.CurrentSceneName);
         }
 
@@ -75,10 +95,10 @@
 
         private void StartNewGameOnSaveSlotClicked(SaveSlot saveSlot)
         {
-            DataPersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
-            DataPersistenceManager.Instance.NewGame();
+            GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
+            GameStatePersistenceManager.Instance.NewGame();
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
-            DataPersistenceManager.Instance.SaveGame();
+            GameStatePersistenceManager.Instance.SaveData();
         }
         
         public void OnClearClicked(SaveSlot saveSlotMenuItem)
@@ -87,7 +107,7 @@
                 _clearSaveSlotTitle,
                 () => 
                 {
-                    DataPersistenceManager.Instance.DeleteProfileData(saveSlotMenuItem.ProfileId);
+                    GameStatePersistenceManager.Instance.DeleteProfileData(saveSlotMenuItem.ProfileId);
                     ActivateMenu(_isLoadingGame);
                 },
                 () =>

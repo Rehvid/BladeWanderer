@@ -1,7 +1,5 @@
 ﻿namespace RehvidGames.UI.Menu
 {
-    using System;
-    using DataPersistence;
     using DataPersistence.Managers;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -9,7 +7,7 @@
 
     public class MainMenu : MonoBehaviour
     {
-        public const string MainMenuSceneName = "Menu";
+        public const string SceneName = "Menu";
         
         [Header("Menu Buttons")]
         [SerializeField] private Button _newGameButton;
@@ -26,7 +24,7 @@
 
         private void DisableMainMenuButtonsDependingOfData()
         {
-            if (DataPersistenceManager.Instance.HasAllProfilesGameData()) return;
+            if (GameStatePersistenceManager.Instance.HasAnyProfiles()) return;
             
             _continueGameButton.interactable = false;
             _loadGameButton.interactable = false;
@@ -51,7 +49,7 @@
 
         public void OnContinueGameClicked()
         {
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            GameStatePersistenceManager.Instance.LoadMostRecentlyUpdatedProfileId();
         }
 
         public void OnExitGameClicked()

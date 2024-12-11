@@ -1,11 +1,10 @@
 ﻿namespace RehvidGames.Interfaces
 {
     using DataPersistence.Data;
-    using Serializable;
-
-    public interface IDataPersistence
+    
+    public interface IDataPersistence<T>
     {
-        public void LoadData(GameData data);
-        public void SaveData(GameData data);
+        public void LoadData(T data);
+        public void SaveData(T data);
     }
 }

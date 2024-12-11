@@ -3,13 +3,15 @@
     using System.Collections.Generic;
     using System.Linq;
     using DataPersistence.Data;
+    using DataPersistence.Data.Configuration;
     using DataPersistence.Managers;
     using Interfaces;
+    using Managers;
     using TMPro;
     using UnityEngine;
     using UnityEngine.UI;
 
-    public class GameplayMenu : MonoBehaviour, IGameSettingsPersistence
+    public class GameplayMenu : MonoBehaviour, IDataPersistence<GameConfiguration>
     {
         [Header("Gameplay interactable options")]
         [SerializeField] private TMP_Dropdown _resolutionDropdown;
@@ -18,21 +20,17 @@
         
         private Resolution[] _resolutions;
         
-        private void Awake()
-        {
-            GameSettingsPersistenceRegistryManager.Instance.Register(this);
-        }
-
         private void OnDestroy()
         {
-            GameSettingsPersistenceRegistryManager.Instance.Unregister(this);
+            RegistryManager<IDataPersistence<GameConfiguration>>.Instance?.Unregister(this);
         }
 
         private void Start()
         {
-            InitializeResolutions();
-            SetCurrentResolution();
-            GameSettingsPersistenceManager.Instance.LoadGameSettings();
+            if (_resolutions == null)
+            {
+                InitializeResolutions();
+            }
         }
 
         private void InitializeResolutions()
@@ -46,53 +44,57 @@
             _resolutionDropdown.ClearOptions();
             _resolutionDropdown.AddOptions(options);
         }
+        
+        
+        public void OnQualityChanged(int qualityIndex) => SetQualitySettingsLevel(qualityIndex);
+        
 
-        private void SetCurrentResolution()
-        {
-            int currentResolutionIndex = _resolutions
-                .Select((resolution, index) => new { resolution, index })
-                .FirstOrDefault(item => item.resolution.width == Screen.currentResolution.width &&
-                                        item.resolution.height == Screen.currentResolution.height)
-                ?.index ?? 0;
-            
-            _resolutionDropdown.value = currentResolutionIndex;
-            _resolutionDropdown.RefreshShownValue();
-        }
-
-        public void OnQualityChanged(int qualityIndex)
+        private void SetQualitySettingsLevel(int qualityIndex)
         {
             QualitySettings.SetQualityLevel(qualityIndex);
         }
+        
+        public void OnResolutionChanged(int resolutionIndex) => SetScreenResolution(resolutionIndex);
 
-        public void OnResolutionChanged(int resolutionIndex)
+        private void SetScreenResolution(int resolutionIndex)
         {
             Resolution resolution = _resolutions[resolutionIndex];
             Screen.SetResolution(resolution.width, resolution.height, Screen.fullScreen);
         }
-
-        public void OnFullScreenChanged(bool isFullScreen)
+        
+        public void OnFullScreenChanged(bool isFullScreen) => SetFullScreen(isFullScreen);
+        
+        private void SetFullScreen(bool isFullScreen) => Screen.fullScreen = isFullScreen;
+        
+        public void LoadData(GameConfiguration data)
         {
-            Screen.fullScreen = isFullScreen;
+            GameplaySettings settings = data.GameplaySettings;
+            if (_resolutions == null)
+            {
+                InitializeResolutions();
+            }
+            
+            SetFullScreen(settings.IsFullScreen);
+            _fullscreenToggle.isOn = settings.IsFullScreen;
+             
+            SetScreenResolution(settings.ResolutionIndex);
+            _resolutionDropdown.value = settings.ResolutionIndex;
+            _resolutionDropdown.RefreshShownValue();
+            
+            SetQualitySettingsLevel(settings.QualityIndex);
+            _qualityDropdown.value = settings.QualityIndex;
+            _qualityDropdown.RefreshShownValue();
         }
 
-        public void LoadGameSettings(GameSettings settings)
+        public void SaveData(GameConfiguration data)
         {
-            GameGameplaySettings gameplaySettings = settings.GameplaySettings;
+            GameplaySettings gameplaySettings = data.GameplaySettings;
             
-            _resolutionDropdown.value = gameplaySettings.ResolutionIndex;
-            _qualityDropdown.value = gameplaySettings.QualityIndex;
-            _fullscreenToggle.isOn = gameplaySettings.IsFullScreen;
-        }
-
-        public void SaveGameSettings(GameSettings settings)
-        {
-            GameGameplaySettings gameplaySettings = settings.GameplaySettings;
-            
-            gameplaySettings.IsFullScreen = Screen.fullScreen;
+            gameplaySettings.IsFullScreen = _fullscreenToggle.isOn;
             gameplaySettings.ResolutionIndex = _resolutionDropdown.value;
             gameplaySettings.QualityIndex = QualitySettings.GetQualityLevel();
             
-            settings.GameplaySettings = gameplaySettings;
+            data.GameplaySettings = gameplaySettings;
         }
     }
 }
