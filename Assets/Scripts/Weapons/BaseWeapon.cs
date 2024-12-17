@@ -1,5 +1,6 @@
 namespace RehvidGames.Weapons
 {
+    using System;
     using Interfaces;
     using UnityEngine;
 
@@ -7,11 +8,31 @@ namespace RehvidGames.Weapons
     {
         [SerializeField] protected Collider damageCollider;
         [SerializeField] protected WeaponStats weaponStats;
+        [SerializeField] protected string id;
+        [SerializeField] protected string name;
         
         public WeaponStats Stats => weaponStats;
         
         public bool IsCurrentlyEquipped { get; private set; }
+
+        public string Id => id; 
+        public string Name => name;
+
+        private void OnValidate()
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                id = Guid.NewGuid().ToString();
+            }
+
+            if (string.IsNullOrEmpty(name))
+            {
+                name = gameObject.name;
+            }
+        }
         
+        public void RegenerateId() => id = Guid.NewGuid().ToString();
+
         public virtual void EnableDamageCollider()
         {
             damageCollider.enabled = true;
@@ -23,7 +44,7 @@ namespace RehvidGames.Weapons
             damageCollider.enabled = false;
             damageCollider.isTrigger = false;
         }
-        
+
         
         #region Events
         public void OnEnableDamageCollider() => EnableDamageCollider();

@@ -60,6 +60,7 @@
             if (_interactableObject is not BaseWeapon weapon) return;
             GameObject parentWeapon = weapon.transform.parent.gameObject;
             
+            weapon.RegenerateId();
             _player.SetAction(PlayerActionType.Interacting);
             _player.AttachWeaponToPrimarySocket(weapon);
             

@@ -22,6 +22,7 @@
         [SerializeField] private Transform _storageWeaponSocket;
         [SerializeField] private PlayerActionManager _actionManager;
         [SerializeField] private StaminaCosts _staminaCosts;
+        [SerializeField] private WeaponManager _weaponManager;
         
         public PlayerActionManager ActionManager => _actionManager;
         
@@ -79,12 +80,38 @@
             Debug.Log("OnDeath - Player"); 
         }
         
-        public void LoadData(GameState data)
+        public void LoadData(GameState data) //TODO: Refactor later
         {
             PlayerProfile playerProfile = data.PlayerProfile;
+            PlayerAttribute stamina = playerProfile.Stamina;
+            PlayerAttribute health = playerProfile.Health;
             
             transform.position = playerProfile.Position;
+            
             _attributes.AddSouls(data.PlayerProfile.CollectedSouls);
+            _attributes.Stamina.MaxValue = stamina.MaxValue;
+            _attributes.Stamina.CurrentValue = stamina.CurrentValue;
+            
+            healthAttribute.MaxValue = health.MaxValue;
+            healthAttribute.CurrentValue = health.CurrentValue;
+
+            WeaponState weaponState = data.PlayerProfile.WeaponState;
+            var socket = weaponState.IsCurrenltyEquipped ? _primaryWeaponSocket : _storageWeaponSocket;
+            var weapon = _weaponManager.InstantiateWeapon("SwordOneHanded", socket);
+            if (weapon)
+            {
+                Weapon = weapon;
+                weapon.SetCurrentlyEquipped(weaponState.IsCurrenltyEquipped);
+                var baseWeapons = FindObjectsByType<BaseWeapon>(FindObjectsSortMode.None); //OnScene
+                if (baseWeapons.Length <= 0) return;
+                foreach (var baseWeapon in baseWeapons)
+                {
+                    if (baseWeapon.Name == weaponState.Id && baseWeapon != weapon)
+                    {
+                        Destroy(baseWeapon.gameObject); 
+                    }
+                }
+            }
         }
 
         public void SaveData(GameState data)
@@ -93,6 +120,12 @@
             
             playerProfile.Position = transform.position;
             playerProfile.CollectedSouls = _attributes.CurrentSouls;
+            playerProfile.Stamina = new PlayerAttribute(_attributes.Stamina.MaxValue, _attributes.Stamina.CurrentValue);
+            playerProfile.Health = new PlayerAttribute(healthAttribute.MaxValue, healthAttribute.CurrentValue);
+            if (Weapon)
+            { 
+                playerProfile.WeaponState = new WeaponState(Weapon.Name, Weapon.IsCurrentlyEquipped);
+            }
         }
     }
 }

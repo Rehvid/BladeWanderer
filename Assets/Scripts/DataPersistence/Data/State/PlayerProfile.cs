@@ -8,5 +8,8 @@
     {
         public Vector3 Position;
         public int CollectedSouls;
+        public PlayerAttribute Stamina;
+        public PlayerAttribute Health;
+        public WeaponState WeaponState;
     }
 }
