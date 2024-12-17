@@ -7,10 +7,14 @@
 
     public class Minotaur: BaseEnemy
     {
+        
+        
         public override void OnDeath(Component sender, object value = null)
         {
             HandleDeath();
         }
+
+        public override EnemyType GetType() => EnemyType.Minotaur;
 
         private void OnEnableCollision()
         {

@@ -2,6 +2,7 @@
 {
     using Animator;
     using Character;
+    using Enums;
     using UnityEngine;
 
     public abstract class BaseEnemy: BaseCharacter
@@ -11,6 +12,7 @@
         [SerializeField] protected float _deathTime = 5f;
         
         public abstract void OnDeath(Component sender, object value = null);
+        public abstract EnemyType GetType();
 
         protected virtual Collider GetCollider() => TryGetComponent(out CapsuleCollider component) ? component : null;
 

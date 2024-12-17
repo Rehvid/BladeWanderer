@@ -29,6 +29,8 @@
         public PlayerAttributes Attributes => _attributes;
         
         public StaminaCosts StaminaCosts => _staminaCosts;
+
+        private bool _isSpawned;
         
         private void OnDestroy()
         {
@@ -111,6 +113,12 @@
                         Destroy(baseWeapon.gameObject); 
                     }
                 }
+            }
+
+            if (!_isSpawned)
+            {
+                 EnemyManager.Instance.Instantiate(EnemyType.Minotaur);
+                 _isSpawned = true;
             }
         }
 
