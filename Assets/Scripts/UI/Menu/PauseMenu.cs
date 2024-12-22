@@ -24,7 +24,7 @@
         public void OnMainMenu()
         {
             GameManager.Instance.LoadMainMenu();
-            SceneManager.LoadScene("Menu");  
+            SceneManager.LoadScene(MainMenu.SceneName);  
         }
         
         public void OnPause(InputAction.CallbackContext context)
