@@ -1,10 +1,10 @@
 ﻿namespace RehvidGames.Interfaces
 {
-    using Player;
-
+    using Characters.Player;
+    
     public interface IInteractable
     {
-        public void Interact(Player player);
-        public bool CanInteract(Player player);
+        public void Interact(PlayerController player);
+        public bool CanInteract(PlayerController player);
     }
 }

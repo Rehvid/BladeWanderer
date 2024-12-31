@@ -1,32 +1,25 @@
 ﻿namespace RehvidGames.Managers
 {
     using Audio;
+    using Characters.Player;
     using DG.Tweening;
+    using UI.Menu;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using Utilities;
 
-    public class GameManager : MonoBehaviour
+    public class GameManager : BaseSingletonMonoBehaviour<GameManager>
     {
-        public static GameManager Instance { get; private set;}
+        [SerializeField] private PlayerController _player;
+        public PlayerController Player => _player;
+        
         public bool IsPaused { get; private set; }
         
-        private void Awake()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
         public void LoadMainMenu()
         {
             SetTimeScale(1);
             ClearGameState();
-            SceneManager.LoadScene("Menu"); 
+            SceneManager.LoadScene(MainMenu.SceneName); 
         }
 
         private void ClearGameState()

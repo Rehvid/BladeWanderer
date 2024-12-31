@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.UI.Player
 {
     using Attributes;
+    using Attributes.Base;
     using Interfaces;
     using UnityEngine;
    
@@ -10,12 +11,12 @@
         [Header("UI Elements")] 
         [SerializeField] private UISlider _slider;
 
-        public void Init(IAttribute attribute)
+        public void Init(BaseAttribute baseAttribute)
         {
-            _slider.InitSliderValues(attribute.MaxValue, attribute.CurrentValue);
+            _slider.InitSliderValues(baseAttribute.MaxValue, baseAttribute.CurrentValue);
         }
         
-        public void UpdateStamina(StaminaAttribute attribute)
+        public void UpdateStamina(Stamina attribute)
         {
             _slider.UpdateSliderValues(attribute.MaxValue, attribute.CurrentValue);
         }

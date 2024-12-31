@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.Attributes
 {
     using System.Collections;
+    using Base;
     using Interfaces;
     using UnityEngine;
 
@@ -10,9 +11,9 @@
         [SerializeField] private float _regenRate = 5f;
         private Coroutine _regenCoroutine;
 
-        public void StartRegeneration(IAttribute attribute, System.Action<IAttribute> updateUI)
+        public void StartRegeneration(BaseAttribute baseAttribute, System.Action<BaseAttribute> updateUI)
         {
-            if (attribute == null) return;
+            if (baseAttribute == null) return;
             
             if (updateUI == null)
             {
@@ -21,7 +22,7 @@
             
             if (_regenCoroutine == null)
             {
-                _regenCoroutine = StartCoroutine(Regenerate(attribute, updateUI));
+                _regenCoroutine = StartCoroutine(Regenerate(baseAttribute, updateUI));
             }
             else
             {
@@ -38,19 +39,19 @@
             _regenCoroutine = null;
         }
         
-        private IEnumerator Regenerate(IAttribute attribute, System.Action<IAttribute> updateUI)
+        private IEnumerator Regenerate(BaseAttribute baseAttribute, System.Action<BaseAttribute> updateUI)
         {
-            while (attribute.CurrentValue < attribute.MaxValue)
+            while (baseAttribute.CurrentValue < baseAttribute.MaxValue)
             {
-                attribute.CurrentValue += _regenRate * Time.deltaTime; 
-                attribute.CurrentValue = Mathf.Clamp(attribute.CurrentValue, 0, attribute.MaxValue);
-                updateUI?.Invoke(attribute);
+                baseAttribute.CurrentValue += _regenRate * Time.deltaTime; 
+                baseAttribute.CurrentValue = Mathf.Clamp(baseAttribute.CurrentValue, 0, baseAttribute.MaxValue);
+                updateUI?.Invoke(baseAttribute);
             
                 yield return null;
             }
             
-            attribute.CurrentValue = attribute.MaxValue;
-            updateUI?.Invoke(attribute);
+            baseAttribute.CurrentValue = baseAttribute.MaxValue;
+            updateUI?.Invoke(baseAttribute);
             StopRegeneration();
         }
     }

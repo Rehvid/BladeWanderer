@@ -27,7 +27,7 @@
             SceneManager.LoadScene(MainMenu.SceneName);  
         }
         
-        public void OnPause(InputAction.CallbackContext context)
+        public void OnPausePerformed(InputAction.CallbackContext context)
         {
             if (!context.performed) return;
             

@@ -7,12 +7,13 @@
     using TMPro;
     using UnityEngine;
     using UnityEngine.SceneManagement;
+    using UnityEngine.Serialization;
 
     public class SaveMenu : MonoBehaviour
     {
         [Header("Menu")] 
         [SerializeField] private TextMeshProUGUI _header;
-        [SerializeField] private SaveMenuTitle _saveMenuTitle;
+        [FormerlySerializedAs("_saveMenuTitle")] [SerializeField] private SaveMenuTitleData saveMenuTitleData;
         
         [Header("Confirmation popup menu")]
         [SerializeField] private ConfirmationPopupMenu _confirmationPopupMenu;
@@ -31,7 +32,7 @@
 
         private void UpdateHeaderText()
         {
-            _header.text = _isLoadingGame ? _saveMenuTitle.HeaderLoadingSlotTitle : _saveMenuTitle.HeaderSlotTitle;
+            _header.text = _isLoadingGame ? saveMenuTitleData.HeaderLoadingSlotTitle : saveMenuTitleData.HeaderSlotTitle;
         }
 
         private void ActivateAllSlots()
@@ -81,7 +82,7 @@
         private void OverrideSaveSlotClicked(SaveSlot saveSlot)
         {
             _confirmationPopupMenu.ActivateMenu(
-                _saveMenuTitle.OverrideSlotTitle,
+                saveMenuTitleData.OverrideSlotTitle,
                 () => { StartNewGameOnSaveSlotClicked(saveSlot); },
                 () => { }
             );
@@ -100,7 +101,7 @@
         public void OnClearClicked(SaveSlot saveSlotMenuItem)
         {
             _confirmationPopupMenu.ActivateMenu(
-                _saveMenuTitle.ClearSlotTitle,
+                saveMenuTitleData.ClearSlotTitle,
                 () => 
                 {
                     GameStatePersistenceManager.Instance.DeleteProfileData(saveSlotMenuItem.ProfileId);

@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using BackupServices;
+    using Base;
     using Data.State;
     using DataHandlers;
     using Interfaces;
@@ -12,7 +13,7 @@
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
-    public class GameStatePersistenceManager: DataPersistenceBase<GameState>
+    public class GameStatePersistenceManager: BaseDataPersistence<GameState>
     {
         public static GameStatePersistenceManager Instance { get; private set; }
         

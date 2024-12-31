@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.DataPersistence.Managers
 {
     using BackupServices;
+    using Base;
     using Data.Configuration;
     using DataHandlers;
     using Interfaces;
@@ -9,7 +10,7 @@
     using Service;
     using UnityEngine;
 
-    public class GameConfigurationPersistenceManager: DataPersistenceBase<GameConfiguration>
+    public class GameConfigurationPersistenceManager: BaseDataPersistence<GameConfiguration>
     {
         public static GameConfigurationPersistenceManager Instance { get; private set; }
         
