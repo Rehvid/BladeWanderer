@@ -32,15 +32,11 @@
                 return;
             }
             
-            _weapon = _enemy.Weapon;
+            _weapon = _enemy.WeaponHandler.CurrentWeapon;
             _animatorHandler = _enemy.AnimatorHandler;
         }
 
         #region Events
-        public void OnEnemyWeaponEnableDamageCollider() => _weapon?.EnableDamageCollider();
-        
-        public void OnEnemyWeaponDisableDamageCollider() =>_weapon?.DisableDamageCollider();
-
         public void OnEnemyEndAttack() => SetReadyAttackState();
         #endregion
         

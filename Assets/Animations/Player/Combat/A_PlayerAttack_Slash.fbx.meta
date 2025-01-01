@@ -56,21 +56,21 @@ ModelImporter:
       curves: []
       events:
       - time: 0.39642859
-        functionName: OnPlayerWeaponEnableDamageCollider
+        functionName: OnWeaponEnableDamageCollider
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.42543262
-        functionName: OnPlayerWeaponEffects
+        functionName: OnWeaponEffects
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.46428573
-        functionName: OnPlayerWeaponDisableDamageCollider
+        functionName: OnWeaponDisableDamageCollider
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0

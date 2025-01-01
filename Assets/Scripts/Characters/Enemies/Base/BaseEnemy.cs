@@ -11,14 +11,14 @@
     public abstract class BaseEnemy: BaseCharacter
     {
         [Header("Enemy configuration")] 
-        [SerializeField] protected BaseWeapon weapon;
+        [SerializeField] protected EnemyWeaponHandler weaponHandler;
         [SerializeField] protected EnemyTreasure _treasure;
         [SerializeField] protected float _deathTime = 5f;
         
         [Header("Enemy character effects")]
         [SerializeField] protected EnemyCharacterEffectsData enemyEffectsData;
         
-        public BaseWeapon Weapon => weapon;
+        public EnemyWeaponHandler WeaponHandler => weaponHandler;
         
         public abstract EnemyType GetEnemyType();
 

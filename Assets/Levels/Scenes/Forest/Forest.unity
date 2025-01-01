@@ -2825,9 +2825,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5e3b2d2716454562932efbaa7d778de8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  _weapon: {fileID: 0}
   _rightHandMount: {fileID: 1453299763}
   _leftLegMount: {fileID: 659847291}
-  _weapon: {fileID: 0}
   _weaponDrawAudioData: {fileID: 11400000, guid: d7f420e53c3bcf944895bc62320d7a36, type: 2}
   _weaponHideAudioData: {fileID: 11400000, guid: 36b93d421fcf5c9408981862a0f49269, type: 2}
 --- !u!114 &1150700279
@@ -3649,7 +3649,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1459725962}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 72f3c134f44144e899db5a78a7a4e0d9, type: 3}
   m_Name: 
@@ -8248,7 +8248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: {fileID: 4501127629007062601}
   animatorHandler: {fileID: 7145518760731489710}
-  weapon: {fileID: 2742709753250709280}
+  weaponHandler: {fileID: 8962764134798868958}
   _treasure: {fileID: 7806207246086959145}
   _deathTime: 5
   enemyEffectsData: {fileID: 11400000, guid: 5007b945a57c7f847aa872a94a6aab06, type: 2}
@@ -10495,7 +10495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _detectionRadius: 5
-  _fieldOfViewAngle: 120
+  _fieldOfViewAngle: 150
   _obstacleMask:
     serializedVersion: 2
     m_Bits: 0
@@ -12557,6 +12557,7 @@ GameObject:
   - component: {fileID: 7145518760731489710}
   - component: {fileID: 8962764134798868955}
   - component: {fileID: 8962764134798868957}
+  - component: {fileID: 8962764134798868958}
   m_Layer: 0
   m_Name: Minotaur
   m_TagString: Untagged
@@ -12789,7 +12790,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _enemy: {fileID: 3937239663635612957}
-  _fightRadius: 2
+  _fightRadius: 1.5
+--- !u!114 &8962764134798868958
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8568743353859426938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 53d53da8b3814deaa141727384d4ac98, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  _weapon: {fileID: 2742709753250709280}
 --- !u!1 &8983797235748967167
 GameObject:
   m_ObjectHideFlags: 0
