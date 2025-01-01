@@ -28,6 +28,7 @@
             
             var movement = GetMovement();
             
+            LookAtPlayer();
             movement.SetDestination(controller.Player.transform.position);
             movement.SetChaseSpeed();
         }

@@ -35,5 +35,7 @@
         }
 
         protected bool HasLastKnownLocationPlayer() => controller.Sight.PlayerLastKnownLocation != Vector3.zero;
+
+        protected void LookAtPlayer() => controller.Enemy.transform.LookAt(controller.Player.transform);  
     }
 }

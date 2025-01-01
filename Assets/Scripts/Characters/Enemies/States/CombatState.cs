@@ -27,7 +27,6 @@
         public override void Execute()
         {
             controller.Movement.StopMovement();
-            
             if (controller.Combat.CanAttack())
             {
                 controller.Combat.Attack();
@@ -35,10 +34,9 @@
             {
                 controller.Combat.ResetAttack(); 
             }
+            LookAtPlayer();
         }
         
-        
-
         public override void Exit()
         {
             controller.Movement.ResumeMovement();

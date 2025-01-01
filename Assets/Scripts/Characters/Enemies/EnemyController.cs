@@ -29,6 +29,8 @@
         public EnemySight Sight => _sight;
         
         public EnemyCombat Combat => _combat;
+
+        public BaseEnemy Enemy => _enemy;
         
         private void Start()
         {

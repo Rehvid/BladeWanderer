@@ -42,7 +42,6 @@
         
         public void SetReadyAttackState() => CurrentAttackState = AttackStateType.Ready;
         
-        //TODO: Rotation towards player before animation is called.
         public void Attack()
         {
             _animatorHandler.SetTrigger(AnimatorParameter.Attack);
