@@ -7,8 +7,7 @@
     using UnityEngine;
     using UnityEngine.InputSystem;
     using VFXManager = VFX.VFXManager;
-
-    //TODO: Refactor later
+    
     public class PlayerMovement: MonoBehaviour
     {
         private const float MinimumRunningSpeed = 1f;
