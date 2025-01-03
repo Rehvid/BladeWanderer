@@ -5,7 +5,7 @@
     using Data;
     using Enums;
     using UnityEngine;
-    using UnityEngine.Serialization;
+    using UnityEngine.AI;
     using VFX;
 
     public class PlayerController: BaseCharacter
@@ -47,7 +47,6 @@
             {
                 HandleHitDirection(hitPosition);
             }
-            
         }
 
         private void HandleHitDirection(Vector3 hitPosition)
@@ -59,7 +58,12 @@
         
         public override void OnDeath(Component sender, object value = null)
         {
-            Debug.Log("Death - Player");
+            ActionHandler.ChangeCurrentAction(PlayerActionType.Death);
+            animatorHandler.SetTrigger(AnimatorParameter.Death);
+            if (TryGetComponent(out NavMeshObstacle navMeshObstacle))
+            {
+                navMeshObstacle.enabled = true;
+            }
         }
         
         #region proxy functions

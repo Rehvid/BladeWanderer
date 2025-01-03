@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f528b7cd0ddc49bdbe2c38e1fc732b98, type: 3}
   m_Name: AxeWeaponStatsData
   m_EditorClassIdentifier: 
-  _baseDamage: 15
+  _baseDamage: 100
   _baseStaminaCost: 0

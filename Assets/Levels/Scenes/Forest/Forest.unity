@@ -1612,9 +1612,47 @@ MonoBehaviour:
   Response:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: RehvidGames.Player.Player, Assembly-CSharp
+      - m_Target: {fileID: 1150700279}
+        m_TargetAssemblyTypeName: RehvidGames.Characters.Player.PlayerController,
+          Assembly-CSharp
         m_MethodName: OnDeath
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 1727901267}
+        m_TargetAssemblyTypeName: RehvidGames.Managers.GameManager, Assembly-CSharp
+        m_MethodName: OnDeath
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 8962764134798868956}
+        m_TargetAssemblyTypeName: RehvidGames.Characters.Enemies.EnemyController,
+          Assembly-CSharp
+        m_MethodName: OnPlayerDeath
+        m_Mode: 0
+        m_Arguments:
+          m_ObjectArgument: {fileID: 0}
+          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
+          m_IntArgument: 0
+          m_FloatArgument: 0
+          m_StringArgument: 
+          m_BoolArgument: 0
+        m_CallState: 2
+      - m_Target: {fileID: 6270527046367063996}
+        m_TargetAssemblyTypeName: RehvidGames.Characters.Enemies.EnemySight, Assembly-CSharp
+        m_MethodName: OnPlayerDeath
         m_Mode: 0
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1654,7 +1692,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _currentValue: 100
   _maxValue: 100
-  _deathTriggered: {fileID: 0}
+  _deathTriggered: {fileID: 11400000, guid: e4fc4730512b58f40ab3a90281bdb949, type: 2}
   _healthBar: {fileID: 1094040444}
 --- !u!114 &549555872
 MonoBehaviour:
@@ -2695,6 +2733,7 @@ GameObject:
   - component: {fileID: 1150700280}
   - component: {fileID: 1150700281}
   - component: {fileID: 1150700282}
+  - component: {fileID: 1150700284}
   m_Layer: 3
   m_Name: Player
   m_TagString: Untagged
@@ -2898,6 +2937,22 @@ MonoBehaviour:
   _decelerationRate: 5
   _cameraTransform: {fileID: 1823688467}
   _rotationSmoothingTime: 0.1
+--- !u!208 &1150700284
+NavMeshObstacle:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1150700264}
+  m_Enabled: 0
+  serializedVersion: 3
+  m_Shape: 1
+  m_Extents: {x: 0.5, y: 0.5, z: 0.5}
+  m_MoveThreshold: 0.5
+  m_Carve: 1
+  m_CarveOnlyStationary: 1
+  m_Center: {x: 0, y: 0, z: 0}
+  m_TimeToStationary: 0.5
 --- !u!1 &1214633245
 GameObject:
   m_ObjectHideFlags: 0
@@ -4087,6 +4142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _isPersistent: 1
   _player: {fileID: 1150700279}
+  _deathScreen: {fileID: 3763921584330360633, guid: 3450a9f380580024eadaddf4858e7a37, type: 3}
 --- !u!1 &1739509124
 GameObject:
   m_ObjectHideFlags: 0

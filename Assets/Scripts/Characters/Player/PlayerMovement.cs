@@ -28,12 +28,14 @@
         [SerializeField] private float _animatorVerticalOffset = -0.5f;
         [Tooltip("Smoothing factor for speed transitions in the animator. Lower values make animations more responsive to speed changes, while higher values create smoother, slower adjustments.")]
         [SerializeField] private float _animatorSpeedSmoothingFactor = 0.1f;
-        
+
+        private bool _isDead;
         private bool _isStopped;
         private bool _canPlayDustGroundVFX;
         private bool _isFootstepsSoundPlaying;
+        
         private float _previousSpeed;
-         
+        
         private PlayerController _player;
         private AnimatorHandler _animatorHandler;
         private AudioManager _audioManager;
@@ -57,7 +59,7 @@
 
         private void Update()
         {
-            if (GameManager.Instance.IsPaused) return;
+            if (!ShouldMove()) return;
             
             HandlePlayerMovement();
             if (!_isStopped)
@@ -68,6 +70,8 @@
             PlayMovementStopEffects();
             PlayMovementSound();
         }
+        
+        private bool ShouldMove() => !GameManager.Instance.IsPaused && !GameManager.Instance.IsPlayerDead;
 
         private void HandlePlayerMovement()
         {
@@ -173,6 +177,8 @@
             _audioManager.StopCurrentSoundType(SoundType.PlayerFootsteps);
             _isFootstepsSoundPlaying = false;
         }
+        
+        
         
         #region Input events
         public void OnMovePerformed(InputAction.CallbackContext context)

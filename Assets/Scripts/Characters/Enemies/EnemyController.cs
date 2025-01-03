@@ -35,6 +35,7 @@
         private void Start()
         {
             FindComponents();
+            
             _player = GameManager.Instance.Player;
             _stateHandler?.InitState(EnemyStateFactory.GetState(EnemyStateType.Patrol, this));
         }
@@ -71,5 +72,10 @@
             => _enemy.AnimatorHandler.SetFloat(AnimatorParameter.XSpeed, _movement.GetVelocityMagnitudeAgent());
 
         public bool IsPlayerDead() => _player.IsDead();
+
+        public void OnPlayerDeath(Component sender, object value)
+        {
+            _movement.StopMovement();
+        }
     }
 }

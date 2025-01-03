@@ -60,7 +60,7 @@
         
         public void OnDodgePerformed(InputAction.CallbackContext context)
         {
-            if (context.performed || CanDodge())
+            if (context.performed && CanDodge())
             {
                 Dodge();
             }

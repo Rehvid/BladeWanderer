@@ -33,13 +33,21 @@
 
         private void Update()
         {
-            if (!CanDetectPlayer()) return;
+           HandleDetectingPlayer();
+        }
 
-            DetectPlayer();
+        private void HandleDetectingPlayer()
+        {
+            if (CanDetectPlayer())
+            {
+                DetectPlayer();
+            }
         }
 
         private bool CanDetectPlayer() => _player && !_player.IsDead();
-
+        
+        public void OnPlayerDeath(Component sender, object value) => IsPlayerInSight = false;
+        
         private void DetectPlayer()
         {
             var isPlayerCurrentlyVisible = IsPlayerVisible();

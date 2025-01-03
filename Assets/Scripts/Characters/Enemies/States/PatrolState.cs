@@ -17,9 +17,8 @@
 
         public override void Enter()
         {
-            base.Enter();
-
             var movementPatrol = GetMovementPatrol();
+            
             if (!movementPatrol.IsImmediatePatrol)
             {
                 movementPatrol.IsImmediatePatrol = true;
@@ -37,6 +36,5 @@
         }
         
         private EnemyMovementPatrol GetMovementPatrol() => controller.Movement.MovementPatrol;
-        
     }
 }

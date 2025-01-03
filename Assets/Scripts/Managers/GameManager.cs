@@ -11,9 +11,19 @@
     public class GameManager : BaseSingletonMonoBehaviour<GameManager>
     {
         [SerializeField] private PlayerController _player;
+        [SerializeField] private GameObject _deathScreen;
+        
         public PlayerController Player => _player;
         
         public bool IsPaused { get; private set; }
+        
+        public bool IsPlayerDead { get; private set; }
+
+        public void OnDeath(Component sender, object value = null)
+        {
+           IsPlayerDead = true;
+           Instantiate(_deathScreen);
+        }
         
         public void LoadMainMenu()
         {
