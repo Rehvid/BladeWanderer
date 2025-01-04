@@ -5,9 +5,10 @@
     using UnityEngine.SceneManagement;
 
     [Serializable]
-    public class GameSessionData
+    public class GameSessionState
     {
         public string CurrentSceneName;
+        public int IndexScene;
         public string ProfileId;
         public string LastUpdated;
 
@@ -23,6 +24,11 @@
             {
                  CurrentSceneName = currentActiveSceneName; 
             }
+        }
+
+        public void UpdateSceneIndex()
+        {
+            IndexScene = SceneManager.GetActiveScene().buildIndex;
         }
         
         public string GetFormattedLastUpdated(string format = "dd.MM.yyyy HH:mm:ss")

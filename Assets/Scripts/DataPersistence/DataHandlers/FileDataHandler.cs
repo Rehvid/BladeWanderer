@@ -198,8 +198,8 @@
                 }
                 else
                 {
-                    DateTime mostRecentDate = profiles[mostRecentProfileId].SessionData.GetDateTimeFromLastUpdated();
-                    DateTime newDateTime = gameData.SessionData.GetDateTimeFromLastUpdated();
+                    DateTime mostRecentDate = profiles[mostRecentProfileId].SessionState.GetDateTimeFromLastUpdated();
+                    DateTime newDateTime = gameData.SessionState.GetDateTimeFromLastUpdated();
                     
                     if (newDateTime > mostRecentDate)
                     {

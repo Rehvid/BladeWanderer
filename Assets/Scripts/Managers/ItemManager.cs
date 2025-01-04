@@ -1,11 +1,12 @@
 ﻿namespace RehvidGames.Managers
 {
     using System.Collections.Generic;
+    using System.Linq;
     using Items.Base;
     using UnityEngine;
     using Utilities;
     
-    public class ItemManager : BaseSingletonMonoBehaviour<GameManager>
+    public class ItemManager : BaseSingletonMonoBehaviour<ItemManager>
     {
         private readonly Dictionary<string, BaseItem> _itemsPrefabs = new();
 
@@ -27,6 +28,16 @@
             }
         }
 
+        public BaseItem FindItemInScene(string id)
+        {
+            if (string.IsNullOrEmpty(id)) return null;
+            var baseItems = FindObjectsByType<BaseItem>(FindObjectsSortMode.None);
+            
+            if (baseItems == null || baseItems.Length == 0) return null;
+            
+            return baseItems.FirstOrDefault(item => item.Id == id);
+        }
+        
         public BaseItem InstantiateItem(
             string id, 
             Vector3 position = default, 

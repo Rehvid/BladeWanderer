@@ -7202,7 +7202,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _header: {fileID: 2002193249}
-  _saveMenuTitle: {fileID: 11400000, guid: 399dcf3c23e06ee4bacf071403112f6d, type: 2}
+  saveMenuTitleData: {fileID: 11400000, guid: 399dcf3c23e06ee4bacf071403112f6d, type: 2}
   _confirmationPopupMenu: {fileID: 1465379724}
 --- !u!224 &857203317213340280 stripped
 RectTransform:

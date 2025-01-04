@@ -64,11 +64,11 @@
             SetActiveClearButton(true);
             IsDataAvailable = true;
             
-            GameSessionData sessionData = gameState.SessionData;
+            GameSessionState sessionState = gameState.SessionState;
             
-            CurrentSceneName = sessionData.CurrentSceneName;
-            _sceneNameText.text = sessionData.CurrentSceneName;
-            _lastUpdatedText.text = sessionData.GetFormattedLastUpdated();
+            CurrentSceneName = sessionState.CurrentSceneName;
+            _sceneNameText.text = sessionState.CurrentSceneName;
+            _lastUpdatedText.text = sessionState.GetFormattedLastUpdated();
         }
 
         public void SetInteractable(bool interactable)

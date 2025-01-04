@@ -15,6 +15,7 @@
 
     public class GameStatePersistenceManager: BaseDataPersistence<GameState>
     {
+        public bool IsNewGame { get; set; }
         public static GameStatePersistenceManager Instance { get; private set; }
         
         [Header("Debugging")]
@@ -84,13 +85,32 @@
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         { 
+            LoadObjectsIntoScene();
+            if (scene.name != MainMenu.SceneName)
+            {
+               HandleLoadingScene(); 
+            }
+        }
+
+        private void LoadObjectsIntoScene()
+        {
             RegistryManager<IDataPersistence<GameState>>.Instance.RegisterMonoBehaviours(); 
             persistenceObjects = RegistryManager<IDataPersistence<GameState>>.Instance.RegisteredObjects;
-            if (scene.name == MainMenu.SceneName) return;
+        }
+
+        private void HandleLoadingScene()
+        {
+            if (IsNewGame)
+            {
+                SaveData();
+                IsNewGame = false;
+                return;
+            }
             
             LoadData();
             autoSaveManager.HandleAutoSaveCoroutine();
         }
+        
         #endregion
 
         public Dictionary<string, GameState> GetAllProfiles() => dataHandler.LoadAllProfiles();
@@ -106,7 +126,7 @@
             GameState recentlyUpdatedState = dataHandler.LoadGameState(dataHandler.GetMostRecentlyUpdatedProfileId());
             if (recentlyUpdatedState != null)
             {
-                SceneManager.LoadScene(recentlyUpdatedState.SessionData.CurrentSceneName);
+                SceneManager.LoadScene(recentlyUpdatedState.SessionState.IndexScene); 
             }
         }
         

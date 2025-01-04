@@ -4,27 +4,27 @@
     using Audio;
     using Audio.Data;
     using Base;
+    using DataPersistence.Data.State;
     using Enums;
+    using Interfaces;
+    using Items.Base;
     using Items.Weapons.Base;
+    using Items.Weapons.Interfaces;
     using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
 
-    public class PlayerWeaponHandler: BaseCharacterWeaponHandler
+    public class PlayerWeaponHandler: BaseCharacterWeaponHandler, IDataPersistence<GameState>
     {
         [Header("Weapon mounts")]
         [SerializeField] private Transform _rightHandMount;
         [SerializeField] private Transform _leftLegMount;
-        
-        // [Header("Weapon")]
-        // [SerializeField] private BaseWeapon _weapon;
         
         [Header("Audio")]
         [SerializeField] private AudioData _weaponDrawAudioData;
         [SerializeField] private AudioData _weaponHideAudioData;
         
         public bool IsDrawnWeapon { get; private set; }
-        // public BaseWeapon CurrentWeapon => _weapon;
         
         private PlayerController _player;
         private AudioManager _audioManager;
@@ -45,6 +45,57 @@
                 Debug.LogWarning("No audio manager found!");
             }
         }
+
+        public void LoadData(GameState data)
+        {
+            if (string.IsNullOrEmpty(data.InventoryState.weaponState.Id)) return;
+            
+            BaseWeapon baseWeapon = GetWeaponFromGameState(data.InventoryState.weaponState);
+            if (baseWeapon)
+            {
+              HandleInstantiateWeapon(data.InventoryState.weaponState, baseWeapon);  
+            }
+        }
+
+        private BaseWeapon GetWeaponFromGameState(WeaponState weaponState)
+        {
+            ItemManager itemManager = ItemManager.Instance;
+            BaseItem itemScene = itemManager.FindItemInScene(weaponState.Id);
+            
+            if (itemScene != null)
+            {
+                Destroy(itemScene.gameObject);
+            }
+            
+            return itemManager.InstantiateItem(weaponState.Id) as BaseWeapon;
+        }
+
+        private void HandleInstantiateWeapon(WeaponState weaponState, BaseWeapon baseWeapon)
+        {
+            if (baseWeapon is IPickUpWeapon)
+            {
+                var pickUp = baseWeapon as IPickUpWeapon;
+                Destroy(pickUp.GetPickableWeaponCollider());
+            }
+            
+            if (weaponState.IsDrawnWeapon)
+            {
+                AttachWeaponToRightHand(baseWeapon);
+                return;
+            }
+            
+            AttachWeaponToLeftLeg(baseWeapon);
+        }
+        
+        public void SaveData(GameState data)
+        {
+            WeaponState weaponState = data.InventoryState.weaponState;
+            if (!_weapon) return;
+            
+            weaponState.IsDrawnWeapon = IsDrawnWeapon;
+            weaponState.Id = _weapon.Id;
+        }
+        
 
         #region Events
         public void OnWeaponTogglePerformed(InputAction.CallbackContext context)

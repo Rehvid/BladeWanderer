@@ -22,7 +22,12 @@
             SetInteractionAnimation(player);
             DestroyPickableWeaponCollider();
         }
-        
+
+        private void OnDestroy()
+        {
+            Destroy(GetWaveMotionController());
+        }
+
         private void SetInteractionAnimation(PlayerController player)
         {
             AnimatorHandler animator = player.AnimatorHandler;

@@ -13,13 +13,14 @@
     {
         [Header("Menu")] 
         [SerializeField] private TextMeshProUGUI _header;
-        [FormerlySerializedAs("_saveMenuTitle")] [SerializeField] private SaveMenuTitleData saveMenuTitleData;
+        [SerializeField] private SaveMenuTitleData saveMenuTitleData;
         
         [Header("Confirmation popup menu")]
         [SerializeField] private ConfirmationPopupMenu _confirmationPopupMenu;
         
         private SaveSlot[] _saveSlots;
         private bool _isLoadingGame;
+        private bool _hasNewGameStarted;
         
         private void Awake() => _saveSlots = GetComponentsInChildren<SaveSlot>();
         
@@ -95,8 +96,9 @@
             
             SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
             
-            GameStatePersistenceManager.Instance.SaveData();
+            GameStatePersistenceManager.Instance.IsNewGame = true;
         }
+        
         
         public void OnClearClicked(SaveSlot saveSlotMenuItem)
         {

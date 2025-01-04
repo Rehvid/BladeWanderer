@@ -3,12 +3,14 @@
     using Animator;
     using Base;
     using Data;
+    using DataPersistence.Data.State;
     using Enums;
+    using Interfaces;
     using UnityEngine;
     using UnityEngine.AI;
     using VFX;
 
-    public class PlayerController: BaseCharacter
+    public class PlayerController: BaseCharacter, IDataPersistence<GameState>
     {
         [Header("Stats")]
         [SerializeField] private PlayerAttributes _attributes; 
@@ -64,6 +66,31 @@
             {
                 navMeshObstacle.enabled = true;
             }
+        }
+
+        public void LoadData(GameState data)
+        {
+            AttributeState healthAttribute = data.PlayerAttributeState.Health;
+            health.CurrentValue = healthAttribute.CurrentValue;
+            health.MaxValue = healthAttribute.MaxValue;
+
+            transform.position = data.PlayerState.Position;
+            transform.rotation = data.PlayerState.Rotation;
+        }
+
+        public void SaveData(GameState data)
+        {
+            var healthAttribute = new AttributeState
+            {
+                CurrentValue = health.CurrentValue,
+                MaxValue = health.MaxValue
+            };
+
+            PlayerState state = data.PlayerState;
+            state.Position = transform.position;
+            state.Rotation = transform.rotation;
+            
+            data.PlayerAttributeState.Health = healthAttribute;
         }
         
         #region proxy functions

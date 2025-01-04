@@ -49,12 +49,13 @@
 
         private GameState UpdateSessionData(GameState state)
         {
-            GameSessionData sessionData = state.SessionData;
-            sessionData.UpdateLastUpdated();
-            sessionData.UpdateCurrentSceneName();
-            sessionData.ProfileId = _profileManager.GetCurrentProfileId();
+            GameSessionState sessionState = state.SessionState;
+            sessionState.UpdateLastUpdated();
+            sessionState.UpdateCurrentSceneName();
+            sessionState.UpdateSceneIndex();
+            sessionState.ProfileId = _profileManager.GetCurrentProfileId();
             
-            state.SessionData = sessionData;
+            state.SessionState = sessionState;
             return state;
         }
     }

@@ -1,11 +1,11 @@
 ﻿namespace RehvidGames.DataPersistence.Data.State
 {
     using System;
-    
+
     [Serializable]
-    public class WeaponState
+    public class AttributeState
     {
-        public bool IsDrawnWeapon;
-        public string Id;
+        public float MaxValue;
+        public float CurrentValue;
     }
 }

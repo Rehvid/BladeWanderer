@@ -4,20 +4,17 @@
     using System.Linq;
     using Data;
     using Enums;
-    using ScriptableObjects;
     using Serializable;
     using Service;
     using UnityEngine;
-    using UnityEngine.Serialization;
     using Utilities;
 
     public class AudioManager : BaseSingletonMonoBehaviour<AudioManager>
     {
-        [FormerlySerializedAs("_audioSourceManager")]
         [Header("Audio components")] 
         [SerializeField] private AudioSourceService audioSourceService;
-        [FormerlySerializedAs("_audioMixerManager")] [SerializeField] private AudioMixerService audioMixerService;
-        [FormerlySerializedAs("_audioCollection")] [SerializeField] private AudioCollectionData audioCollectionData;
+        [SerializeField] private AudioMixerService audioMixerService;
+        [SerializeField] private AudioCollectionData audioCollectionData;
 
         private Dictionary<SoundType, SoundCategory> _soundCategories;
         
