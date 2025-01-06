@@ -9188,7 +9188,7 @@ MonoBehaviour:
   animatorHandler: {fileID: 7145518760731489710}
   weaponHandler: {fileID: 8962764134798868958}
   _treasure: {fileID: 7806207246086959145}
-  _deathTime: 5
+  _deathTime: 2
   enemyEffectsData: {fileID: 11400000, guid: 5007b945a57c7f847aa872a94a6aab06, type: 2}
 --- !u!1 &3974129213252977763
 GameObject:

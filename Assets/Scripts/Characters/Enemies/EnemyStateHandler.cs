@@ -24,6 +24,8 @@
             }
         }
         
+        public void ExitCurrentState() => _currentState?.Exit();
+        
         private void TransitionToState(IState state)
         {
             _currentState?.Exit();

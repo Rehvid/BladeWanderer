@@ -10,8 +10,6 @@
 
     public class EnemyController: MonoBehaviour
     {
-        private BaseEnemy _enemy;
-        private PlayerController _player;
         
         [Header("State handler")]
         [SerializeField] private EnemyStateHandler _stateHandler;
@@ -30,6 +28,11 @@
         public EnemyCombat Combat => _combat;
 
         public BaseEnemy Enemy => _enemy;
+        
+        private BaseEnemy _enemy;
+        private PlayerController _player;
+
+        private bool _hasProcessedDeathStateExit;
         
         private void Start()
         {
@@ -53,13 +56,21 @@
 
         private void Update()
         {
-            if (!CanUpdate()) return;
-            
+            if (GameManager.Instance.IsPaused || _hasProcessedDeathStateExit) return;
+
+            HandleProcessingDeathStateExit();
             HandleStateManagement();
             UpdateAnimatorAgentSpeed();
         }
+
+        private void HandleProcessingDeathStateExit()
+        {
+            if (!_enemy.IsDead()) return;
+            
+            _stateHandler.ExitCurrentState();
+            _hasProcessedDeathStateExit = true;
+        }
         
-        private bool CanUpdate() => !_enemy.IsDead() || !GameManager.Instance.IsPaused;
         
         private void HandleStateManagement()
         {
