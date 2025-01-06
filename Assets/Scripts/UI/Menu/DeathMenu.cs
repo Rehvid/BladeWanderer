@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.UI.Menu
 {
     using DataPersistence.Managers;
+    using Handler;
     using Managers;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -9,18 +10,16 @@
     {
         [Header("Menu sections")]
         [SerializeField] private GameObject _deathMenu;
-        [SerializeField] private SaveMenu saveMenu;
+        [SerializeField] private SaveMenu _saveMenu;
         
-        public void OnMainMenu()
-        {
-            GameManager.Instance.LoadMainMenu();
-            SceneManager.LoadScene(MainMenu.SceneName);  
-        }
+        [Header("Handler")]
+        [SerializeField] private MainMenuHandler _mainMenuHandler;
+        
         
         public void OnLoadSlot()
         {
-            saveMenu.FindSaveSlots();
-            saveMenu.ActivateMenu(true); 
+            _saveMenu.FindSaveSlots();
+            _saveMenu.ActivateMenu(true); 
         }
 
         public void OnContinueGame()

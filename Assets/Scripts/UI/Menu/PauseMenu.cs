@@ -1,5 +1,6 @@
 ﻿namespace RehvidGames.UI.Menu
 {
+    using Handler;
     using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
@@ -9,7 +10,10 @@
     {
         [Header("Menu sections")]
         [SerializeField] private GameObject _pauseMenu;
-        [SerializeField] private SaveMenu saveMenu;
+        [SerializeField] private SaveMenu _saveMenu;
+        
+        [Header("Handler")]
+        [SerializeField] private MainMenuHandler _mainMenuHandler;
         
         public void OnResume()
         {
@@ -23,22 +27,20 @@
             GameManager.Instance.ResumeGame();
         }
         
-        public void OnMainMenu()
-        {
-            GameManager.Instance.LoadMainMenu();
-            SceneManager.LoadScene(MainMenu.SceneName);  
-        }
-
         public void OnLoadSlot()
-        {
-            saveMenu.FindSaveSlots();
-            saveMenu.ActivateMenu(true); 
+        { 
+            HandleSaveMenu(true);
         }
 
         public void OnSaveSlot()
         {
-            saveMenu.FindSaveSlots();
-            saveMenu.ActivateMenu(false); 
+            HandleSaveMenu(false);
+        }
+
+        private void HandleSaveMenu(bool isLoadingGame)
+        {
+            _saveMenu?.FindSaveSlots();
+            _saveMenu?.ActivateMenu(isLoadingGame); 
         }
         
         public void OnPausePerformed(InputAction.CallbackContext context)
