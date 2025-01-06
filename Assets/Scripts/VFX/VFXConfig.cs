@@ -1,13 +1,8 @@
 ﻿namespace RehvidGames.VFX
 {
+    using Enums;
     using UnityEngine;
-
-    public enum VFXType
-    {
-        ParticleEffect,
-        VisualEffect
-    }
- 
+    
     [CreateAssetMenu(fileName = "NewVFXConfig", menuName = "VFX/VFXConfig")]
     public class VFXConfig : ScriptableObject
     {
