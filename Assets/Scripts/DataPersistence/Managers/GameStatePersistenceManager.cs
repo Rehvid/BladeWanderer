@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using BackupServices;
+    using Base;
     using Data.State;
     using DataHandlers;
     using Interfaces;
@@ -12,8 +13,9 @@
     using UnityEngine;
     using UnityEngine.SceneManagement;
 
-    public class GameStatePersistenceManager: DataPersistenceBase<GameState>
+    public class GameStatePersistenceManager: BaseDataPersistence<GameState>
     {
+        public bool IsNewGame { get; set; }
         public static GameStatePersistenceManager Instance { get; private set; }
         
         [Header("Debugging")]
@@ -83,13 +85,32 @@
         
         private void OnSceneLoaded(Scene scene, LoadSceneMode mode)
         { 
+            LoadObjectsIntoScene();
+            if (scene.name != MainMenu.SceneName)
+            {
+               HandleLoadingScene(); 
+            }
+        }
+
+        private void LoadObjectsIntoScene()
+        {
             RegistryManager<IDataPersistence<GameState>>.Instance.RegisterMonoBehaviours(); 
             persistenceObjects = RegistryManager<IDataPersistence<GameState>>.Instance.RegisteredObjects;
-            if (scene.name == MainMenu.SceneName) return;
+        }
+
+        private void HandleLoadingScene()
+        {
+            if (IsNewGame)
+            {
+                SaveData();
+                IsNewGame = false;
+                return;
+            }
             
             LoadData();
             autoSaveManager.HandleAutoSaveCoroutine();
         }
+        
         #endregion
 
         public Dictionary<string, GameState> GetAllProfiles() => dataHandler.LoadAllProfiles();
@@ -105,7 +126,7 @@
             GameState recentlyUpdatedState = dataHandler.LoadGameState(dataHandler.GetMostRecentlyUpdatedProfileId());
             if (recentlyUpdatedState != null)
             {
-                SceneManager.LoadScene(recentlyUpdatedState.SessionData.CurrentSceneName);
+                SceneManager.LoadScene(recentlyUpdatedState.SessionState.IndexScene); 
             }
         }
         
@@ -114,19 +135,12 @@
         public void ChangeSelectedProfileId(string newProfileId)
         {
             _profileManager.SetCurrentProfile(newProfileId);
-            LoadData();
         }
 
         public void DeleteProfileData(string profileId)
         {
             _profileManager.DeleteProfile(profileId);
             LoadData();
-        }
-        
-        
-        private void OnApplicationQuit()
-        {
-            SaveData();
         }
     }
 }

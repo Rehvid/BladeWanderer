@@ -1,0 +1,17 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5df3ae2127584cc6984e1219bb09b04e, type: 3}
+  m_Name: DustGroundVFX
+  m_EditorClassIdentifier: 
+  VfxType: 0
+  EffectPrefab: {fileID: 282287880995613752, guid: 33896edc2aea9b041a572e70594dc478, type: 3}
+  Duration: 0.5

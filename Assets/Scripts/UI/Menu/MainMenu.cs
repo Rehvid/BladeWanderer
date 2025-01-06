@@ -2,7 +2,6 @@
 {
     using DataPersistence.Managers;
     using UnityEngine;
-    using UnityEngine.SceneManagement;
     using UnityEngine.UI;
 
     public class MainMenu : MonoBehaviour
@@ -39,12 +38,12 @@
 
         public void OnPlayGameClicked()
         {
-            saveMenu.ActivateMenu(false);
+            saveMenu.ActivateMenu(false); 
         }
 
         public void OnLoadGameClicked()
         {
-            saveMenu.ActivateMenu(true); 
+            saveMenu.ActivateMenu(true);  
         }
 
         public void OnContinueGameClicked()

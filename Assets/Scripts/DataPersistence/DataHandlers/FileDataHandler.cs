@@ -4,10 +4,8 @@
     using System.Collections.Generic;
     using System.IO;
     using BackupServices;
-    using Data;
     using Data.Configuration;
     using Data.State;
-    using Interfaces;
     using Serializers;
     using UnityEngine;
 
@@ -198,8 +196,8 @@
                 }
                 else
                 {
-                    DateTime mostRecentDate = profiles[mostRecentProfileId].SessionData.GetDateTimeFromLastUpdated();
-                    DateTime newDateTime = gameData.SessionData.GetDateTimeFromLastUpdated();
+                    DateTime mostRecentDate = profiles[mostRecentProfileId].SessionState.GetDateTimeFromLastUpdated();
+                    DateTime newDateTime = gameData.SessionState.GetDateTimeFromLastUpdated();
                     
                     if (newDateTime > mostRecentDate)
                     {

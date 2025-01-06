@@ -1,7 +1,5 @@
 ﻿namespace RehvidGames.DataPersistence.Serializers
 {
-    using Interfaces;
-
     public interface ISerializer
     {
         /// <summary>

@@ -1,48 +1,38 @@
 ﻿namespace RehvidGames.Managers
 {
     using System.Collections.Generic;
-    using Enemy;
+    using Characters.Enemies.Base;
     using Enums;
     using UnityEngine;
+    using Utilities;
     using Random = UnityEngine.Random;
 
-    public class EnemyManager: MonoBehaviour
+    public class EnemyManager: BaseSingletonMonoBehaviour<EnemyManager>
     {
-        public static EnemyManager Instance { get; private set; }
-        
+        [Header("Enemies")]
         [SerializeField] private List<Transform> _spawnPoints;
         [SerializeField] private float _spawnRadius = 10f;
-        [SerializeField] private bool _isDebugEnabled = false;
+        
+        [Header("Debug")]
+        [SerializeField] private bool _isDebugEnabled;
         
         private readonly Dictionary<EnemyType, GameObject> _enemyPrefabs = new (); 
         
-        private void Awake()
+        protected override void Awake()
         {
-            InitializeInstance();
+            base.Awake();
+            
             FindEnemyPrefabs();
         }
-
-        private void InitializeInstance()
-        {
-            if (Instance == null)
-            {
-                Instance = this;
-                DontDestroyOnLoad(this);
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
-        }
-
+        
         private void FindEnemyPrefabs()
         {
             var enemies = Resources.LoadAll<BaseEnemy>("Enemies");
             foreach (var enemy in enemies)
             {
-                if (!_enemyPrefabs.ContainsKey(enemy.GetType()))
+                if (!_enemyPrefabs.ContainsKey(enemy.GetEnemyType()))
                 {
-                    _enemyPrefabs.Add(enemy.GetType(), enemy.gameObject);
+                    _enemyPrefabs.Add(enemy.GetEnemyType(), enemy.gameObject);
                 }
             }
         }

@@ -1,65 +1,73 @@
 ﻿namespace RehvidGames.UI.Menu
 {
     using System.Collections.Generic;
+    using Data;
     using DataPersistence.Data.State;
     using DataPersistence.Managers;
+    using DG.Tweening;
+    using Managers;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.EventSystems;
     using UnityEngine.SceneManagement;
 
     public class SaveMenu : MonoBehaviour
     {
         [Header("Menu")] 
         [SerializeField] private TextMeshProUGUI _header;
+        [SerializeField] private SaveMenuTitleData saveMenuTitleData;
         
         [Header("Confirmation popup menu")]
         [SerializeField] private ConfirmationPopupMenu _confirmationPopupMenu;
-        [SerializeField] private string _overrideSaveSlotTitle = "Rozpoczęcie nowej gry z tym slotem spowoduje nadpisanie istniejących danych profilu. Czy na pewno chcesz kontynuować?";
-        [SerializeField] private string _clearSaveSlotTitle = "Czy na pewno chcesz wyczyścić zapisane dane?";
         
         private SaveSlot[] _saveSlots;
         private bool _isLoadingGame;
-        
-        private void Awake()
+
+        private void Awake() => FindSaveSlots();
+
+        public void FindSaveSlots()
         {
-            _saveSlots = GetComponentsInChildren<SaveSlot>();
+            _saveSlots ??= GetComponentsInChildren<SaveSlot>();
         }
         
         public void ActivateMenu(bool isLoadingGame)
         {
             _isLoadingGame = isLoadingGame;
-            UpdateHeader();
             
-            Dictionary<string, GameState> profilesGameData = GameStatePersistenceManager.Instance.GetAllProfiles();
+            UpdateHeaderText();
+            ActivateAllSlots();
+        }
+
+        private void UpdateHeaderText()
+        {
+            _header.text = _isLoadingGame ? saveMenuTitleData.HeaderLoadingSlotTitle : saveMenuTitleData.HeaderSlotTitle;
+        }
+
+        private void ActivateAllSlots()
+        { 
+            Dictionary<string, GameState> profiles = GameStatePersistenceManager.Instance.GetAllProfiles();
             foreach (var saveSlot in _saveSlots)
             {
-                ActiveSlot(profilesGameData, saveSlot);
+                ActiveSlot(profiles, saveSlot);
             }
         }
 
-        private void UpdateHeader()
+        private void ActiveSlot(Dictionary<string, GameState> profiles, SaveSlot saveSlot)
         {
-            if (_isLoadingGame)
+            profiles.TryGetValue(saveSlot.ProfileId, out var gameState);
+            if (GameManager.Instance.IsPaused || GameManager.Instance.IsGameOver)
             {
-                _header.text = "Wczytaj grę";
-                return;
+                saveSlot.FindSaveSlotButton();  
             }
-
-            _header.text = "Wybierz slot";
-        }
-
-        private void ActiveSlot(Dictionary<string, GameState> profilesGameData, SaveSlot saveSlot)
-        {
-            profilesGameData.TryGetValue(saveSlot.ProfileId, out var gameState);
+            
             saveSlot.SetData(gameState);
             if (gameState == null && _isLoadingGame)
             {
                 saveSlot.SetInteractable(false);
+                return;
             }
-            else
-            {
-                saveSlot.SetInteractable(true);
-            }
+            
+            saveSlot.SetInteractable(true);
         }
         
         public void OnSaveSlotClicked(SaveSlot saveSlot)
@@ -71,25 +79,45 @@
             {
                 OverrideSaveSlotClicked(saveSlot);
             }
+            else if (GameManager.Instance.IsPaused)
+            {
+                SaveGameOnSaveSlotClicked(saveSlot);
+            }
             else
             {
                 StartNewGameOnSaveSlotClicked(saveSlot);
             }
         }
-
+        
         private void LoadSaveSlotClicked(SaveSlot saveSlot)
         {
             GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
             GameStatePersistenceManager.Instance.LoadData();
-            SceneManager.LoadScene(saveSlot.CurrentSceneName);
+            if (GameManager.Instance.IsPaused)
+            {
+                DOTween.KillAll();
+                GameManager.Instance.ResumeGame();
+            }
+            
+            SceneManager.LoadScene(saveSlot.IndexScene, LoadSceneMode.Single);
         }
 
         private void OverrideSaveSlotClicked(SaveSlot saveSlot)
         {
             _confirmationPopupMenu.ActivateMenu(
-                _overrideSaveSlotTitle,
-                () => { StartNewGameOnSaveSlotClicked(saveSlot); },
-                () => { }
+                saveMenuTitleData.OverrideSlotTitle,
+                () =>
+                {
+                    if (GameManager.Instance.IsPaused)
+                    {
+                        SaveGameOnSaveSlotClicked(saveSlot);
+                        ActivateMenu(_isLoadingGame); 
+                        return;
+                    }
+                    
+                    StartNewGameOnSaveSlotClicked(saveSlot);
+                },
+                () => {  ActivateMenu(_isLoadingGame); }
             );
         }
 
@@ -97,14 +125,25 @@
         {
             GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
             GameStatePersistenceManager.Instance.NewGame();
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
+            
+            GameStatePersistenceManager.Instance.IsNewGame = true;
+        }
+
+        private void SaveGameOnSaveSlotClicked(SaveSlot saveSlot)
+        {
+            GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
             GameStatePersistenceManager.Instance.SaveData();
+            
+            ActivateMenu(_isLoadingGame); 
+            EventSystem.current.SetSelectedGameObject(null);
         }
         
         public void OnClearClicked(SaveSlot saveSlotMenuItem)
         {
             _confirmationPopupMenu.ActivateMenu(
-                _clearSaveSlotTitle,
+                saveMenuTitleData.ClearSlotTitle,
                 () => 
                 {
                     GameStatePersistenceManager.Instance.DeleteProfileData(saveSlotMenuItem.ProfileId);

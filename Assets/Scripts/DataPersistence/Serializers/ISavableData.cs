@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.Interfaces
+﻿namespace RehvidGames.DataPersistence.Serializers
 {
     public interface ISavableData { }
 }

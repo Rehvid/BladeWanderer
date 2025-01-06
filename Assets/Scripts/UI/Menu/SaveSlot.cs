@@ -1,9 +1,8 @@
 ﻿namespace RehvidGames.UI.Menu
 {
-    using DataPersistence.Data;
     using DataPersistence.Data.State;
+    using Managers;
     using TMPro;
-    using Unity.Collections;
     using UnityEngine;
     using UnityEngine.UI;
 
@@ -13,7 +12,9 @@
         [SerializeField] private string _profileId;
         
         public string ProfileId => _profileId;
-        public string CurrentSceneName { get; private set; }
+        
+        public int IndexScene { get; private set; }
+        
         public bool IsDataAvailable { get; private set; }
         
         [Header("Content")]
@@ -29,7 +30,7 @@
         
         private void Awake()
         {
-            _saveSlotButton = gameObject.GetComponent<Button>();
+            FindSaveSlotButton();
         }
 
         public void GenerateGuid()
@@ -37,46 +38,51 @@
             _profileId = System.Guid.NewGuid().ToString();
         }
 
+        public void FindSaveSlotButton()
+        {
+            _saveSlotButton ??= gameObject.GetComponent<Button>();
+        }
+        
         public void SetData(GameState data)
         {
-            if (data == null)
+            var isDataAvailable = data != null;
+            
+            UpdateDataState(isDataAvailable);
+            if (isDataAvailable)
             {
-                ShowNoDataState();
+                UpdateSlotInformationFromSessionState(data);
             }
-            else
+
+            if (GameManager.Instance.IsPaused)
             {
-                ShowDataState(data);
+                SetActiveClearButton(false);
             }
         }
 
-        private void ShowNoDataState()
+        private void UpdateDataState(bool isDataAvailable)
         {
-            _noDataPanel.SetActive(true);
-            _dataAvailablePanel.SetActive(false);
-            SetActiveClearButton(false);
-            IsDataAvailable = false;
+            _noDataPanel.SetActive(!isDataAvailable);
+            _dataAvailablePanel.SetActive(isDataAvailable);
+            
+            SetActiveClearButton(isDataAvailable);
+            IsDataAvailable = isDataAvailable;
         }
-
-        private void ShowDataState(GameState gameState)
+        
+        private void UpdateSlotInformationFromSessionState(GameState gameState)
         {
-            _noDataPanel.SetActive(false);
-            _dataAvailablePanel.SetActive(true);
-            SetActiveClearButton(true);
-            IsDataAvailable = true;
+            GameSessionState sessionState = gameState.SessionState;
             
-            GameSessionData sessionData = gameState.SessionData;
-            
-            CurrentSceneName = sessionData.CurrentSceneName;
-            _sceneNameText.text = sessionData.CurrentSceneName;
-            _lastUpdatedText.text = sessionData.GetFormattedLastUpdated();
+            IndexScene = sessionState.IndexScene;
+            _sceneNameText.text = sessionState.CurrentSceneName;
+            _lastUpdatedText.text = sessionState.GetFormattedLastUpdated();
         }
 
         public void SetInteractable(bool interactable)
         {
             _saveSlotButton.interactable = interactable;
-            _clearDataButton.interactable = interactable;
+            _clearDataButton.interactable = interactable; 
         }
-
+        
         private void SetActiveClearButton(bool active)
         { 
             _clearDataButton.gameObject.SetActive(active);

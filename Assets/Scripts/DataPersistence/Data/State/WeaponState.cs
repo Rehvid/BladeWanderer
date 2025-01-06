@@ -5,13 +5,7 @@
     [Serializable]
     public class WeaponState
     {
-        public bool IsCurrenltyEquipped;
+        public bool IsDrawnWeapon;
         public string Id;
-
-        public WeaponState(string id, bool isCurrentlyEquipped)
-        {
-            Id = id;
-            IsCurrenltyEquipped = isCurrentlyEquipped;
-        }
     }
 }

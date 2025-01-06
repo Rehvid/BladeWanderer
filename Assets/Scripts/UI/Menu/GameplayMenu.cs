@@ -2,10 +2,8 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using DataPersistence.Data;
     using DataPersistence.Data.Configuration;
-    using DataPersistence.Managers;
-    using Interfaces;
+    using DataPersistence.Interfaces;
     using Managers;
     using TMPro;
     using UnityEngine;

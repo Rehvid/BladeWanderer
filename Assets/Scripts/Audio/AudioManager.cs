@@ -2,45 +2,37 @@
 {
     using System.Collections.Generic;
     using System.Linq;
+    using Data;
     using Enums;
-    using ScriptableObjects;
     using Serializable;
+    using Service;
     using UnityEngine;
+    using Utilities;
 
-    public class AudioManager : MonoBehaviour
+    public class AudioManager : BaseSingletonMonoBehaviour<AudioManager>
     {
-        public static AudioManager Instance { get; private set; }
-
         [Header("Audio components")] 
-        [SerializeField] private AudioSourceManager _audioSourceManager;
-
-        [SerializeField] private AudioMixerManager _audioMixerManager;
-        [SerializeField] private AudioCollection _audioCollection;
+        [SerializeField] private AudioSourceService audioSourceService;
+        [SerializeField] private AudioMixerService audioMixerService;
+        [SerializeField] private AudioCollectionData audioCollectionData;
 
         private Dictionary<SoundType, SoundCategory> _soundCategories;
         
-        private void Awake()
+        protected override void Awake()
         {
-            if (Instance == null)
-            {
-                Instance = this;
-                InitializeSoundCategories();
-            }
-            else
-            {
-                Destroy(gameObject);
-            }
+            base.Awake();
+            InitializeSoundCategories();
         }
 
         private void InitializeSoundCategories()
         {
-            if (_audioCollection == null)
+            if (audioCollectionData == null)
             {
                 Debug.LogError("AudioCollection is not assigned in the AudioManager!");
                 return;
             }
             
-            _soundCategories = _audioCollection?.SoundCategories.ToDictionary(
+            _soundCategories = audioCollectionData?.SoundCategories.ToDictionary(
                 category => category.SoundType,
                 category => category
             );
@@ -50,13 +42,13 @@
         public AudioPlayContext GetCurrentAudioPlayContext(SoundType soundType)
         {
             _soundCategories.TryGetValue(soundType, out SoundCategory soundCategory);
-            return soundCategory == null ? null : _audioSourceManager.GetActiveAudioContext(soundCategory.AudioSourceType);
+            return soundCategory == null ? null : audioSourceService.GetActiveAudioContext(soundCategory.AudioSourceType);
         }
         
         public void StopCurrentSoundType(SoundType soundType)
         {
             if (!_soundCategories.TryGetValue(soundType, out SoundCategory soundCategory)) return;
-            _audioSourceManager.StopActiveAudioSource(soundCategory.AudioSourceType);   
+            audioSourceService.StopActiveAudioSource(soundCategory.AudioSourceType);   
         }
         
         public void PlayClip(SoundType soundType, string clipName, AudioSource customAudioSource = null)
@@ -71,7 +63,7 @@
 
         public void StopAllSounds()
         {
-            _audioSourceManager.StopAllActiveAudioSources();
+            audioSourceService.StopAllActiveAudioSources();
         }
 
         private void PlayClipInternal(SoundType soundType, bool isRandom, string clipName, AudioSource customAudioSource = null)
@@ -86,17 +78,17 @@
 
             if (clipSettings == null) return;
             
-            float volumeMultiplier = _audioMixerManager.GetMixerVolume(soundCategory.AudioSourceType);
+            float volumeMultiplier = audioMixerService.GetMixerVolume(soundCategory.AudioSourceType);
 
             var context = AudioPlayContext.Create(
                 soundType,
-                _audioSourceManager.GetAudioSourceForClip(soundCategory.AudioSourceType, customAudioSource),
+                audioSourceService.GetAudioSourceForClip(soundCategory.AudioSourceType, customAudioSource),
                 clipSettings,
                 volumeMultiplier,
                 soundCategory.AudioSourceType
             );
             
-            _audioSourceManager.PlayClip(context);
+            audioSourceService.PlayClip(context);
         }
     }
 }

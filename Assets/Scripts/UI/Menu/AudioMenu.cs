@@ -1,7 +1,7 @@
 ﻿namespace RehvidGames.UI.Menu
 {
     using DataPersistence.Data.Configuration;
-    using Interfaces;
+    using DataPersistence.Interfaces;
     using Managers;
     using UnityEngine;
     using UnityEngine.Audio;

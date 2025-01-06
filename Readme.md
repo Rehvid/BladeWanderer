@@ -28,15 +28,22 @@ Welcome to my Unity **Blade Wanderer** project! This game serves as a portfolio 
 - **Health Bars**: Smoothly animated health bars for both player and enemies using DOTween.
 - **Damage Feedback**: Immediate UI updates and visual effects to reflect damage taken.
 
-### Visuals and Audio
+### Visuals
 - **Lightweight VFX**: For events like soul collection and blood effects.
 - **UI Integration**: Real-time health and stamina updates.
 - **DOTween Integration**: Smooth animations for health and stamina bars.
 
+### Audio Implementation
+- Added sound effects for core gameplay elements such as walking, combat hits, and environmental sounds.
+- Future plans for adding additional sounds, including ambient sounds and more action-related audio, to further enrich the gaming experience.
+
 ### Technical Features
 - **Programming Patterns**: StateMachine, Factory, and Singleton patterns are extensively used.
 - **Save/Load System**: Game state is saved to and loaded from files.
-- **Refactoring in Progress**: Improving codebase structure and aligning with best practices.
+
+## Upcoming Features
+- Currently focusing on creating and refining scenes and the world-building aspect of the game.
+- More sound effects planned, with a focus on enhancing immersion and player experience across all game events.
 
 ## Installation
 1. Clone this repository:

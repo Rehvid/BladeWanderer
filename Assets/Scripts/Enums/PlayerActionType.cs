@@ -6,6 +6,7 @@
         Jumping,
         Interacting,
         Attacking,
-        Dodge
+        Dodge,
+        Death
     }
 }

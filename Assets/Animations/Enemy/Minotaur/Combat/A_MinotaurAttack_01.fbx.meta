@@ -58,22 +58,22 @@ ModelImporter:
       bodyMask: 01000000010000000100000001000000010000000100000001000000010000000100000001000000010000000100000001000000
       curves: []
       events:
-      - time: 0.2453735
-        functionName: OnStartAttack
+      - time: 0.19727224
+        functionName: OnWeaponEnableDamageCollider
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.5070422
-        functionName: OnStopAttack
+        functionName: OnWeaponDisableDamageCollider
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
       - time: 0.9797468
-        functionName: OnEndAttack
+        functionName: OnEnemyEndAttack
         data: 
         objectReferenceParameter: {instanceID: 0}
         floatParameter: 0
