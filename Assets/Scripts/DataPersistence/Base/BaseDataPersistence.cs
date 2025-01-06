@@ -2,9 +2,9 @@
 {
     using System.Collections.Generic;
     using Managers;
-    using RehvidGames.DataPersistence.DataHandlers;
-    using RehvidGames.DataPersistence.Service;
-    using RehvidGames.Interfaces;
+    using DataHandlers;
+    using Service;
+    using Interfaces;
     using UnityEngine;
 
     public abstract class BaseDataPersistence<T>: MonoBehaviour where T : class, new()

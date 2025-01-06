@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.AI.States.Interfaces
+﻿namespace RehvidGames.Characters.Enemies.States.Interfaces
 {
     public interface IState
     {

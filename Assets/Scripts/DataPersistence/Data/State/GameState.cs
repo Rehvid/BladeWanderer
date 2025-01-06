@@ -1,6 +1,6 @@
 ﻿namespace RehvidGames.DataPersistence.Data.State
 {
-    using Interfaces;
+    using Serializers;
 
     [System.Serializable]
     public class GameState: ISavableData

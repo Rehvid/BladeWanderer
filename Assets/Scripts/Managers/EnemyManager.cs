@@ -1,8 +1,6 @@
 ﻿namespace RehvidGames.Managers
 {
     using System.Collections.Generic;
-    using Characters.Base;
-    using Characters.Enemies;
     using Characters.Enemies.Base;
     using Enums;
     using UnityEngine;

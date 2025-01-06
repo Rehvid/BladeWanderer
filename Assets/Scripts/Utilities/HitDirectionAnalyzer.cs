@@ -1,8 +1,8 @@
 ﻿namespace RehvidGames.Utilities
 {
     using System;
-    using RehvidGames.Animator;
-    using RehvidGames.Enums;
+    using Animator;
+    using Enums;
     using UnityEngine;
 
     public class HitDirectionAnalyzer

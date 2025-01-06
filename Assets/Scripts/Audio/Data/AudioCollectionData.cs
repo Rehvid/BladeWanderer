@@ -2,7 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Linq;
-    using RehvidGames.Serializable;
+    using Serializable;
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "NewAudioCollection", menuName = "Sound/AudioCollection")]

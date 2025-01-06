@@ -1,6 +1,5 @@
-﻿namespace RehvidGames.Interfaces
+﻿namespace RehvidGames.DataPersistence.Interfaces
 {
-    using DataPersistence.Data;
     
     public interface IDataPersistence<T>
     {

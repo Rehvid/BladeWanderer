@@ -2,9 +2,7 @@
 {
     using Attributes;
     using Attributes.Base;
-    using Interfaces;
     using UnityEngine;
-   
 
     public class PlayerStaminaBar : MonoBehaviour
     {

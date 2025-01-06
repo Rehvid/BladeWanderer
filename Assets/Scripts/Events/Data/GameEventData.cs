@@ -1,7 +1,6 @@
 ﻿namespace RehvidGames.Events.Data
 {
     using System.Collections.Generic;
-    using RehvidGames.Serializable;
     using UnityEngine;
 
     [CreateAssetMenu(fileName = "NewGameEvent", menuName = "Events/GameEvent<Component, object[]>")]

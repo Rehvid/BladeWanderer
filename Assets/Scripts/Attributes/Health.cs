@@ -4,7 +4,6 @@
     using Events.Data;
     using UnityEngine;
     using Interfaces;
-    using ScriptableObjects;
     using UI;
 
     public class Health: BaseAttribute, IDamageable

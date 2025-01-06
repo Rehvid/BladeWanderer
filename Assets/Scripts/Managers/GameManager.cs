@@ -1,6 +1,5 @@
 ﻿namespace RehvidGames.Managers
 {
-    using System;
     using Audio;
     using Characters.Player;
     using DG.Tweening;

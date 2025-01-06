@@ -1,8 +1,8 @@
 ﻿namespace RehvidGames.Characters.Player
 {
     using Items.Weapons.Interfaces;
-    using RehvidGames.Interfaces;
-    using RehvidGames.Managers;
+    using Interfaces;
+    using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
 

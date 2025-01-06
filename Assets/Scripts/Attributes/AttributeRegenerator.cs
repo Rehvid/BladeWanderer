@@ -2,7 +2,6 @@
 {
     using System.Collections;
     using Base;
-    using Interfaces;
     using Managers;
     using UnityEngine;
 

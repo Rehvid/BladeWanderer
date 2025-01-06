@@ -1,12 +1,11 @@
 ﻿namespace RehvidGames.Characters.Player
 {
     using DataPersistence.Data.State;
-    using Interfaces;
     using Managers;
-    using RehvidGames.Attributes;
+    using Attributes;
+    using DataPersistence.Interfaces;
     using UnityEngine;
     using UnityEngine.Events;
-    using UnityEngine.Serialization;
 
     public class PlayerAttributes : MonoBehaviour, IDataPersistence<GameState>
     {

@@ -1,10 +1,8 @@
 ﻿namespace RehvidGames.UI.Menu
 {
-    using DataPersistence.Data;
     using DataPersistence.Data.State;
     using Managers;
     using TMPro;
-    using Unity.Collections;
     using UnityEngine;
     using UnityEngine.UI;
 

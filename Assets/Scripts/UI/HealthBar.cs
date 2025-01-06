@@ -2,9 +2,7 @@
 {
     using Attributes;
     using Attributes.Base;
-    using Interfaces;
     using UnityEngine;
-    using UnityEngine.Serialization;
 
     public class HealthBar: MonoBehaviour
     {

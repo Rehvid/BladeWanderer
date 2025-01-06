@@ -1,7 +1,7 @@
 ﻿namespace RehvidGames.Audio.Service
 {
     using System;
-    using RehvidGames.Enums;
+    using Enums;
     using UnityEngine;
     using UnityEngine.Audio;
 

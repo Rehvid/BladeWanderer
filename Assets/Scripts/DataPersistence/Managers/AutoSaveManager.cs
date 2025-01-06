@@ -1,7 +1,6 @@
 ﻿namespace RehvidGames.DataPersistence.Managers
 {
     using System.Collections;
-    using Data;
     using Data.State;
     using Interfaces;
     using RehvidGames.Managers;

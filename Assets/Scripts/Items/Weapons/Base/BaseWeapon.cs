@@ -1,10 +1,10 @@
 namespace RehvidGames.Items.Weapons.Base
 {
-    using RehvidGames.Audio;
+    using Audio;
     using RehvidGames.Interfaces;
     using RehvidGames.Items.Base;
-    using RehvidGames.Items.Weapons;
-    using RehvidGames.VFX;
+    using Weapons;
+    using VFX;
     using UnityEngine;
 
     public abstract class BaseWeapon : BaseItem

@@ -1,6 +1,6 @@
 ﻿namespace RehvidGames.Characters.Enemies
 {
-    using RehvidGames.AI.States.Interfaces;
+    using States.Interfaces;
     using UnityEngine;
 
     public class EnemyStateHandler : MonoBehaviour

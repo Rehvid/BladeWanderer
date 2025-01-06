@@ -2,10 +2,9 @@
 {
     using System;
     using System.Collections.Generic;
-    using AI.States;
-    using AI.States.Interfaces;
     using Characters.Enemies;
     using Characters.Enemies.States;
+    using Characters.Enemies.States.Interfaces;
     using Enums;
     using UnityEngine.SceneManagement;
 

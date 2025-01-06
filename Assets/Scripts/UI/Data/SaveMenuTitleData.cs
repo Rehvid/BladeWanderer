@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.ScriptableObjects
+﻿namespace RehvidGames.UI.Data
 {
     using UnityEngine;
 

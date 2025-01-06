@@ -1,10 +1,10 @@
 ﻿namespace RehvidGames.Characters.Enemies.States
 {
-    using RehvidGames.AI.States.Interfaces;
     using Enemies;
     using Base;
     using Enums;
     using Factories;
+    using Interfaces;
 
     public class CombatState: BaseState
     {

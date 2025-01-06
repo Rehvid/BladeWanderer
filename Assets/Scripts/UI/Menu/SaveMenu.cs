@@ -1,11 +1,11 @@
 ﻿namespace RehvidGames.UI.Menu
 {
     using System.Collections.Generic;
+    using Data;
     using DataPersistence.Data.State;
     using DataPersistence.Managers;
     using DG.Tweening;
     using Managers;
-    using ScriptableObjects;
     using TMPro;
     using UnityEngine;
     using UnityEngine.EventSystems;

@@ -1,7 +1,7 @@
 ﻿namespace RehvidGames.DataPersistence.Data.Configuration
 {
     using System;
-    using RehvidGames.Interfaces;
+    using Serializers;
 
     [Serializable]
     public class GameConfiguration: ISavableData

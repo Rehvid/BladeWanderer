@@ -1,8 +1,8 @@
 ﻿namespace RehvidGames.Audio.Service
 {
     using System.Collections.Generic;
-    using RehvidGames.Enums;
-    using RehvidGames.Serializable;
+    using Enums;
+    using Serializable;
     using UnityEngine;
 
     public class AudioSourceService : MonoBehaviour

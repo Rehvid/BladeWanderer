@@ -5,7 +5,6 @@
     using Animator;
     using Characters.Player;
     using Enums;
-    using RehvidGames.Interfaces;
     using UnityEngine;
     
     public class Sword: BaseWeapon, IPickUpWeapon

@@ -1,6 +1,5 @@
 ﻿namespace RehvidGames.Items.Weapons
 {
-    using Audio;
     using Audio.Data;
     using VFX;
     using UnityEngine;

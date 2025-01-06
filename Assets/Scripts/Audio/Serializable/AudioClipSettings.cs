@@ -1,4 +1,4 @@
-﻿namespace RehvidGames.Serializable
+﻿namespace RehvidGames.Audio.Serializable
 {
     using System;
     using UnityEngine;

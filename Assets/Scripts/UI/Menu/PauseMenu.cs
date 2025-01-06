@@ -1,6 +1,5 @@
 ﻿namespace RehvidGames.UI.Menu
 {
-    using DG.Tweening;
     using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;

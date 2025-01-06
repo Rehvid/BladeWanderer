@@ -5,7 +5,6 @@
     using Data;
     using Enemies;
     using Enums;
-    using RehvidGames.Items.Weapons.Base;
     using UnityEngine;
 
     public abstract class BaseEnemy: BaseCharacter

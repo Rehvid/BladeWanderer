@@ -1,6 +1,5 @@
 ﻿namespace RehvidGames.Characters.Enemies
 {
-    using AI;
     using Animator;
     using Base;
     using Enums;

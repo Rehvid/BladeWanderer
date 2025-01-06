@@ -1,9 +1,9 @@
 ﻿namespace RehvidGames.Characters.Enemies.States.Base
 {
-    using RehvidGames.AI.States.Interfaces;
     using Enemies;
     using Enums;
     using Factories;
+    using Interfaces;
     using UnityEngine;
 
     public abstract class BaseState: IState

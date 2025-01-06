@@ -1,12 +1,11 @@
 ﻿namespace RehvidGames.Characters.Player
 {
-    using System;
     using Animator;
     using Base;
     using Data;
     using DataPersistence.Data.State;
+    using DataPersistence.Interfaces;
     using Enums;
-    using Interfaces;
     using Managers;
     using UnityEngine;
     using UnityEngine.AI;
