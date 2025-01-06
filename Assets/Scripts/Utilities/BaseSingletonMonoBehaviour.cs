@@ -1,6 +1,7 @@
 ﻿namespace RehvidGames.Utilities
 {
     using UnityEngine;
+    using UnityEngine.SceneManagement;
 
     /// <summary>
     /// Base class for creating a singleton MonoBehaviour.
@@ -35,19 +36,35 @@
         {
             InitializeSingleton();
         }
+        
+        private void OnEnable()
+        {
+            SceneManager.activeSceneChanged += OnActiveSceneChanged;
+        }
 
-        protected virtual void InitializeSingleton()
+        private void OnDisable()
+        {
+            SceneManager.activeSceneChanged -= OnActiveSceneChanged;
+        }
+
+        private void OnActiveSceneChanged(Scene previousScene, Scene newScene)
+        {
+            ResetState();
+        }
+
+        protected virtual void ResetState() {}
+        
+        private void InitializeSingleton()
         {
             if (_instance == null)
             {
                 _instance = this as T;
                 if (_isPersistent)
                 {
-                   DontDestroyOnLoad(this); 
+                   DontDestroyOnLoad(gameObject);  
                 }
             } else if (_instance != this)
             {
-                Debug.LogError($"Singleton conflict detected: {typeof(T).Name} on {gameObject.name}. Destroying duplicate.");
                 Destroy(gameObject);
             }
         }

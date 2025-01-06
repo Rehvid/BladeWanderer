@@ -3,11 +3,13 @@
     using System.Collections.Generic;
     using DataPersistence.Data.State;
     using DataPersistence.Managers;
+    using DG.Tweening;
+    using Managers;
     using ScriptableObjects;
     using TMPro;
     using UnityEngine;
+    using UnityEngine.EventSystems;
     using UnityEngine.SceneManagement;
-    using UnityEngine.Serialization;
 
     public class SaveMenu : MonoBehaviour
     {
@@ -20,13 +22,18 @@
         
         private SaveSlot[] _saveSlots;
         private bool _isLoadingGame;
-        private bool _hasNewGameStarted;
-        
-        private void Awake() => _saveSlots = GetComponentsInChildren<SaveSlot>();
+
+        private void Awake() => FindSaveSlots();
+
+        public void FindSaveSlots()
+        {
+            _saveSlots ??= GetComponentsInChildren<SaveSlot>();
+        }
         
         public void ActivateMenu(bool isLoadingGame)
         {
             _isLoadingGame = isLoadingGame;
+            
             UpdateHeaderText();
             ActivateAllSlots();
         }
@@ -37,7 +44,7 @@
         }
 
         private void ActivateAllSlots()
-        {
+        { 
             Dictionary<string, GameState> profiles = GameStatePersistenceManager.Instance.GetAllProfiles();
             foreach (var saveSlot in _saveSlots)
             {
@@ -48,6 +55,11 @@
         private void ActiveSlot(Dictionary<string, GameState> profiles, SaveSlot saveSlot)
         {
             profiles.TryGetValue(saveSlot.ProfileId, out var gameState);
+            if (GameManager.Instance.IsPaused)
+            {
+                saveSlot.FindSaveSlotButton(); 
+            }
+            
             saveSlot.SetData(gameState);
             if (gameState == null && _isLoadingGame)
             {
@@ -67,25 +79,45 @@
             {
                 OverrideSaveSlotClicked(saveSlot);
             }
+            else if (GameManager.Instance.IsPaused)
+            {
+                SaveGameOnSaveSlotClicked(saveSlot);
+            }
             else
             {
                 StartNewGameOnSaveSlotClicked(saveSlot);
             }
         }
-
+        
         private void LoadSaveSlotClicked(SaveSlot saveSlot)
         {
             GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
             GameStatePersistenceManager.Instance.LoadData();
-            SceneManager.LoadScene(saveSlot.CurrentSceneName);
+            if (GameManager.Instance.IsPaused)
+            {
+                DOTween.KillAll();
+                GameManager.Instance.ResumeGame();
+            }
+            
+            SceneManager.LoadScene(saveSlot.IndexScene, LoadSceneMode.Single);
         }
 
         private void OverrideSaveSlotClicked(SaveSlot saveSlot)
         {
             _confirmationPopupMenu.ActivateMenu(
                 saveMenuTitleData.OverrideSlotTitle,
-                () => { StartNewGameOnSaveSlotClicked(saveSlot); },
-                () => { }
+                () =>
+                {
+                    if (GameManager.Instance.IsPaused)
+                    {
+                        SaveGameOnSaveSlotClicked(saveSlot);
+                        ActivateMenu(_isLoadingGame); 
+                        return;
+                    }
+                    
+                    StartNewGameOnSaveSlotClicked(saveSlot);
+                },
+                () => {  ActivateMenu(_isLoadingGame); }
             );
         }
 
@@ -94,11 +126,19 @@
             GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
             GameStatePersistenceManager.Instance.NewGame();
             
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1, LoadSceneMode.Single);
             
             GameStatePersistenceManager.Instance.IsNewGame = true;
         }
-        
+
+        private void SaveGameOnSaveSlotClicked(SaveSlot saveSlot)
+        {
+            GameStatePersistenceManager.Instance.ChangeSelectedProfileId(saveSlot.ProfileId);
+            GameStatePersistenceManager.Instance.SaveData();
+            
+            ActivateMenu(_isLoadingGame); 
+            EventSystem.current.SetSelectedGameObject(null);
+        }
         
         public void OnClearClicked(SaveSlot saveSlotMenuItem)
         {

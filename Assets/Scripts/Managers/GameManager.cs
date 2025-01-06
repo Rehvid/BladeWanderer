@@ -1,5 +1,6 @@
 ﻿namespace RehvidGames.Managers
 {
+    using System;
     using Audio;
     using Characters.Player;
     using DG.Tweening;
@@ -10,14 +11,31 @@
 
     public class GameManager : BaseSingletonMonoBehaviour<GameManager>
     {
-        [SerializeField] private PlayerController _player;
         [SerializeField] private GameObject _deathScreen;
         
-        public PlayerController Player => _player;
-        
+        public PlayerController Player { get; private set; }
+
         public bool IsPaused { get; private set; }
         
         public bool IsPlayerDead { get; private set; }
+
+        private void Start()
+        {
+            FindPlayer();
+        }
+
+        protected override void ResetState()
+        {
+            FindPlayer();
+        }
+
+        private void FindPlayer()
+        {
+            if (SceneManager.GetActiveScene().buildIndex == 0) return;
+            
+            GameObject.FindGameObjectWithTag("Player").TryGetComponent(out PlayerController playerController);
+            Player = playerController;
+        }
 
         public void OnDeath(Component sender, object value = null)
         {
@@ -36,6 +54,7 @@
         {
             StopAllSounds();
             DOTween.KillAll();
+            IsPaused = false;
         }
      
         public void PauseGame()
@@ -43,8 +62,9 @@
             if (IsPaused) return;
             IsPaused = true;
             
-            StopAllSounds();
+            StopAllSounds(); 
             SetTimeScale(0);
+            DOTween.PauseAll(); 
         }
 
         public void ResumeGame()
@@ -52,7 +72,8 @@
             if (!IsPaused) return;
             IsPaused = false;
             
-            SetTimeScale(1);
+            SetTimeScale(1); 
+            DOTween.PlayAll();
         }
         
         private void SetTimeScale(int scale) => Time.timeScale = scale; 

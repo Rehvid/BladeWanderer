@@ -1,5 +1,6 @@
 ﻿namespace RehvidGames.UI.Menu
 {
+    using DG.Tweening;
     using Managers;
     using UnityEngine;
     using UnityEngine.InputSystem;
@@ -7,7 +8,9 @@
 
     public class PauseMenu : MonoBehaviour
     {
+        [Header("Menu sections")]
         [SerializeField] private GameObject _pauseMenu;
+        [SerializeField] private SaveMenu saveMenu;
         
         public void OnResume()
         {
@@ -25,6 +28,18 @@
         {
             GameManager.Instance.LoadMainMenu();
             SceneManager.LoadScene(MainMenu.SceneName);  
+        }
+
+        public void OnLoadSlot()
+        {
+            saveMenu.FindSaveSlots();
+            saveMenu.ActivateMenu(true); 
+        }
+
+        public void OnSaveSlot()
+        {
+            saveMenu.FindSaveSlots();
+            saveMenu.ActivateMenu(false); 
         }
         
         public void OnPausePerformed(InputAction.CallbackContext context)

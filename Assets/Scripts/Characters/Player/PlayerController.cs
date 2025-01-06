@@ -1,13 +1,16 @@
 ﻿namespace RehvidGames.Characters.Player
 {
+    using System;
     using Animator;
     using Base;
     using Data;
     using DataPersistence.Data.State;
     using Enums;
     using Interfaces;
+    using Managers;
     using UnityEngine;
     using UnityEngine.AI;
+    using UnityEngine.SceneManagement;
     using VFX;
 
     public class PlayerController: BaseCharacter, IDataPersistence<GameState>
@@ -38,6 +41,11 @@
             {
                 Debug.LogError($"No component of type {typeof(PlayerActionHandler)} found");
             }
+        }
+
+        private void OnDestroy()
+        {
+            RegistryManager<IDataPersistence<GameState>>.Instance.Unregister(this);
         }
 
         public override void ReceiveDamage(float damage, Vector3 hitPosition)
@@ -74,6 +82,8 @@
             health.CurrentValue = healthAttribute.CurrentValue;
             health.MaxValue = healthAttribute.MaxValue;
 
+            if (data.SessionState.IndexScene != SceneManager.GetActiveScene().buildIndex) return;
+            
             transform.position = data.PlayerState.Position;
             transform.rotation = data.PlayerState.Rotation;
         }

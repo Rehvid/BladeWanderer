@@ -12,8 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b93ad48026a3411994d67d9d0d925c07, type: 3}
   m_Name: SaveMenuTitlesData
   m_EditorClassIdentifier: 
-  OverrideSlotTitle: "Rozpocz\u0119cie nowej gry z tym slotem spowoduje nadpisanie
-    istniej\u0105cych danych profilu. Czy na pewno chcesz kontynuowa\u0107?"
-  ClearSlotTitle: "Czy na pewno chcesz wyczy\u015Bci\u0107 zapisane dane?"
-  HeaderSlotTitle: Wybierz slot
-  HeaderLoadingSlotTitle: Wczytaj
+  _overrideSlotTitle: "Czy na pewno chcesz nadpisa\u0107 istniej\u0105ce dane? Ta
+    operacja jest nieodwracalna."
+  _clearSlotTitle: "Czy na pewno chcesz usun\u0105\u0107 istniej\u0105ce dane? Ta
+    operacja jest nieodwracalna."
+  _headerSlotTitle: Zapisz
+  _headerLoadingSlotTitle: Wczytaj

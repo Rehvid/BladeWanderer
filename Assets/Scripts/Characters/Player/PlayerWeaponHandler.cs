@@ -45,6 +45,11 @@
                 Debug.LogWarning("No audio manager found!");
             }
         }
+        
+        private void OnDestroy()
+        {
+            RegistryManager<IDataPersistence<GameState>>.Instance.Unregister(this);
+        }
 
         public void LoadData(GameState data)
         {

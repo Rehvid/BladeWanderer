@@ -135,19 +135,12 @@
         public void ChangeSelectedProfileId(string newProfileId)
         {
             _profileManager.SetCurrentProfile(newProfileId);
-            LoadData();
         }
 
         public void DeleteProfileData(string profileId)
         {
             _profileManager.DeleteProfile(profileId);
             LoadData();
-        }
-        
-        
-        private void OnApplicationQuit()
-        {
-            SaveData();
         }
     }
 }

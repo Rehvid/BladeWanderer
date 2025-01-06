@@ -3,6 +3,7 @@
     using System.Collections;
     using Base;
     using Interfaces;
+    using Managers;
     using UnityEngine;
 
     public class AttributeRegenerator: MonoBehaviour
@@ -40,19 +41,26 @@
         }
         
         private IEnumerator Regenerate(BaseAttribute baseAttribute, System.Action<BaseAttribute> updateUI)
-        {
-            while (baseAttribute.CurrentValue < baseAttribute.MaxValue)
+        { 
+            while (CanRegenerate(baseAttribute))
             {
+                
                 baseAttribute.CurrentValue += _regenRate * Time.deltaTime; 
                 baseAttribute.CurrentValue = Mathf.Clamp(baseAttribute.CurrentValue, 0, baseAttribute.MaxValue);
                 updateUI?.Invoke(baseAttribute);
             
                 yield return null;
             }
-            
-            baseAttribute.CurrentValue = baseAttribute.MaxValue;
-            updateUI?.Invoke(baseAttribute);
+ 
+            if (!GameManager.Instance.IsPaused)
+            {
+                baseAttribute.CurrentValue = baseAttribute.MaxValue; 
+                updateUI?.Invoke(baseAttribute);
+            }
             StopRegeneration();
         }
+
+        private bool CanRegenerate(BaseAttribute baseAttribute) =>
+            baseAttribute.CurrentValue < baseAttribute.MaxValue && !GameManager.Instance.IsPaused;
     }
 }

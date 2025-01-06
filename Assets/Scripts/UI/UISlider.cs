@@ -3,9 +3,7 @@ using UnityEngine.UI;
 
 namespace RehvidGames.UI
 {
-    using System.Collections;
     using DG.Tweening;
-    using Interfaces;
 
     public class UISlider : MonoBehaviour 
     {
@@ -29,10 +27,10 @@ namespace RehvidGames.UI
                 _dotweenDuration
             );
             DOTween.To(
-                    () => _slider.value, 
-                    SetSliderValue,
-                    currentValue,
-                    _dotweenDuration
+                () => _slider.value,
+                SetSliderValue,
+                currentValue,
+                _dotweenDuration
             ).SetEase(Ease.OutCubic);
         }
         

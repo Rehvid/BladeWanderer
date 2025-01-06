@@ -2,6 +2,7 @@
 {
     using DataPersistence.Data.State;
     using Interfaces;
+    using Managers;
     using RehvidGames.Attributes;
     using UnityEngine;
     using UnityEngine.Events;
@@ -25,6 +26,11 @@
         {
             _currentSouls += souls;
             _soulCounterChanged?.Invoke(_currentSouls);
+        }
+        
+        private void OnDestroy()
+        {
+            RegistryManager<IDataPersistence<GameState>>.Instance.Unregister(this);
         }
         
 
