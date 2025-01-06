@@ -67,6 +67,8 @@
         
         public override void OnDeath(Component sender, object value = null)
         {
+            GameManager.Instance.GameOver();
+            
             ActionHandler.ChangeCurrentAction(PlayerActionType.Death);
             animatorHandler.SetTrigger(AnimatorParameter.Death);
             if (TryGetComponent(out NavMeshObstacle navMeshObstacle))

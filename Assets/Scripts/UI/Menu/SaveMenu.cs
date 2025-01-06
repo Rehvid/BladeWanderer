@@ -55,9 +55,9 @@
         private void ActiveSlot(Dictionary<string, GameState> profiles, SaveSlot saveSlot)
         {
             profiles.TryGetValue(saveSlot.ProfileId, out var gameState);
-            if (GameManager.Instance.IsPaused)
+            if (GameManager.Instance.IsPaused || GameManager.Instance.IsPlayerDead)
             {
-                saveSlot.FindSaveSlotButton(); 
+                saveSlot.FindSaveSlotButton();  
             }
             
             saveSlot.SetData(gameState);

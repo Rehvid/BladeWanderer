@@ -17,7 +17,8 @@
         public bool IsPaused { get; private set; }
         
         public bool IsPlayerDead { get; private set; }
-
+        
+        
         private void Start()
         {
             FindPlayer();
@@ -25,6 +26,7 @@
 
         protected override void ResetState()
         {
+            IsPlayerDead = false;
             FindPlayer();
         }
 
@@ -36,7 +38,7 @@
             Player = playerController;
         }
 
-        public void OnDeath(Component sender, object value = null)
+        public void GameOver()
         {
            IsPlayerDead = true;
            Instantiate(_deathScreen);

@@ -1632,18 +1632,6 @@ MonoBehaviour:
           m_StringArgument: 
           m_BoolArgument: 0
         m_CallState: 2
-      - m_Target: {fileID: 1727901267}
-        m_TargetAssemblyTypeName: RehvidGames.Managers.GameManager, Assembly-CSharp
-        m_MethodName: OnDeath
-        m_Mode: 0
-        m_Arguments:
-          m_ObjectArgument: {fileID: 0}
-          m_ObjectArgumentAssemblyTypeName: UnityEngine.Object, UnityEngine
-          m_IntArgument: 0
-          m_FloatArgument: 0
-          m_StringArgument: 
-          m_BoolArgument: 0
-        m_CallState: 2
       - m_Target: {fileID: 8962764134798868956}
         m_TargetAssemblyTypeName: RehvidGames.Characters.Enemies.EnemyController,
           Assembly-CSharp
@@ -5011,8 +4999,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _isPersistent: 1
-  _player: {fileID: 1150700279}
-  _deathScreen: {fileID: 3763921584330360633, guid: 3450a9f380580024eadaddf4858e7a37, type: 3}
+  _deathScreen: {fileID: 5516068806811844125, guid: 3450a9f380580024eadaddf4858e7a37, type: 3}
 --- !u!1 &1739509124
 GameObject:
   m_ObjectHideFlags: 0
@@ -6600,7 +6587,7 @@ RectTransform:
   m_Father: {fileID: 4345730126361413206}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 1, y: 1}
+  m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: -1.9000015}
   m_SizeDelta: {x: 0, y: 133}
   m_Pivot: {x: 0.5, y: 0.5}
@@ -13528,7 +13515,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!1 &8571866021694975471
 GameObject:
   m_ObjectHideFlags: 0
