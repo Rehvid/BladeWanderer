@@ -3065,8 +3065,8 @@ GameObject:
   - component: {fileID: 1094040440}
   - component: {fileID: 1094040442}
   - component: {fileID: 1094040441}
-  - component: {fileID: 1094040444}
   - component: {fileID: 1094040443}
+  - component: {fileID: 1094040444}
   m_Layer: 3
   m_Name: PlayerHealthBar
   m_TagString: Untagged
@@ -3178,10 +3178,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1094040439}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a41aea34d0c4eed88e3e36f2df905c1, type: 3}
+  m_Script: {fileID: 11500000, guid: 424f85500b914d4998010f8d598f125d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slider: {fileID: 1094040443}
+  sliderManager: {fileID: 1094040443}
 --- !u!1 &1139997462
 GameObject:
   m_ObjectHideFlags: 0
@@ -3193,8 +3193,8 @@ GameObject:
   - component: {fileID: 1139997463}
   - component: {fileID: 1139997467}
   - component: {fileID: 1139997466}
-  - component: {fileID: 1139997468}
   - component: {fileID: 1139997464}
+  - component: {fileID: 1139997468}
   m_Layer: 3
   m_Name: PlayerStaminaBar
   m_TagString: Untagged
@@ -3306,10 +3306,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1139997462}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2354cfcb73df416da5066ced4f67fbca, type: 3}
+  m_Script: {fileID: 11500000, guid: 424f85500b914d4998010f8d598f125d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _slider: {fileID: 1139997464}
+  sliderManager: {fileID: 1139997464}
 --- !u!1 &1150700264
 GameObject:
   m_ObjectHideFlags: 0
@@ -7394,19 +7394,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1813528252682703008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3199205835195477768}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0a41aea34d0c4eed88e3e36f2df905c1, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  _slider: {fileID: 4805606361080894798}
 --- !u!1 &1822055118666010395
 GameObject:
   m_ObjectHideFlags: 0
@@ -8438,8 +8425,8 @@ GameObject:
   - component: {fileID: 4345730126361413206}
   - component: {fileID: 2989997815447079063}
   - component: {fileID: 9076751171708977459}
-  - component: {fileID: 1813528252682703008}
   - component: {fileID: 4805606361080894798}
+  - component: {fileID: 9076751171708977460}
   m_Layer: 0
   m_Name: MinotaurHealthBar
   m_TagString: Untagged
@@ -9700,7 +9687,7 @@ MonoBehaviour:
   _currentValue: 100
   _maxValue: 100
   _deathTriggered: {fileID: 11400000, guid: 426aa2c514d90b449bc6c2c92ccc8377, type: 2}
-  _healthBar: {fileID: 1813528252682703008}
+  _healthBar: {fileID: 9076751171708977460}
 --- !u!4 &4549387482221245883
 Transform:
   m_ObjectHideFlags: 0
@@ -13859,6 +13846,19 @@ MonoBehaviour:
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls: []
+--- !u!114 &9076751171708977460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3199205835195477768}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 424f85500b914d4998010f8d598f125d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sliderManager: {fileID: 4805606361080894798}
 --- !u!1 &9078157329932306250
 GameObject:
   m_ObjectHideFlags: 0

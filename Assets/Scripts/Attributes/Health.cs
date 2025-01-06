@@ -4,12 +4,12 @@
     using Events.Data;
     using UnityEngine;
     using Interfaces;
-    using UI;
+    using UI.Slider.Bar;
 
     public class Health: BaseAttribute, IDamageable
     {
         [SerializeField] private GameEventData _deathTriggered;
-        [SerializeField] private HealthBar _healthBar;
+        [SerializeField] private AttributeBar _healthBar;
         
         private void Start()
         {
@@ -19,7 +19,7 @@
         public void ReceiveDamage(float damage, Vector3 hitPosition)
         {
             CurrentValue -= damage;
-            _healthBar.UpdateHealth(this);
+            _healthBar.UpdateValues(this);
             if (IsDead())
             {
                 _deathTriggered.Raise(this);

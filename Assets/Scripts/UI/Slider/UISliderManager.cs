@@ -1,15 +1,14 @@
-﻿using UnityEngine;
-using UnityEngine.UI;
-
-namespace RehvidGames.UI
+﻿namespace RehvidGames.UI.Slider
 {
     using DG.Tweening;
+    using UnityEngine;
+    using UnityEngine.UI;
 
-    public class UISlider : MonoBehaviour 
+    public class UISliderManager : MonoBehaviour 
     {
         [Header("Slider configuration")]
         [SerializeField] private Slider _slider;
-        [SerializeField] private float _dotweenDuration = 0.5f;
+        [SerializeField] private float _dotweenDuration = 0.2f;
         
         
         public void InitSliderValues(float maxValue, float currentValue)

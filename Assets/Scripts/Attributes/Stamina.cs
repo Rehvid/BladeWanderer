@@ -1,12 +1,12 @@
 ﻿namespace RehvidGames.Attributes
 {
     using Base;
-    using UI.Player;
+    using UI.Slider.Bar;
     using UnityEngine;
 
     public class Stamina: BaseAttribute
     {
-        [SerializeField] private PlayerStaminaBar _staminaBar;
+        [SerializeField] private AttributeBar _staminaBar;
         [SerializeField] private AttributeRegenerator _regenerator;
         
         private void Start()
@@ -18,7 +18,7 @@
         {
             if (!HasEnoughStamina(useStamina)) return;
             CurrentValue -= useStamina;
-            _staminaBar.UpdateStamina(this);
+            _staminaBar.UpdateValues(this);
         }
 
         public void Regeneration()
@@ -26,7 +26,7 @@
             if (_regenerator.IsRegenerationStarted()) return;
             _regenerator.StartRegeneration(
                 this, 
-                (_) => _staminaBar.UpdateStamina(this)
+                (_) => _staminaBar.UpdateValues(this)
             );
         }
 
