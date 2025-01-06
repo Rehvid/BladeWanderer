@@ -19,13 +19,7 @@
             SetHitDirectionNormalized(hitPosition, damageReceiver);
             SetForwardDirectionNormalized(damageReceiver);
             
-            if (CalculateDotProduct() <= DotProductThreshold)
-            {
-                Debug.Log("Uderzenie z tyłu");
-                return HitDirectionType.Back;
-            }
-
-            return HitDirectionType.Front;
+            return CalculateDotProduct() <= DotProductThreshold ? HitDirectionType.Back : HitDirectionType.Front;
         }
         
         public HitDirectionType GetDirectionType(Vector3 hitPosition, Transform damageReceiver)
@@ -35,24 +29,15 @@
 
             if (CalculateDotProduct() <= DotProductThreshold)
             {
-                Debug.Log("Uderzenie z tyłu");
                 return HitDirectionType.Back;
             }
             
             if (CalculateAngleBetweenDirections() <= FrontHitAngleThreshold)
             {
-                Debug.Log("Uderzenie z przodu");
                 return HitDirectionType.Front;
             }
             
-            if (CalculateCrossProduct().y > CrossProductThresholdY)
-            {
-                Debug.Log("Uderzenie z prawej strony");
-                return HitDirectionType.Right;
-            }
-            
-            Debug.Log("Uderzenie z lewej strony");
-            return HitDirectionType.Left;
+            return CalculateCrossProduct().y > CrossProductThresholdY ? HitDirectionType.Right : HitDirectionType.Left;
         }
         
         public int GetAnimatorParameterTypeByHitDirectionType(HitDirectionType directionType)

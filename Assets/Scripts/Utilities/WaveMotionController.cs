@@ -19,9 +19,7 @@
         
         private void Update()
         {
-            Debug.Log(transform.position);
             transform.position = GetWavePosition();
-            Debug.Log($"TransformPosition: {transform.position}");
         }
         
         private Vector3 GetWavePosition()
