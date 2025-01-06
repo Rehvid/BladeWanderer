@@ -16,7 +16,7 @@
 
         public bool IsPaused { get; private set; }
         
-        public bool IsPlayerDead { get; private set; }
+        public bool IsGameOver { get; private set; }
         
         
         private void Start()
@@ -26,7 +26,7 @@
 
         protected override void ResetState()
         {
-            IsPlayerDead = false;
+            IsGameOver = false;
             FindPlayer();
         }
 
@@ -40,7 +40,7 @@
 
         public void GameOver()
         {
-           IsPlayerDead = true;
+           IsGameOver = true;
            Instantiate(_deathScreen);
         }
         

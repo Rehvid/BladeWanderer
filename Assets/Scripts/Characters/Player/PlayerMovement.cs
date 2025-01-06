@@ -71,7 +71,7 @@
             PlayMovementSound();
         }
         
-        private bool ShouldMove() => !GameManager.Instance.IsPaused && !GameManager.Instance.IsPlayerDead;
+        private bool ShouldMove() => !GameManager.Instance.IsPaused && !GameManager.Instance.IsGameOver;
 
         private void HandlePlayerMovement()
         {
