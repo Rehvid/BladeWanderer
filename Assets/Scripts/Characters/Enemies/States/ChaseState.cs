@@ -12,11 +12,11 @@
 
         public override IState GetNextState()
         {
-            if (controller.IsPlayerDead()) return EnemyStateFactory.GetState(EnemyStateType.Patrol, controller);
+            if (controller.IsPlayerDead()) return GetState(EnemyStateType.Patrol);
             
             if (ShouldTransitionToChaseState())
             {
-                return controller.Combat.CanAttack() ? EnemyStateFactory.GetState(EnemyStateType.Combat, controller) : this; 
+                return controller.Combat.CanAttack() ? GetState(EnemyStateType.Combat) : this; 
             }
 
             return GetStateBasedOnLastKnownPlayerLocation();

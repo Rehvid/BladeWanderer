@@ -12,9 +12,9 @@
 
         public override IState GetNextState()
         {
-            if (controller.IsPlayerDead()) return EnemyStateFactory.GetState(EnemyStateType.Patrol, controller);
+            if (controller.IsPlayerDead()) return GetState(EnemyStateType.Patrol);
             
-           return ShouldSearchForPlayer() ? this : EnemyStateFactory.GetState(EnemyStateType.Patrol, controller);
+           return ShouldSearchForPlayer() ? this : GetState(EnemyStateType.Patrol);
         }
 
         public override void Execute()

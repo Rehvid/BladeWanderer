@@ -3,8 +3,9 @@
     using Enemies;
     using Enums;
     using Factories;
-    using Interfaces;
+    using Unity.VisualScripting;
     using UnityEngine;
+    using IState = Interfaces.IState;
 
     public abstract class BaseState: IState
     {
@@ -28,14 +29,13 @@
         
         protected IState GetStateBasedOnLastKnownPlayerLocation()
         {
-            return EnemyStateFactory.GetState(
-                HasLastKnownLocationPlayer() ? EnemyStateType.Search : EnemyStateType.Patrol,
-                controller
-            );
+            return GetState(HasLastKnownLocationPlayer() ? EnemyStateType.Search : EnemyStateType.Patrol);
         }
 
         protected bool HasLastKnownLocationPlayer() => controller.Sight.PlayerLastKnownLocation != Vector3.zero;
 
         protected void LookAtPlayer() => controller.Enemy.transform.LookAt(controller.Player.transform);  
+        
+        protected IState GetState(EnemyStateType stateType) => controller.StateHandler.GetState(stateType, controller);
     }
 }

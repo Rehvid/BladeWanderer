@@ -12,7 +12,10 @@
         
         public override void OnDeath(Component sender, object value = null)
         {
-            HandleDeath();
+            if (health.IsDead())
+            {
+                HandleDeath(); //TODO: Letter
+            }
         }
 
         public override EnemyType GetEnemyType() => EnemyType.Minotaur;

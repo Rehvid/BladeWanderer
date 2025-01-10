@@ -1163,9 +1163,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _patrolTargets:
   - {fileID: 0}
-  - {fileID: 0}
-  - {fileID: 0}
-  _waitSecondsForNextPointTarget: 15
+  _waitSecondsForNextPointTarget: 3
 --- !u!114 &6508004152948854578
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1178,7 +1176,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e588c5f918a445a19a940aad058ee98e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _detectionRadius: 5
+  _detectionRadius: 10
   _fieldOfViewAngle: 150
   _obstacleMask:
     serializedVersion: 2

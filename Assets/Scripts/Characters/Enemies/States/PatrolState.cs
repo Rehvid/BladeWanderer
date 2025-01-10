@@ -12,7 +12,7 @@
 
         public override IState GetNextState()
         {
-            return ShouldTransitionToChaseState() ? EnemyStateFactory.GetState(EnemyStateType.Chase, controller) : this;
+            return ShouldTransitionToChaseState() ? GetState(EnemyStateType.Chase) : this;
         }
 
         public override void Enter()

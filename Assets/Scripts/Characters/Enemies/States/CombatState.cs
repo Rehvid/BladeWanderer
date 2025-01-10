@@ -14,14 +14,14 @@
         {
             if (controller.Combat.CurrentAttackState != AttackStateType.Ready) return this; 
             
-            if (controller.IsPlayerDead()) return EnemyStateFactory.GetState(EnemyStateType.Patrol, controller);
+            if (controller.IsPlayerDead()) return GetState(EnemyStateType.Patrol);
             
             if (!ShouldTransitionToChaseState())
             {
                 return GetStateBasedOnLastKnownPlayerLocation();
             }
 
-            return controller.Combat.CanAttack() ? this : EnemyStateFactory.GetState(EnemyStateType.Chase, controller);
+            return controller.Combat.CanAttack() ? this : GetState(EnemyStateType.Chase);
         }
         
         public override void Execute()

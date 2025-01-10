@@ -29,6 +29,8 @@
 
         public BaseEnemy Enemy => _enemy;
         
+        public EnemyStateHandler StateHandler => _stateHandler;
+        
         private BaseEnemy _enemy;
         private PlayerController _player;
 
@@ -39,7 +41,7 @@
             FindComponents();
             
             _player = GameManager.Instance.Player;
-            _stateHandler?.InitState(EnemyStateFactory.GetState(EnemyStateType.Patrol, this));
+            _stateHandler?.InitState(_stateHandler.GetState(EnemyStateType.Patrol, this));
         }
 
         private void FindComponents()
