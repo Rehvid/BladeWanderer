@@ -3,6 +3,7 @@
     using Audio;
     using Characters.Player;
     using DG.Tweening;
+    using TMPro;
     using UI.Menu;
     using UnityEngine;
     using UnityEngine.SceneManagement;
@@ -11,6 +12,7 @@
     public class GameManager : BaseSingletonMonoBehaviour<GameManager>
     {
         [SerializeField] private GameObject _deathScreen;
+        [SerializeField] private FinishMenu _finishMenu;
         
         public PlayerController Player { get; private set; }
 
@@ -18,6 +20,7 @@
         
         public bool IsGameOver { get; private set; }
         
+        public bool IsGameFinished { get; private set; }
         
         private void Start()
         {
@@ -42,6 +45,19 @@
         {
            IsGameOver = true;
            Instantiate(_deathScreen);
+        }
+
+        public void GameFinished()
+        {
+            SetTimeScale(0);
+            StopAllSounds();
+            DOTween.KillAll();
+            IsGameFinished = true;
+            
+            if (_finishMenu == null || !_finishMenu.TryGetComponent(out FinishMenu finishMenu)) return;
+            
+            finishMenu.SetSoulStatsText(Player.Attributes.CurrentSouls);
+            finishMenu.InitializeFinishScreen();
         }
         
         public void LoadMainMenu()

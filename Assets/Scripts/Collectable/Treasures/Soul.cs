@@ -4,6 +4,8 @@
     using Base;
     using Characters.Player;
     using Enums;
+    using Managers;
+    using UnityEngine;
 
     public class Soul: BaseTreasure
     {
@@ -14,6 +16,10 @@
             AudioManager.Instance.PlayRandomClip(SoundType.ItemPickUpSoul);
             
             Destroy(gameObject);
+            if (gameObject.name.Contains("Horseman"))
+            {
+                GameManager.Instance.GameFinished();
+            }
         }
     }
 }

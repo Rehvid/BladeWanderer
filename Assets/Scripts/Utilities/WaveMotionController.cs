@@ -32,7 +32,7 @@
             
             return new Vector3(
                 _direction.x != 0 ? _startPosition.x + waveDisplacement.x : _startPosition.x,
-                _direction.y != 0 ? _startPosition.y + waveDisplacement.y : _startPosition.y,
+                _direction.y != 0 ? Mathf.Max(_maxDownwardDisplacement, _startPosition.y + waveDisplacement.y) : Mathf.Max(_maxDownwardDisplacement, _startPosition.y),
                 _direction.z != 0 ? _startPosition.z + waveDisplacement.z : _startPosition.z
             );
         }

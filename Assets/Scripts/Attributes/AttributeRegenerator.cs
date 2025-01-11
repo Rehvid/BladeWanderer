@@ -43,7 +43,11 @@
         { 
             while (CanRegenerate(baseAttribute))
             {
-                
+                if (Time.timeScale == 0)
+                {
+                    StopRegeneration();
+                    break;
+                }
                 baseAttribute.CurrentValue += _regenRate * Time.deltaTime; 
                 baseAttribute.CurrentValue = Mathf.Clamp(baseAttribute.CurrentValue, 0, baseAttribute.MaxValue);
                 updateUI?.Invoke(baseAttribute);
@@ -60,6 +64,6 @@
         }
 
         private bool CanRegenerate(BaseAttribute baseAttribute) =>
-            baseAttribute.CurrentValue < baseAttribute.MaxValue && !GameManager.Instance.IsPaused;
+            baseAttribute.CurrentValue < baseAttribute.MaxValue && Time.timeScale > 0;
     }
 }
